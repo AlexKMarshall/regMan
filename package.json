@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "commitmsg": "validate-commit-msg"
+    "postinstall": "(cd server && npm install); (cd client && npm install)"
   },
   "repository": {
     "type": "git",
@@ -41,9 +41,13 @@
       ],
       "warnOnFail": false,
       "maxSubjectLength": 100,
-      "subjectPattern": "^[A-Z]+-[0-9]+ - .*",
       "subjectPatternErrorMsg": "Subject must be in format 'CMS-123 - Commit message'",
       "helpMessage": ""
+    }
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "validate-commit-msg"
     }
   }
 }
