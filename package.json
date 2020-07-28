@@ -1,0 +1,49 @@
+{
+  "name": "regman",
+  "version": "0.0.1",
+  "description": "A CRM tool for handling small registration processes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "commitmsg": "validate-commit-msg"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ishdril/regMan.git"
+  },
+  "author": "Bernat Duran",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ishdril/regMan/issues"
+  },
+  "homepage": "https://github.com/Ishdril/regMan#readme",
+  "devDependencies": {
+    "commitizen": "^4.1.2",
+    "cz-conventional-changelog": "^3.2.0",
+    "husky": "^4.2.5",
+    "validate-commit-msg": "^2.14.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    },
+    "validate-commit-msg": {
+      "types": [
+        "feat",
+        "fix",
+        "docs",
+        "style",
+        "refactor",
+        "perf",
+        "test",
+        "chore",
+        "revert"
+      ],
+      "warnOnFail": false,
+      "maxSubjectLength": 100,
+      "subjectPattern": "^[A-Z]+-[0-9]+ - .*",
+      "subjectPatternErrorMsg": "Subject must be in format 'CMS-123 - Commit message'",
+      "helpMessage": ""
+    }
+  }
+}
