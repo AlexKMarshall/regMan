@@ -1,6 +1,6 @@
 const { attendant, instrument, payment } = require('../models');
-// const { sendEmail } = require('../services/SendEmail');
-// const { welcomeEmail } = require('../views/welcome-email');
+const { sendEmail } = require('../services/SendEmail');
+const { welcomeEmail } = require('../views/welcome-email');
 
 exports.getAll = async (req, res) => {
   try {
@@ -24,6 +24,8 @@ exports.getAll = async (req, res) => {
 exports.postNewAttendant = async (req, res) => {
   try {
     const newAttendant = await attendant.create(req.body);
+    const selInstr = await instrument.findAll({where: {id: newAttendant.instrumentId}});
+    newAttendant.instrument = selInstr[0].name
     // sendEmail(newAttendant.email, welcomeEmail(newAttendant));
     res.status(201);
     res.json(newAttendant);
