@@ -3,14 +3,14 @@ module.exports = (sequelize, DataTypes) => {
     amount_paid: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       }
     },
     payment_date: {
       type: DataTypes.DATE,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
         isDate: true,
       }
@@ -18,13 +18,15 @@ module.exports = (sequelize, DataTypes) => {
     type_of_payment: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       }
     }
-  })
+  });
+
   payment.associate = models => {
     payment.belongsTo(models.attendant);
   };
-  return payment
+
+  return payment;
 }

@@ -3,23 +3,23 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       }
     },
     max_attendants: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
         isInt: true,
       }
     },
-  })
+  });
 
   instrument.associate = (model) => {
     instrument.hasMany(model.attendant);
-  }
+  };
 
-  return instrument
+  return instrument;
 }

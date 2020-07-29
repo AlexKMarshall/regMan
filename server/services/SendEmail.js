@@ -12,7 +12,7 @@ exports.sendEmail = async (attendantEmail, emailContent) => {
     },
   });
 
-  let info = await transporter.sendMail({
+  transporter.sendMail({
     from: `"Crisol App testing" <${process.env.GMAIL_FROM}>`,
     to: `${attendantEmail}, ${process.env.GMAIL_TO}`,
     subject: "Test Email from the new server",
@@ -20,7 +20,7 @@ exports.sendEmail = async (attendantEmail, emailContent) => {
     html: emailContent,
   }, (err, data) => {
     if (err) console.log('Sending email failed: ', err);
-    else console.log('Email sent');
+    else console.log('Email sent 🎉🎉: ', data);
   });
 }
 

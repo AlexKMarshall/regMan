@@ -24,7 +24,7 @@ exports.postInstrument = async (req, res) => {
 
 exports.putInstrument = async (req, res) => {
   try {
-    const [rowsUpdated, [ updatedInstrument ]] = await instrument.update(
+    const [rowsUpdated, [ updatedInstrument ]] = await instrument.update( // eslint-disable-line no-unused-vars
       {...req.body},
       {returning: true, where: {id: req.params.id}}
     );

@@ -24,7 +24,7 @@ exports.postNewPayment = async (req, res) => {
 
 exports.putUpdatePayment = async (req, res) => {
   try {
-    const [rowsUpdated, [ updatedPayment ]] = await payment.update(
+    const [rowsUpdated, [ updatedPayment ]] = await payment.update( // eslint-disable-line no-unused-vars
       {...req.body},
       {returning: true, where: {id: req.params.id}}
     );

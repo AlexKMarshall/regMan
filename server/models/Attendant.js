@@ -3,21 +3,21 @@ module.exports = (sequelize, DataTypes) => {
     first_name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       }
     },
     last_name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       }
     },
     date_of_birth: {
       type: DataTypes.DATE,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
         isDate: true,
       }
@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
         isEmail: true,
       }
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     is_underage: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       },
       defaultValue: false
@@ -41,42 +41,42 @@ module.exports = (sequelize, DataTypes) => {
     street: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       }
     },
     city: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       }
     },
     country: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       }
     },
     allergies: {
       type: DataTypes.TEXT,
       allowNull: true,
-      validate: {
+      validate:{
         notEmpty: false,
       }
     },
     accepts_tos: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       }
     },
     registration_status: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       },
       defaultValue: 'New'
@@ -84,7 +84,7 @@ module.exports = (sequelize, DataTypes) => {
     course_price: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       },
       defaultValue: 60000
@@ -92,7 +92,7 @@ module.exports = (sequelize, DataTypes) => {
     amount_paid: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       },
       defaultValue: 0
@@ -100,7 +100,7 @@ module.exports = (sequelize, DataTypes) => {
     amount_due: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       },
       defaultValue: 60000
@@ -108,7 +108,7 @@ module.exports = (sequelize, DataTypes) => {
     payment_status: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       },
       defaultValue: 'pending'
@@ -116,7 +116,7 @@ module.exports = (sequelize, DataTypes) => {
     displayed: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      validate: {
+      validate:{
         notEmpty: true,
       },
       defaultValue: true

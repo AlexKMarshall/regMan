@@ -1,6 +1,6 @@
 const { attendant, instrument, payment } = require('../models');
-const { sendEmail } = require('../services/SendEmail');
-const { welcomeEmail } = require('../views/welcome-email');
+const { sendEmail } = require('../services/SendEmail'); // eslint-disable-line no-unused-vars
+const { welcomeEmail } = require('../views/welcome-email');// eslint-disable-line no-unused-vars
 
 exports.getAll = async (req, res) => {
   try {
@@ -70,7 +70,7 @@ exports.putDeleteAttendant = async (req, res) => {
 
 exports.putUpdateAttendant = async (req, res) => {
   try {
-    const [rowsUpdated, [ updatedAttendant ]] = await attendant.update(
+    const [rowsUpdated, [ updatedAttendant ]] = await attendant.update( // eslint-disable-line no-unused-vars
       {...req.body},
       {returning: true, where: {id: req.params.id}}
     );
