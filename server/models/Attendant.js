@@ -61,10 +61,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     allergies: {
       type: DataTypes.TEXT,
-      allowNull: true,
-      validate:{
-        notEmpty: false,
-      }
     },
     accepts_tos: {
       type: DataTypes.BOOLEAN,

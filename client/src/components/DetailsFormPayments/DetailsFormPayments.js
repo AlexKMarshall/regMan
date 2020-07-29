@@ -5,16 +5,8 @@ import { PaymentDetail, Popup, StatusLight } from '@/components';
 import './DetailsFormPayments.css'
 
 const DetailsFormPayments = ({ details, setDetails }) => {
-  const [payments, setPayments] = useState([]);
   const [popupInfo, setPopupInfo] = useState({});
   const { getAccessTokenSilently } = useAuth0();
-  const id = details._id
-
-  useEffect(() => {
-    getAccessTokenSilently()
-    .then(token => id && ApiClient.getAttendantPayments(id, token))
-    .then(payments => setPayments(payments))
-  }, [details]);
 
   function promptPopup (info, type) {
     setPopupInfo({info, type})
@@ -31,20 +23,19 @@ const DetailsFormPayments = ({ details, setDetails }) => {
       case 'Add Payment':
         ApiClient.postNewPayment(info, token)
           .then(newPayment => {
-            setPayments(payments => [...payments, newPayment]);
             setDetails(oldDetails => {
-              const paymentValue = newPayment.payment_kind === 'Payment' ? newPayment.amount_paid : -newPayment.amount_paid;
+              const paymentValue = newPayment.type_of_payment === 'Payment' ? newPayment.amount_paid : -newPayment.amount_paid;
               const newDetails = {
                 amount_paid: oldDetails.amount_paid + paymentValue,
                 amount_due: oldDetails.amount_due - paymentValue,
-                related_payments: [...oldDetails.related_payments, newPayment._id]
+                payments: [...oldDetails.payments, newPayment]
               }
               newDetails.amount_paid < 60 && (newDetails.payment_status = 'pending');
               newDetails.amount_paid >= 60 && (newDetails.payment_status = 'downpayment');
               newDetails.amount_due === 0 && (newDetails.payment_status = 'payment complete')
               const updatedDetails = {...oldDetails, ...newDetails}
               ApiClient.putParticipantChanges(updatedDetails, token)
-              return {...oldDetails, ...newDetails}
+              return updatedDetails
             })
             return '';
           })
@@ -54,26 +45,20 @@ const DetailsFormPayments = ({ details, setDetails }) => {
         ApiClient.putUpdatePayment(info, token)
           .then(updatedPayment => {
             let oldValue = {};
-            setPayments(payments => {
-              const newPaymentsArray = payments.filter(payment => {
-                payment._id === updatedPayment._id && (oldValue = payment)
-                return payment._id !== updatedPayment._id && payment
-              });
-              return newPaymentsArray.push(updatedPayment)
-            });
             setDetails(oldDetails => {
-              const updatedValue = updatedPayment.payment_kind === 'Payment' ? updatedPayment.amount_paid : -updatedPayment.amount_paid;
-              const oldPaymentValue = oldValue.payment_kind === 'Payment' ? +oldValue.amount_paid : -oldValue.amount_paid;
+              const updatedValue = updatedPayment.type_of_payment === 'Payment' ? updatedPayment.amount_paid : -updatedPayment.amount_paid;
+              const oldPaymentValue = oldValue.type_of_payment === 'Payment' ? +oldValue.amount_paid : -oldValue.amount_paid;
               const newDetails = {
                 amount_paid: oldDetails.amount_paid + updatedValue - oldPaymentValue,
                 amount_due: oldDetails.amount_due - updatedValue + oldPaymentValue,
+                payments: oldDetails.payments.filter(payment => payment.id !== updatedPayment.id).push(updatedPayment)
               }
               newDetails.amount_paid < 60 && (newDetails.payment_status = 'pending');
               newDetails.amount_paid >= 60 && (newDetails.payment_status = 'downpayment');
               newDetails.amount_due === 0 && (newDetails.payment_status = 'payment complete')
               const updatedDetails = {...oldDetails, ...newDetails}
               ApiClient.putParticipantChanges(updatedDetails, token)
-              return {...oldDetails, ...newDetails}
+              return updatedDetails;
             })
             return '';
           })
@@ -96,24 +81,32 @@ const DetailsFormPayments = ({ details, setDetails }) => {
   return (
     <section id="payments">
       {popupBackground}
+      {console.log(details)}
       <div className="global-payment-status">
         <div className="payment status">
           <StatusLight status={details.payment_status} />
           <p>Payment status: <b>{details.payment_status}</b></p>
         </div>
-        <div className="payment course-price">Course price: {Number.parseFloat(details.course_price).toFixed(2) + ' €'}</div>
-        <div className="payment amount-paid">Amount paid: {Number.parseFloat(details.amount_paid).toFixed(2) + ' €'}</div>
-        <div className="payment amount-due">Amount due: <b>{Number.parseFloat(details.amount_due).toFixed(2) + ' €'}</b></div>
+        <div className="payment course-price">Course price: {Number.parseFloat(details.course_price/100).toFixed(2) + ' €'}</div>
+        <div className="payment amount-paid">Amount paid: {Number.parseFloat(details.amount_paid/100).toFixed(2) + ' €'}</div>
+        <div className="payment amount-due">Amount due: <b>{Number.parseFloat(details.amount_due/100).toFixed(2) + ' €'}</b></div>
       </div>
       <div className="payments-list">
         <div className="new-payment-button">
-          <button onClick={()=> promptPopup({associated_attendant: details._id}, 'Add Payment')}>Add new payment</button>
+          <button
+            onClick={()=> promptPopup({
+              attendantId: details.id,
+              type_of_payment: 'Payment'
+            }, 'Add Payment')}
+          >
+            Add new payment
+          </button>
         </div>
         {
-          (payments && payments.length)
-            ? payments.map(payment => (
+          (details && details.payments.length)
+            ? details.payments.map(payment => (
               <PaymentDetail
-                key={payment._id}
+                key={'payment'+payment.id}
                 payment={payment}
                 promptPopup={promptPopup}
               />))

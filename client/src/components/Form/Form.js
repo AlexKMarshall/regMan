@@ -4,14 +4,13 @@ import ApiClient from '@/services/ApiClient';
 import moment from 'moment';
 
 const newRegistration = {
-  name: '',
-  surname: '',
+  first_name: '',
+  last_name: '',
   email: '',
-  date_birth: '',
+  date_of_birth: '',
   street: '',
   city: '',
   country: '',
-  instrument: '',
   allergies: '',
   accepts_tos: false,
 }
@@ -29,13 +28,13 @@ const Form = () => {
 
   useEffect(() => {
     const fiddle = instruments.filter(instrument => instrument.name === 'Fiddle')[0];
-    fiddle && setRegistration(registration => ({...registration, instrument: fiddle._id}))
+    fiddle && setRegistration(registration => ({...registration, instrumentId: fiddle.id}))
   }, [instruments]);
 
   function submitHandler (e) {
     e.preventDefault();
     const courseStart = moment(process.env.REACT_APP_COURSE_START);
-    const dateBirth = moment(registration.date_birth);
+    const dateBirth = moment(registration.date_of_birth);
     courseStart.diff(dateBirth, 'years') < 18 && (registration.is_underage = true);
     ApiClient.postNewAttendant(registration);
     setRedirect(true);
@@ -59,23 +58,23 @@ const Form = () => {
 
       <form onSubmit={submitHandler}>
         <div>
-          <label htmlFor="name">Name: </label>
+          <label htmlFor="first_name">Name: </label>
           <input
             type="text"
-            name="name"
+            name="first_name"
             className="form-input"
-            value={registration.name}
+            value={registration.first_name}
             onChange={handleChange}
             required
           />
         </div>
         <div>
-          <label htmlFor="surname">Surname: </label>
+          <label htmlFor="last_name">Surname: </label>
           <input
             type="text"
-            name="surname"
+            name="last_name"
             className="form-input"
-            value={registration.surname}
+            value={registration.last_name}
             onChange={handleChange}
             required
           />
@@ -92,14 +91,14 @@ const Form = () => {
           />
         </div>
         <div>
-          <label htmlFor="date_birth">Date of birth: </label>
+          <label htmlFor="date_of_birth">Date of birth: </label>
           <input
             type="date"
             min="1900-01-01"
             max="2020-12-31"
-            name="date_birth"
+            name="date_of_birth"
             className="form-input"
-            value={registration.date_birth}
+            value={registration.date_of_birth}
             onChange={handleChange}
             required
           />
@@ -138,13 +137,13 @@ const Form = () => {
           />
         </div>
         <div>
-          <label htmlFor="instrument">Instrument: </label>
+          <label htmlFor="instrumentId">Instrument: </label>
           <select
-            name="instrument"
-            value={registration.instrument}
+            name="instrumentId"
+            value={registration.instrumentId}
             onChange={handleChange}
           >
-            {instruments.map(instrument => <option key={instrument._id} value={instrument._id}>{instrument.name}</option>)}
+            {instruments.map(instrument => <option key={'instrument'+instrument.id} value={instrument.id}>{instrument.name}</option>)}
           </select>
         </div>
         <div>

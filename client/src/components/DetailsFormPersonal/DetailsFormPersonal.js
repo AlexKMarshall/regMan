@@ -2,27 +2,29 @@ import React from 'react';
 import moment from 'moment';
 import {EditButtons} from '@/components'
 
-const DetailsFormPersonal = ({details, instruments, isEditting, handleChange, handleAgeChange, buttonFunctionality}) => {
+const DetailsFormPersonal = ({details, instruments, isEditting, handleChange, buttonFunctionality}) => {
+  let disabled = !isEditting ? 'disabled' : '';
+
   return (
     <section id="personal-details">
       <EditButtons isEditting={isEditting} buttonFunctionality={buttonFunctionality} />
       <div className="form-fields">
         <div className="field instrument">
-          <label htmlFor="instrument">Registered for: </label>
+          <label htmlFor="instrumentId">Registered for: </label>
             <select
-              className={!isEditting ? 'disabled' : ''}
-              name="instrument"
-              value={details.instrument}
+              className={disabled}
+              name="instrumentId"
+              value={details.instrumentId}
               onChange={handleChange}
               disabled={!isEditting}
             >
-              {instruments.map(instrument => <option key={instrument._id} value={instrument._id}>{instrument.name}</option>)}
+              {instruments.map(instrument => <option key={'instrument'+instrument.id} value={instrument.id}>{instrument.name}</option>)}
             </select>
         </div>
       <div className="field registration-status">
           <label htmlFor="registration_status">Registration status: </label>
           <select
-            className={!isEditting ? 'disabled' : ''}
+            className={disabled}
             name="registration_status"
             value={details.registration_status}
             onChange={handleChange}
@@ -36,25 +38,24 @@ const DetailsFormPersonal = ({details, instruments, isEditting, handleChange, ha
             <option value="Waitlist">Waitlist</option>
           </select>
         </div>
-        {console.log('details',details)}
         <div className="field name">
-          <label htmlFor="name">Name: </label>
+          <label htmlFor="first_name">Name: </label>
           <input
-            className={!isEditting ? 'disabled' : ''}
+            className={disabled}
             type="text"
-            name="name"
-            value={details.name}
+            name="first_name"
+            value={details.first_name}
             onChange={handleChange}
             readOnly={!isEditting}
           />
         </div>
         <div className="field surname">
-          <label htmlFor="surname">Surname: </label>
+          <label htmlFor="last_name">Surname: </label>
           <input
-            className={!isEditting ? 'disabled' : ''}
+            className={disabled}
             type="text"
-            name="surname"
-            value={details.surname}
+            name="last_name"
+            value={details.last_name}
             onChange={handleChange}
             readOnly={!isEditting}
           />
@@ -62,7 +63,7 @@ const DetailsFormPersonal = ({details, instruments, isEditting, handleChange, ha
         <div className="field email">
           <label htmlFor="email">Email: </label>
           <input
-            className={!isEditting ? 'disabled' : ''}
+            className={disabled}
             type="text"
             name="email"
             value={details.email}
@@ -70,14 +71,14 @@ const DetailsFormPersonal = ({details, instruments, isEditting, handleChange, ha
             readOnly={!isEditting}
           />
         </div>
-        <div className="field date_birth">
-          <label htmlFor="date_birth">Date of Birth: </label>
+        <div className="field date_of_birth">
+          <label htmlFor="date_of_birth">Date of Birth: </label>
           <input
-            className={!isEditting ? 'disabled' : ''}
+            className={disabled}
             type="date"
-            name="date_birth"
-            value={moment(details.date_birth).format('YYYY-MM-DD')}
-            onChange={handleAgeChange}
+            name="date_of_birth"
+            value={moment(details.date_of_birth).format('YYYY-MM-DD')}
+            onChange={handleChange}
             readOnly={!isEditting}
           />
           <label htmlFor="age">
@@ -91,7 +92,7 @@ const DetailsFormPersonal = ({details, instruments, isEditting, handleChange, ha
         <div className="field street">
           <label htmlFor="street">Street: </label>
           <input
-            className={!isEditting ? 'disabled' : ''}
+            className={disabled}
             type="text"
             name="street"
             value={details.street}
@@ -102,7 +103,7 @@ const DetailsFormPersonal = ({details, instruments, isEditting, handleChange, ha
         <div className="field city">
           <label htmlFor="city">City: </label>
           <input
-            className={!isEditting ? 'disabled' : ''}
+            className={disabled}
             type="text"
             name="city"
             value={details.city}
@@ -113,7 +114,7 @@ const DetailsFormPersonal = ({details, instruments, isEditting, handleChange, ha
         <div className="field country">
           <label htmlFor="country">Country: </label>
           <input
-            className={!isEditting ? 'disabled' : ''}
+            className={disabled}
             type="text"
             name="country"
             value={details.country}

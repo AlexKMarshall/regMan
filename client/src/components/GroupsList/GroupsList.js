@@ -19,8 +19,8 @@ const GroupsList = () => {
   return (
     <div>
       {(instruments && attendants) && instruments.map(instrument => (
-        <div key={instrument._id}>
-          <InstrumentList attendants={attendants.filter(attendant => attendant.instrument._id === instrument._id)} instrument={instrument} />
+        <div key={'instrument'+instrument.id}>
+          <InstrumentList attendants={attendants.filter(attendant => attendant.instrument.id === instrument.id)} instrument={instrument} />
         </div>
       ))}
     </div>

@@ -3,12 +3,13 @@
   justify-content: center;
   align-items: center;
   margin-right: 7px;
+  padding: 3px;
 }
 
 .status-light {
-  border-radius: 5px;
-  height: 8px;
-  width: 8px;
+  border-radius: 50%;
+  height: 12px;
+  width: 12px;
 }
 
 .blue {

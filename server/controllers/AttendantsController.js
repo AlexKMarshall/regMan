@@ -37,7 +37,7 @@ exports.postNewAttendant = async (req, res) => {
 
 exports.getDetails = async (req, res) => {
   try {
-    const attendantDetails = await attendant.findAll({
+    const attendantDetails = await attendant.findOne({
       include: [
         instrument,
         {

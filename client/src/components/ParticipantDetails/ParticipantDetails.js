@@ -19,7 +19,7 @@ const ParticipantDetails = ({ match }) => {
     getAccessTokenSilently()
       .then(token => ApiClient.getDetails(id, token))
       .then(details => {
-        details.age = courseStarts.diff(details.date_birth, 'years');
+        details.age = courseStarts.diff(details.date_of_birth, 'years');
         setDetails(details)
         setOldDetails(details)
       })
@@ -44,18 +44,28 @@ const ParticipantDetails = ({ match }) => {
   }
 
   function handleChange ({target}) {
-    setDetails(oldDetails => ({...oldDetails, [target.name]: target.value}));
-  }
+    switch (target.name) {
+      case 'date_of_birth':
+        const newAge = courseStarts.diff(target.value, 'years')
+        setDetails(details => ({
+          ...details,
+          date_of_birth: target.value,
+          age: newAge,
+          is_underage: newAge < 18
+        }))
+        break;
 
-  function handleAgeChange ({target}) {
-    const newAge = courseStarts.diff(target.value, 'years')
-    const newIsUnderage = newAge < 18 ? true : false;
-    setDetails(oldDetails => ({
-      ...oldDetails,
-      date_birth: target.value,
-      age: newAge,
-      is_underage: newIsUnderage
-    }))
+        case 'instrumentId':
+          const [instr] = instruments.filter(instrument => instrument.id === +target.value);
+          setDetails(details => ({
+            ...details,
+            instrumentId: target.value,
+            instrument: instr
+          }))
+
+      default:
+        return setDetails(details => ({...details, [target.name]: target.value}));
+    }
   }
 
   const sectionSwitch = (param) => {
@@ -66,7 +76,6 @@ const ParticipantDetails = ({ match }) => {
           isEditting={isEditting}
           instruments={instruments}
           handleChange={handleChange}
-          handleAgeChange={handleAgeChange}
           buttonFunctionality={buttonFunctionality}
           />)
       case 'selector-health':
@@ -99,7 +108,7 @@ const ParticipantDetails = ({ match }) => {
       <div className="header">
         <div className="displayed-information">
           <StatusLight status={details.registration_status} />
-          <h3>{details.name} {details.surname}</h3>
+          <h3>{details.first_name} {details.last_name}</h3>
         </div>
       </div>
       <div className="section-selectors">

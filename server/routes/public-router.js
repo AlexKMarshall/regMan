@@ -5,7 +5,7 @@ const instrumentsController = require('../controllers/InstrumentsController');
 
 router.post('/inscriptions', attendantsController.postNewAttendant)
 router.get('/instruments',instrumentsController.getInstruments)
-// router.post('/instruments', instrumentsController.postInstrument)
+router.post('/instruments', instrumentsController.postInstrument)
 // router.put('/instruments/:id', instrumentsController.putInstrument)
 // router.delete('/instruments/:id', instrumentsController.deleteInstrument)
 

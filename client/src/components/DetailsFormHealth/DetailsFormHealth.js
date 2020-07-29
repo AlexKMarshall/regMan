@@ -2,6 +2,7 @@ import React from 'react';
 import { EditButtons } from '@/components'
 
 const DetailsFormHealth = ({ details, isEditting, handleChange, buttonFunctionality }) => {
+  let disabled = !isEditting ? 'disabled' : '';
   return (
     <section id="health">
       <EditButtons isEditting={isEditting} buttonFunctionality={buttonFunctionality} />
@@ -9,7 +10,7 @@ const DetailsFormHealth = ({ details, isEditting, handleChange, buttonFunctional
         <div className="field allergies">
           <label htmlFor="allergies">Allergies: </label>
           <input
-            className={!isEditting ? 'disabled' : ''}
+            className={disabled}
             type="text"
             name="allergies"
             value={details.allergies}

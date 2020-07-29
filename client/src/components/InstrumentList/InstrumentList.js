@@ -6,9 +6,8 @@ const InstrumentList = ({attendants, instrument}) => {
     <div>
       {instrument.name} {participantCounter} / {instrument.max_attendants}
       {attendants.map(attendant => {
-        return (<div key={attendant._id}> {attendant.name} </div>)
+        return (<div key={'attendant'+attendant.id}> {attendant.first_name} </div>)
       })}
-      {console.log(participantCounter)}
     </div>
   );
 }

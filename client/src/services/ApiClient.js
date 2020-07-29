@@ -29,7 +29,7 @@ function putDeleteAttendant (id, token) {
 };
 
 function putParticipantChanges (details, token) {
-  return fetchFromDb(`inscriptions/update/${details._id}`, {
+  return fetchFromDb(`inscriptions/update/${details.id}`, {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -59,7 +59,7 @@ function postNewPayment (payment, token) {
 };
 
 function putUpdatePayment (payment, token) {
-  return fetchFromDb(`payments/update/${payment._id}`,{
+  return fetchFromDb(`payments/update/${payment.id}`,{
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${token}`,

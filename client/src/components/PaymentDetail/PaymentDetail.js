@@ -9,8 +9,8 @@ const PaymentDetail = ({payment, promptPopup }) => {
       promptPopup(changedPayment, 'Save Payment')
     }}>
       <div>{moment(payment.payment_date).format('DD/MM/YYYY')}</div>
-      <div>{payment.payment_kind}</div>
-      <div className={payment.payment_kind === 'Refund' ? 'text-red' : ''}>{Number.parseFloat(payment.amount_paid).toFixed(2) + ' €'}</div>
+      <div>{payment.type_of_payment}</div>
+      <div className={payment.type_of_payment === 'Refund' ? 'text-red' : ''}>{Number.parseFloat(payment.amount_paid).toFixed(2) + ' €'}</div>
     </div>
   );
 }

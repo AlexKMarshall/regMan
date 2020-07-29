@@ -26,8 +26,8 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
               <input type="number" step="0.01" placeholder="0.00" name="amount_paid" onChange={handleChange} required/>
             </div>
             <div>
-              <label htmlFor="payment_kind">Select the type of payment:</label>
-              <select name="payment_kind" onChange={handleChange} required>
+              <label htmlFor="type_of_payment">Select the type of payment:</label>
+              <select name="type_of_payment" value={info.type_of_payment} onChange={handleChange} required>
                 <option value="Payment">Payment</option>
                 <option value="Refund">Refund</option>
               </select>
@@ -47,8 +47,9 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
               <input type="number" step="0.01" name="amount_paid" value={Number.parseFloat(info.amount_paid).toFixed(2)} onChange={handleChange} required/>
             </div>
             <div>
-              <label htmlFor="payment_kind">Select the type of payment:</label>
-              <select name="payment_kind" value={info.payment_kind} onChange={handleChange} required>
+              <label htmlFor="type_of_payment">Select the type of payment:</label>
+              {console.log(info)}
+              <select name="type_of_payment" value={info.type_of_payment} onChange={handleChange} required>
                 <option value="Payment">Payment</option>
                 <option value="Refund">Refund</option>
               </select>
