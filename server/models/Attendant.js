@@ -77,38 +77,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       defaultValue: 'New'
     },
-    course_price: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate:{
-        notEmpty: true,
-      },
-      defaultValue: 60000
-    },
-    amount_paid: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate:{
-        notEmpty: true,
-      },
-      defaultValue: 0
-    },
-    amount_due: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate:{
-        notEmpty: true,
-      },
-      defaultValue: 60000
-    },
-    payment_status: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate:{
-        notEmpty: true,
-      },
-      defaultValue: 'pending'
-    },
     displayed: {
       type: DataTypes.BOOLEAN,
       allowNull: false,

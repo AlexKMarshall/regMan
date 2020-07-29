@@ -9,7 +9,7 @@ const ParticipantDetails = ({ match }) => {
   const [details, setDetails] = useState({});
   const [oldDetails, setOldDetails] = useState({});
   const [isEditting, setIsEditting] = useState(false);
-  const [sectionId, setSectionId] = useState('selector-personal')
+  const [sectionId, setSectionId] = useState('selector-payments')
   const [instruments, setInstruments] = useState([]);
   const { getAccessTokenSilently } = useAuth0();
   const id = match.params.id;
