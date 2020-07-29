@@ -1,0 +1,40 @@
+.popup-background {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.65);
+}
+
+.popup {
+  width: 50%;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  background-color: #eeeeee;
+}
+
+.popup-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.popup-buttons > button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0 0 2px grey;
+}
+
+.popup-buttons > button:last-child {
+  background-color: rgb(233, 68, 68);
+}
+.popup-buttons > button:hover {
+  box-shadow: 0 0 4px black;
+}

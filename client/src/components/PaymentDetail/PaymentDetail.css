@@ -1,0 +1,10 @@
+.text-red {
+  color: rgb(210, 1, 1);
+}
+
+.payment-detail {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  cursor: pointer;
+}

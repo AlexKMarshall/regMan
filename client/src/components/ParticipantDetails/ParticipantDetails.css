@@ -1,0 +1,36 @@
+.disabled {
+  background-color: lightgray;
+  cursor: not-allowed;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.participant-details {
+  padding: 40px;
+}
+
+.showcased-section {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  width: 100%;
+}
+
+.showcased-section > section {
+  min-width: 100%;
+}
+
+.section-selectors {
+  display: flex;
+  width: 50%;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.displayed-information {
+  display: flex;
+}

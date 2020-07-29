@@ -1,0 +1,25 @@
+.hidden-button {
+  display: none;
+}
+
+.edit-buttons {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.edit-buttons > div >button {
+  padding: 10px 15px;
+  background-color: orange;
+  font-weight: 700;
+  border: none;
+  border-radius: 5px;
+  margin-left: 5px;
+}
+.edit-buttons > div> button:last-child{
+  background-color: #d2d2d2;
+
+}
+.edit-buttons > div> button:hover {
+  background-color: orangered;
+  cursor: pointer;
+}
