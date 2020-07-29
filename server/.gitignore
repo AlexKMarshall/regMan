@@ -1,1 +1,6 @@
 node_modules
+PGDATA
+crisolTest_db
+
+.env
+logfile
