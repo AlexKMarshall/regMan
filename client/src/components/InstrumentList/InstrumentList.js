@@ -1,13 +1,14 @@
 import React from 'react';
+import { ParticipantItem } from '@/components';
 
-const InstrumentList = ({attendants, instrument}) => {
-  const participantCounter = attendants.length;
+const InstrumentList = ({participants, instrument, promptPopup}) => {
+  const participantCounter = participants.length;
   return (
     <div>
       {instrument.name} {participantCounter} / {instrument.max_attendants}
-      {attendants.map(attendant => {
-        return (<div key={'attendant'+attendant.id}> {attendant.first_name} </div>)
-      })}
+      {participants.map(attendant => (
+        <ParticipantItem participant={attendant} promptPopup={promptPopup}/>
+      ))}
     </div>
   );
 }

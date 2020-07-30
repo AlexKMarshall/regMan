@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import ApiClient from '@/services/ApiClient';
-import { Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './Dashboard.css'
-import { DeleteParticipantButton, Popup } from '@/components';
-import StatusLight from '../StatusLight';
+import {  Popup, ParticipantList, GroupsList, ParticipantDetails, Navbar } from '@/components';
 
 const Dashboard = () => {
   const [participants, setParticipants] = useState([]);
+  const [instruments, setInstruments] = useState([]);
   const [popupInfo, setPopupInfo] = useState({});
   const { getAccessTokenSilently } = useAuth0();
 
@@ -15,6 +15,8 @@ const Dashboard = () => {
     getAccessTokenSilently()
       .then(token => ApiClient.getAllInscriptions(token))
       .then(participants => setParticipants(participants))
+    ApiClient.getInstruments()
+      .then(instruments => setInstruments(instruments))
   }, []);
 
   function promptPopup (info, type) {
@@ -52,25 +54,25 @@ const Dashboard = () => {
     : '';
 
   return (
-    <div className="list">
+    <div>
       {popupBackground}
-      {participants.map(participant => (
-        <div className="participant-container" key={'participant'+participant.id}>
-          <div className="participant">
-            <StatusLight status={participant.registration_status} />
-            <Link to={`/dashboard/${participant.id}/personal`}>
-              {participant.last_name}, {participant.first_name}
-            </Link>
-            <a href={`mailto:${participant.email}`} target="_blank" rel="noopener noreferrer">
-              {participant.email}
-            </a>
-            <div>{participant.is_underage ? (<span role="img" aria-label="underage">🔞</span>) : (<span role="img" aria-label="underage">✅</span>)}</div>
-            <div>{participant.instrument.name}</div>
-            <div>{participant.registration_status}</div>
-            <DeleteParticipantButton info={participant} promptPopup={promptPopup} />
-          </div>
-        </div>
-      ))}
+      <Router>
+        <Navbar />
+        <Route path="/dashboard/list" exact render={() => (
+          <ParticipantList
+            participants={participants}
+            promptPopup={promptPopup}
+          />)}
+        />
+        <Route path="/dashboard/groups" exact render={() => (
+          <GroupsList
+            participants={participants}
+            instruments={instruments}
+            promptPopup={promptPopup}
+          />)}
+        />
+        <Route path="/dashboard/details/:id/:section" component={ParticipantDetails} />
+      </Router>
     </div>
   );
 }

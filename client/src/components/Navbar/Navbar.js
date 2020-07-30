@@ -14,10 +14,10 @@ const Navbar = () => {
       {isAuthenticated ? (
         <ul>
           <li>
-            <NavLink to="/dashboard">Dashboard</NavLink>
+            <NavLink to="/dashboard/list">Dashboard</NavLink>
           </li>
           <li>
-            <NavLink to="/groups">Groups</NavLink>
+            <NavLink to="/dashboard/groups">Groups</NavLink>
           </li>
         </ul>
       ) : (<div></div>)}

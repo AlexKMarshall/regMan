@@ -14,6 +14,8 @@ import InstrumentList from './InstrumentList';
 import Loading from './Loading';
 import Navbar from "./Navbar";
 import ParticipantDetails from "./ParticipantDetails";
+import ParticipantItem from './ParticipantItem';
+import ParticipantList from './ParticipantList';
 import Popup from './Popup';
 import PopupMessage from './PopupMessage';
 import PrivateRoute from './PrivateRoute';
@@ -38,6 +40,8 @@ export {
   Loading,
   Navbar,
   ParticipantDetails,
+  ParticipantItem,
+  ParticipantList,
   PaymentDetail,
   Popup,
   PopupMessage,

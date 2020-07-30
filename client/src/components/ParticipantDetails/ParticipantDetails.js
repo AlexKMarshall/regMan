@@ -78,45 +78,47 @@ const ParticipantDetails = ({ match }) => {
 
   return (
     <div className="participant-details">
-      <div className="header">
-        <div className="displayed-information">
-          <StatusLight status={details.registration_status} />
-          <h3>{details.first_name} {details.last_name}</h3>
+      <Router>
+        <div className="header">
+          <div className="displayed-information">
+            <StatusLight status={details.registration_status} />
+            <h3>{details.first_name} {details.last_name}</h3>
+          </div>
         </div>
-      </div>
-      <div className="section-selectors">
-        <Link to={`${match.url}/personal`}>Health Details</Link>
-        <Link to={`${match.url}/health`}>Health Details</Link>
-        <Link to={`${match.url}/payments`}>Payment Details</Link>
-      </div>
-      <div className="showcased-section">
-        <Router>
-          {console.log(match.url)}
-          <Route path={`${match.url}/personal`}>
+        <div className="section-selectors">
+          <Link to={`/dashboard/details/${match.params.id}/personal`}>Health Details</Link>
+          <Link to={`/dashboard/details/${match.params.id}/health`}>Health Details</Link>
+          <Link to={`/dashboard/details/${match.params.id}/payments`}>Payment Details</Link>
+        </div>
+        <div className="showcased-section">
+          <Route path={`/dashboard/details/${match.params.id}/personal`} render={(props) => (
             <DetailsFormPersonal
+              {...props}
               details={details}
               isEditting={isEditting}
               instruments={instruments}
               handleChange={handleChange}
               buttonFunctionality={buttonFunctionality}
-            />
-          </Route>
-          <Route path={`${match.url}/health`} render={() =>
+            />)}
+          />
+          <Route path={`/dashboard/details/${match.params.id}/health`} render={(props) => (
             <DetailsFormHealth
+              {...props}
               details={details}
               isEditting={isEditting}
               handleChange={handleChange}
               buttonFunctionality={buttonFunctionality}
-            />}
+            />)}
           />
-          <Route path={`${match.url}/payments`} render={() =>
+          <Route path={`/dashboard/details/${match.params.id}/payments`} render={(props) => (
             <DetailsFormPayments
+              {...props}
               details={details}
               setDetails={setDetails}
-            />}
+            />)}
           />
-        </Router>
-      </div>
+        </div>
+      </Router>
     </div>
   );
 }

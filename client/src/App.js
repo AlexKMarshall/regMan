@@ -8,10 +8,8 @@ import {
   Error404,
   Error500,
   Form,
-  GroupsList,
   Loading,
   Navbar,
-  ParticipantDetails,
   PrivateRoute,
 } from '@/components'
 import '@/App.css';
@@ -24,13 +22,10 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <Navbar />
         <Switch>
           <Route path="/" exact component={Form} />
           <Route path="/confirmation" exact component={Confirmation} />
-          <PrivateRoute path="/dashboard" exact component={Dashboard} />
-          <PrivateRoute path="/dashboard/:id" component={ParticipantDetails} />
-          <PrivateRoute path="/groups" exact component={GroupsList} />
+          <PrivateRoute path="/dashboard" component={Dashboard} />
           <Route path="/" component={Error404} />
           <Route path="/error500" component={Error500} />
         </Switch>

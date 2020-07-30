@@ -1,26 +1,18 @@
-import React, {useState, useEffect} from 'react';
-import ApiClient from '@/services/ApiClient';
+import React from 'react';
 import {InstrumentList} from '@/components';
-import { useAuth0 } from "@auth0/auth0-react";
 
-const GroupsList = () => {
-  const [instruments, setInstruments] = useState([]);
-  const [attendants, setAttendants] = useState([]);
-  const { getAccessTokenSilently } = useAuth0()
-
-  useEffect(()=> {
-    ApiClient.getInstruments()
-      .then(instruments => setInstruments(instruments))
-    getAccessTokenSilently()
-      .then(token => ApiClient.getAllInscriptions(token))
-      .then(inscriptions => setAttendants(inscriptions))
-  }, [])
-
+const GroupsList = ({ participants, instruments, promptPopup}) => {
   return (
     <div>
-      {(instruments && attendants) && instruments.map(instrument => (
+      Hellooo!
+      {console.log(instruments)}
+      {(instruments && participants) && instruments.map(instrument => (
         <div key={'instrument'+instrument.id}>
-          <InstrumentList attendants={attendants.filter(attendant => attendant.instrument.id === instrument.id)} instrument={instrument} />
+          <InstrumentList
+            participants={participants.filter(participant => participant.instrument.id === instrument.id)}
+            instrument={instrument}
+            promptPopup={promptPopup}
+          />
         </div>
       ))}
     </div>
