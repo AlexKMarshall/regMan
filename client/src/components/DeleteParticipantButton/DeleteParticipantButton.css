@@ -1,10 +1,10 @@
 .delete-btn {
   background-color: transparent;
   border-radius: 50%;
-  font-size: 16px;
+  font-size: 14px;
   padding: 0;
-  height: 36px;
-  width: 36px;
+  height: 30px;
+  width: 30px;
 }
 
 .delete-btn > span {

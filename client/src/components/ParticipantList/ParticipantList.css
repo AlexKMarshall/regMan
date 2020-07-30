@@ -39,6 +39,10 @@
   padding: 20px 0;
 }
 
+.grid-header:hover {
+  background-color: var(--header-bg);
+}
+
 .grid-header-item {
   border-right: 1px solid gray
 }
@@ -52,6 +56,10 @@
 .grid-name {
   grid-area: name;
   padding-left: 25px;
+}
+
+.grid-participants-total {
+  grid-column: 5 / span 3
 }
 
 .grid-status-title {
