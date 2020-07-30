@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import ApiClient from '@/services/ApiClient';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
-import { Loading, DetailsFormHealth, DetailsFormPayments, DetailsFormPersonal, StatusLight } from '@/components';
+import { Loading, DetailsFormHealth, DetailsFormPayments, DetailsFormPersonal, StatusLight, SmartLink } from '@/components';
 import moment from 'moment';
 import './ParticipantDetails.css'
 
@@ -86,9 +86,9 @@ const ParticipantDetails = ({ match }) => {
           </div>
         </div>
         <div className="section-selectors">
-          <Link to={`/dashboard/details/${match.params.id}/personal`}>Health Details</Link>
-          <Link to={`/dashboard/details/${match.params.id}/health`}>Health Details</Link>
-          <Link to={`/dashboard/details/${match.params.id}/payments`}>Payment Details</Link>
+          <SmartLink to="personal" value="Personal Details" match={match} isEditting={isEditting} />
+          <SmartLink to="health" value="Health Details" match={match} isEditting={isEditting} />
+          <SmartLink to="payments" value="Payment Details" match={match} isEditting={isEditting} />
         </div>
         <div className="showcased-section">
           <Route path={`/dashboard/details/${match.params.id}/personal`} render={(props) => (

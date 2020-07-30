@@ -1,6 +1,8 @@
 .disabled {
-  background-color: lightgray;
+  background-color: var(--main-light-gray);
   cursor: not-allowed;
+  opacity: 1;
+  color: var(--main-green);
 }
 
 .header {

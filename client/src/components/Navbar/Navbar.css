@@ -41,7 +41,7 @@ li > a {
 }
 
 .logout:hover{
-  background-color: orangered;
+  background-color: var(--main-light-orange);
 }
 
 .login {
