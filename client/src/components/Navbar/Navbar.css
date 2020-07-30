@@ -21,6 +21,10 @@
   color: white;
 }
 
+.nav-link:hover {
+  background-color: rgb(41, 41, 41);
+}
+
 ul {
   list-style-type: none;
 }
@@ -34,6 +38,10 @@ li > a {
   background-color: var(--crisol-orange);
   font-size: 14px;
   color: black;
+}
+
+.logout:hover{
+  background-color: orangered;
 }
 
 .login {

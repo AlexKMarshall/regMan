@@ -1,0 +1,105 @@
+.list-container {
+  overflow-y: scroll;
+  height: 90%
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.list-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.list-container {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.participants-list{
+  padding: 50px;
+  height: calc(100vh - 86px);
+  width: 100%;
+}
+
+.participant-grid {
+  background-color: #e4e4e4;
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: 5.75fr 1fr 2.5fr 5.75fr 2fr 2fr 1.5fr;
+  grid-template-areas: "name status-light status email underage instrument delete"
+}
+
+.participant-grid:hover {
+  background-color: var(--main-dark-gray);
+}
+
+.grid-header {
+  background-color: var(--header-bg);
+  color: white;
+  font-weight: 600;
+  padding: 20px 0;
+}
+
+.grid-header-item {
+  border-right: 1px solid gray
+}
+
+.grid-item{
+  padding: 5px 15px;
+  align-self: center;
+  justify-self: stretch;
+}
+
+.grid-name {
+  grid-area: name;
+  padding-left: 25px;
+}
+
+.grid-status-title {
+  grid-area: status-light / span 2;
+}
+
+.grid-status-light {
+  grid-area: status-light;
+  justify-self: right;
+}
+
+.grid-status {
+  grid-area: status;
+}
+
+.grid-email {
+  grid-area: email;
+}
+
+.grid-underage {
+  grid-area: underage;
+}
+
+.grid-instrument {
+  grid-area: instrument;
+}
+
+.grid-delete {
+  grid-area: delete;
+}
+
+.participant-container {
+  background-color: #e4e4e4;
+}
+
+.participant-container:after {
+  content: "";
+  display: block;
+  margin: 0 auto;
+  width: 95%;
+  border-bottom: 1px solid grey;
+}
+
+.participant-container:last-child:after {
+  border: none;
+}
+
+.participant-grid > a:hover {
+  font-weight: 700;
+  /* font-size: 20px; */
+}

@@ -13,6 +13,7 @@
   --main-dark-purple: #57455a;
   --main-btn-letters: #2e2115;
   --crisol-orange: #ff7900;
+  --header-bg: #323232;
 }
 
 body {
@@ -28,6 +29,7 @@ body {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  transition: all 0.3s ease;
 }
 
 a {
@@ -49,6 +51,11 @@ button {
 button:hover {
   background-color: var(--main-btn-hover);
   cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+  box-shadow: inset 0 0 5px grey;
 }
 
 .white-space {
