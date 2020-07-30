@@ -1,4 +1,5 @@
 .main-navbar {
+  background-color: var(--main-dark);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -13,14 +14,35 @@
   align-items: center;
 }
 
-.main-navbar > ul > li {
-  padding: 0 20px;
+.nav-link {
+  background-color: var(--main-dark);
+  border-radius: 8px;
+  padding: 10px 20px;
+  color: white;
 }
 
 ul {
   list-style-type: none;
 }
 
+li > a {
+  color: white;
+  font-weight: 700;;
+}
+
 .logout{
-  background-color: rgb(233, 68, 68);
+  background-color: var(--crisol-orange);
+  font-size: 14px;
+  color: black;
+}
+
+.login {
+  background-color: var(--crisol-orange);
+  font-size: 14px;
+  color: black;
+}
+
+.nav-link-active {
+  background-color: rgb(50, 50, 50);
+  color: var(--crisol-orange);
 }

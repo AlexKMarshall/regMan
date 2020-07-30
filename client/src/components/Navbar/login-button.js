@@ -8,7 +8,7 @@ const LoginButton = () => {
     <button
       onClick={() => loginWithRedirect()}
       variant="primary"
-      className="btn-margin"
+      className="btn-margin login"
     >
       Admin Access
     </button>

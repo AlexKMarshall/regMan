@@ -6,7 +6,7 @@ import LogoutButton from "./logout-button";
 import LoginButton from "./login-button";
 import './Navbar.css'
 
-const Navbar = () => {
+const Navbar = ({match}) => {
   const { isAuthenticated } = useAuth0();
 
   return (
@@ -14,10 +14,18 @@ const Navbar = () => {
       {isAuthenticated ? (
         <ul>
           <li>
-            <NavLink to="/dashboard/list">Dashboard</NavLink>
+            <NavLink
+              to="/dashboard/list"
+              activeClassName="nav-link-active"
+              className="nav-link"
+            >Dashboard</NavLink>
           </li>
           <li>
-            <NavLink to="/dashboard/groups">Groups</NavLink>
+            <NavLink
+              to="/dashboard/groups"
+              activeClassName="nav-link-active"
+              className="nav-link"
+            >Groups</NavLink>
           </li>
         </ul>
       ) : (<div></div>)}

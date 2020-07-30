@@ -1,8 +1,27 @@
+:root {
+  --light-bg: #f4f3f1;
+  --highlight-bg: #efd9c3;
+  --main-light-orange: #ffaa67;
+  --main-btn-hover: #f28939;
+  --main-dark-orange: #da674a;
+  --main-yellow: #ffcd79;
+  --main-green: #39998e;
+  --main-dark: #1c1d1d;
+  --main-red: #ff4557;
+  --main-dark-gray: #aebfd1;
+  --main-light-gray: #f2f5f7;
+  --main-dark-purple: #57455a;
+  --main-btn-letters: #2e2115;
+  --crisol-orange: #ff7900;
+}
+
 body {
   margin: 0;
   font-family: 'avenir', sans-serif;
+  font-size: large;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--light-bg);
 }
 
 * {
@@ -11,16 +30,27 @@ body {
   padding: 0;
 }
 
+a {
+  text-decoration: none;
+  color: black;
+}
+
 button {
-  background-color: orange;
+  background-color: var(--main-light-orange);
+  color: var(--main-btn-letters);
   border: none;
   border-radius: 5px;
+  font-size: 17px;
   font-weight: 700;
   margin: 5px;
   padding: 10px 15px;
 }
 
 button:hover {
-  background-color: orangered;
+  background-color: var(--main-btn-hover);
   cursor: pointer;
+}
+
+.white-space {
+  height: 50px
 }

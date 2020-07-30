@@ -1,0 +1,64 @@
+.form {
+  background-color: var(--highlight-bg);
+  border-radius: 10px;
+  margin: 50px auto 0;
+  padding: 40px 60px;
+  width: 60%;
+}
+
+.form-btns {
+  margin: 20px auto 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.form-btns > button:last-child {
+  background-color: var(--main-yellow);
+}
+
+.form-btns > button:last-child:hover {
+  background-color: var(--main-btn-hover);
+}
+
+.form-section {
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.fields {
+  display:flex;
+  flex-wrap: wrap;
+}
+
+.field > input, .field > select {
+  border: none;
+  font-size: 17px;
+  border-radius: 5px;
+  box-shadow: 0 0 2px gray;
+  height: 40px;
+  min-width: 300px;
+  padding: 10px 20px;
+}
+
+.field {
+  padding: 5px 20px 5px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.description {
+  padding: 10px 0;
+}
+
+.accept-tos > input {
+  box-shadow: none;
+  height: 16px;
+  margin-right: 10px;
+  min-width: 0;
+}
+
+.accept-tos {
+  flex-direction: row;
+  align-items: center;
+}
