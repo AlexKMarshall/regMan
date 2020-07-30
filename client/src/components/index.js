@@ -18,6 +18,7 @@ import Popup from './Popup';
 import PopupMessage from './PopupMessage';
 import PrivateRoute from './PrivateRoute';
 import PaymentDetail from './PaymentDetail';
+import SmartLink from './SmartLink';
 import StatusLight from './StatusLight';
 
 export {
@@ -41,5 +42,6 @@ export {
   Popup,
   PopupMessage,
   PrivateRoute,
+  SmartLink,
   StatusLight,
 };

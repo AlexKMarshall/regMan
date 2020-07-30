@@ -58,7 +58,7 @@ const Dashboard = () => {
         <div className="participant-container" key={'participant'+participant.id}>
           <div className="participant">
             <StatusLight status={participant.registration_status} />
-            <Link to={`/dashboard/${participant.id}`}>
+            <Link to={`/dashboard/${participant.id}/personal`}>
               {participant.last_name}, {participant.first_name}
             </Link>
             <a href={`mailto:${participant.email}`} target="_blank" rel="noopener noreferrer">

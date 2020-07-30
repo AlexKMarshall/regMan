@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import ApiClient from '@/services/ApiClient';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { Loading, DetailsFormHealth, DetailsFormPayments, DetailsFormPersonal, StatusLight } from '@/components';
 import moment from 'moment';
 import './ParticipantDetails.css'
@@ -9,7 +10,6 @@ const ParticipantDetails = ({ match }) => {
   const [details, setDetails] = useState({});
   const [oldDetails, setOldDetails] = useState({});
   const [isEditting, setIsEditting] = useState(false);
-  const [sectionId, setSectionId] = useState('selector-payments')
   const [instruments, setInstruments] = useState([]);
   const { getAccessTokenSilently } = useAuth0();
   const id = match.params.id;
@@ -20,8 +20,8 @@ const ParticipantDetails = ({ match }) => {
       .then(token => ApiClient.getDetails(id, token))
       .then(details => {
         details.age = courseStarts.diff(details.date_of_birth, 'years');
-        setDetails(details)
-        setOldDetails(details)
+        setDetails({...details})
+        setOldDetails({...details})
       })
     ApiClient.getInstruments()
       .then(instruments => setInstruments(instruments))
@@ -68,36 +68,9 @@ const ParticipantDetails = ({ match }) => {
     }
   }
 
-  const sectionSwitch = (param) => {
-    switch (param) {
-      case 'selector-personal':
-        return (<DetailsFormPersonal
-          details={details}
-          isEditting={isEditting}
-          instruments={instruments}
-          handleChange={handleChange}
-          buttonFunctionality={buttonFunctionality}
-          />)
-      case 'selector-health':
-        return (<DetailsFormHealth
-          details={details}
-          isEditting={isEditting}
-          handleChange={handleChange}
-          buttonFunctionality={buttonFunctionality}
-        />)
-      case 'selector-payments':
-        return (<DetailsFormPayments
-          details={details}
-          setDetails={setDetails}
-        />)
-      default:
-        break;
-    }
-  }
-
-  function handleSectionChange ({target}) {
+  function handleSectionChange (url) {
     if (isEditting) return alert("You have to save the changes before changing the section")
-    setSectionId(target.id);
+    return url;
   }
 
   const { isLoading } = useAuth0();
@@ -112,12 +85,37 @@ const ParticipantDetails = ({ match }) => {
         </div>
       </div>
       <div className="section-selectors">
-        <div id="selector-personal" onClick={handleSectionChange}>Personal Details</div>
-        <div id="selector-health" onClick={handleSectionChange}>Health</div>
-        <div id="selector-payments" onClick={handleSectionChange}>Payments</div>
+        <Link to={`${match.url}/personal`}>Health Details</Link>
+        <Link to={`${match.url}/health`}>Health Details</Link>
+        <Link to={`${match.url}/payments`}>Payment Details</Link>
       </div>
       <div className="showcased-section">
-        {sectionSwitch(sectionId)}
+        <Router>
+          {console.log(match.url)}
+          <Route path={`${match.url}/personal`}>
+            <DetailsFormPersonal
+              details={details}
+              isEditting={isEditting}
+              instruments={instruments}
+              handleChange={handleChange}
+              buttonFunctionality={buttonFunctionality}
+            />
+          </Route>
+          <Route path={`${match.url}/health`} render={() =>
+            <DetailsFormHealth
+              details={details}
+              isEditting={isEditting}
+              handleChange={handleChange}
+              buttonFunctionality={buttonFunctionality}
+            />}
+          />
+          <Route path={`${match.url}/payments`} render={() =>
+            <DetailsFormPayments
+              details={details}
+              setDetails={setDetails}
+            />}
+          />
+        </Router>
       </div>
     </div>
   );

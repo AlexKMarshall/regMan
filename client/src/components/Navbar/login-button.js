@@ -10,7 +10,7 @@ const LoginButton = () => {
       variant="primary"
       className="btn-margin"
     >
-      Log In
+      Admin Access
     </button>
   );
 };
