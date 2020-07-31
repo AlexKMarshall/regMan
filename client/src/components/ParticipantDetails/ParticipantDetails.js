@@ -70,7 +70,7 @@ const ParticipantDetails = ({ match }) => {
   }
 
   const { isLoading } = useAuth0();
-  if (isLoading || details === {} || instruments === []) return (<Loading/>)
+  if (isLoading || details == {} || instruments == []) return (<Loading/>)
 
   return (
     <div className="participant-details">

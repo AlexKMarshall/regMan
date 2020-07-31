@@ -28,7 +28,7 @@ const StatusLight = ({status}) => {
         setLightColor('purple')
         break;
       default:
-        setLightColor('red')
+        setLightColor('transparent')
         break;
     }
   }, [status] )

@@ -116,7 +116,7 @@ const DetailsFormPayments = ({ details, setDetails, setDisplayEdit }) => {
                 payment={payment}
                 promptPopup={promptPopup}
               />))
-            : <div className="no-payments">There are no payments to display</div>
+            : <h3 className="no-payments">There are no payments to display</h3>
         }
       </div>
     </section>

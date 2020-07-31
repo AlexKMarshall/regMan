@@ -14,7 +14,7 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
       case 'Delete':
         return (
           <div className="delete-confirmation">
-            `Are you sure that you want to delete ${info.name} ${info.surname}'s registration?`
+            {`Are you sure that you want to delete ${info.first_name} ${info.last_name}'${info.last_name[info.last_name.length - 1] === 's' ? '' : 's'} registration?`}
           </div>
         )
       case 'Add Payment':

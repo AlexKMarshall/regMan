@@ -1,7 +1,6 @@
 .delete-btn {
   background-color: transparent;
   border-radius: 50%;
-  font-size: 14px;
   padding: 0;
   height: 30px;
   width: 30px;
@@ -9,7 +8,8 @@
 
 .delete-btn > span {
   position: relative;
-  left: 2px
+  left: 2px;
+  font-size: 14px;
 }
 
 .delete-btn:hover {

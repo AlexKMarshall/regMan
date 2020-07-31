@@ -25,6 +25,8 @@
 
 .payments-list {
   height: calc(100% - 123px);
+  display: flex;
+  flex-direction: column;
   overflow-y: scroll;
   background-color: #e4e4e4;
 }
@@ -62,4 +64,8 @@
 
 .payment-detail:hover {
   background-color: var(--main-dark-gray);
+}
+
+.no-payments {
+  margin: 20px auto;
 }

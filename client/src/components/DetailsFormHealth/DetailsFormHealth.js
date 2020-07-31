@@ -12,6 +12,9 @@ const DetailsFormHealth = ({ details, isEditting, handleChange, setDisplayEdit }
   return (
     <section id="health-details">
       <div className="form-section">
+        <div className="description">
+          <h3>Health details</h3>
+        </div>
         <div className="fields">
           <div className="field allergies">
             <label htmlFor="allergies">Allergies: </label>

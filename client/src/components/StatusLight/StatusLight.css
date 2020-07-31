@@ -41,3 +41,7 @@
   background-color: rgb(157, 19, 157);
   box-shadow: 0 0 2px rgb(157, 19, 157);
 }
+
+.transparent {
+  background-color: transparent;
+}

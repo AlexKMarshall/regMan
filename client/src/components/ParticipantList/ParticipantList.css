@@ -3,6 +3,10 @@
   height: 90%
 }
 
+.list-container > h3 {
+  text-align: center;
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .list-container::-webkit-scrollbar {
   display: none;
