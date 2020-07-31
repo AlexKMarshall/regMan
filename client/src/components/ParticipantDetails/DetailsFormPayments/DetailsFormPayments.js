@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ApiClient from '@/services/ApiClient';
 import { useAuth0 } from '@auth0/auth0-react';
-import { PaymentDetail, Popup, StatusLight } from '@/components';
+import { PaymentItem, Popup, StatusLight } from '@/components';
 import './DetailsFormPayments.css'
 
 const DetailsFormPayments = ({ details, setDetails, setDisplayEdit }) => {
@@ -111,7 +111,7 @@ const DetailsFormPayments = ({ details, setDetails, setDisplayEdit }) => {
         {
           (details && details.payments && details.payments.length)
             ? details.payments.map(payment => (
-              <PaymentDetail
+              <PaymentItem
                 key={'payment'+payment.id}
                 payment={payment}
                 promptPopup={promptPopup}

@@ -1,8 +1,8 @@
 import React from 'react';
 import moment from 'moment';
-import './PaymentDetail.css'
+import './PaymentItem.css'
 
-const PaymentDetail = ({payment, promptPopup }) => {
+const PaymentItem = ({payment, promptPopup }) => {
   return (
     <div className="payment-detail">
       <div className="payment-detail payment-grid" onClick={() => {
@@ -17,4 +17,4 @@ const PaymentDetail = ({payment, promptPopup }) => {
   );
 }
 
-export default PaymentDetail;
+export default PaymentItem;

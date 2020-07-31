@@ -1,27 +1,27 @@
-import Auth0ProviderWithHistory from './Auth';
-import Confirmation from './Confirmation';
+import Auth0ProviderWithHistory from './Resources/Auth';
+import Confirmation from './Form/Confirmation';
 import Dashboard from "./Dashboard";
-import DeleteParticipantButton from './DeleteParticipantButton';
-import DetailsFormHealth from './DetailsFormHealth';
-import DetailsFormPayments from './DetailsFormPayments';
-import DetailsFormPersonal from './DetailsFormPersonal';
-import EditButtons from './EditButtons';
-import Error404 from './Error404';
-import Error500 from './Error500';
+import DeleteParticipantButton from './Resources/DeleteParticipantButton';
+import DetailsFormHealth from './ParticipantDetails/DetailsFormHealth';
+import DetailsFormPayments from './ParticipantDetails/DetailsFormPayments';
+import DetailsFormPersonal from './ParticipantDetails/DetailsFormPersonal';
+import EditButtons from './Resources/EditButtons';
+import Error404 from './Errors/Error404';
+import Error500 from './Errors/Error500';
 import Form from "./Form";
-import GroupsList from './GroupsList';
-import InstrumentList from './InstrumentList';
-import Loading from './Loading';
-import Navbar from "./Navbar";
+import GroupsList from './Dashboard/GroupsList';
+import InstrumentList from './Dashboard/GroupsList/InstrumentList';
+import Loading from './Resources/Loading';
+import Navbar from "./Resources/Navbar";
 import ParticipantDetails from "./ParticipantDetails";
-import ParticipantItem from './ParticipantItem';
-import ParticipantList from './ParticipantList';
-import Popup from './Popup';
-import PopupMessage from './PopupMessage';
-import PrivateRoute from './PrivateRoute';
-import PaymentDetail from './PaymentDetail';
-import SmartLink from './SmartLink';
-import StatusLight from './StatusLight';
+import ParticipantItem from './Dashboard/ListParticipants/ParticipantItem';
+import ParticipantList from './Dashboard/ListParticipants/ParticipantList';
+import Popup from './Resources/Popup';
+import PopupMessage from './Resources/Popup/PopupMessage';
+import PrivateRoute from './Resources/PrivateRoute';
+import PaymentItem from './ParticipantDetails/DetailsFormPayments/PaymentItem';
+import SmartLink from './Resources/SmartLink';
+import StatusLight from './Resources/StatusLight';
 
 export {
   Auth0ProviderWithHistory,
@@ -42,7 +42,7 @@ export {
   ParticipantDetails,
   ParticipantItem,
   ParticipantList,
-  PaymentDetail,
+  PaymentItem,
   Popup,
   PopupMessage,
   PrivateRoute,
