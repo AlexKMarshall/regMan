@@ -3,8 +3,5 @@
 }
 
 .payment-detail {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
   cursor: pointer;
 }

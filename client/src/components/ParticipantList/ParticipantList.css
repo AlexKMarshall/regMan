@@ -36,7 +36,7 @@
   background-color: var(--header-bg);
   color: white;
   font-weight: 600;
-  padding: 20px 0;
+  padding: 15px 0;
 }
 
 .grid-header:hover {
@@ -89,6 +89,21 @@
 
 .grid-delete {
   grid-area: delete;
+}
+
+.grid-date {
+  grid-area: date;
+  padding-left: 25px;
+}
+
+.grid-type-payment {
+  grid-area: type;
+}
+
+.grid-amount {
+  grid-area: amount;
+  justify-self: right;
+  padding-right: 25px;
 }
 
 .participant-container {

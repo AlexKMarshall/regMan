@@ -80,15 +80,17 @@ const DetailsFormPayments = ({ details, setDetails, setDisplayEdit }) => {
     <section id="payments">
       {popupBackground}
       <div className="global-payment-status">
-        <div className="payment status">
-          <StatusLight status={paymentDetails.payment_status} />
-          <p>Payment status: <b>{paymentDetails.payment_status}</b></p>
+        <div className="status-information">
+          <div className="payment status">
+            <StatusLight status={paymentDetails.payment_status} />
+            <p>Payment status: <b>{paymentDetails.payment_status}</b></p>
+          </div>
+          <div className="payment-information">
+            <div className="payment course-price">Course price: {Number.parseFloat(paymentDetails.course_price/100).toFixed(2) + ' €'}</div>
+            <div className="payment amount-paid">Amount paid: {Number.parseFloat(paymentDetails.amount_paid/100).toFixed(2) + ' €'}</div>
+            <div className="payment amount-due">Amount due: <b>{Number.parseFloat(paymentDetails.amount_due/100).toFixed(2) + ' €'}</b></div>
+          </div>
         </div>
-        <div className="payment course-price">Course price: {Number.parseFloat(paymentDetails.course_price/100).toFixed(2) + ' €'}</div>
-        <div className="payment amount-paid">Amount paid: {Number.parseFloat(paymentDetails.amount_paid/100).toFixed(2) + ' €'}</div>
-        <div className="payment amount-due">Amount due: <b>{Number.parseFloat(paymentDetails.amount_due/100).toFixed(2) + ' €'}</b></div>
-      </div>
-      <div className="payments-list">
         <div className="new-payment-button">
           <button
             onClick={()=> promptPopup({
@@ -99,6 +101,13 @@ const DetailsFormPayments = ({ details, setDetails, setDisplayEdit }) => {
             Add new payment
           </button>
         </div>
+      </div>
+      <div className="payment-grid grid-header">
+        <div className="grid-item grid-header-item grid-date">Payment Date</div>
+        <div className="grid-item grid-header-item grid-type-payment">Type of Payment</div>
+        <div className="grid-item grid-header-item grid-amount">Amount</div>
+      </div>
+      <div className="payments-list">
         {
           (details && details.payments && details.payments.length)
             ? details.payments.map(payment => (
