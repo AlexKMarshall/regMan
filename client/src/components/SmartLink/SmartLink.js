@@ -6,13 +6,13 @@ import { Link } from 'react-router-dom';
 const SmartLink = ({isEditting, match, to, value}) => {
   if (isEditting) {
     return (
-      <div onClick={() => alert("You have to save the changes before changing the section")}>
+      <div className="section-selectors" onClick={() => alert("You have to save the changes before changing the section")}>
         <span>{value}</span>
       </div>
     )
   } else {
     return (
-      <div>
+      <div className="section-selectors">
         <Link to={`/dashboard/details/${match.params.id}/${to}`}>{value}</Link>
       </div>
     );

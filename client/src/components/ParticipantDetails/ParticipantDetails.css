@@ -1,23 +1,29 @@
 .disabled {
-  background-color: var(--main-light-gray);
+  background-color: var(--main-medium-gray);
   cursor: not-allowed;
   opacity: 1;
   color: var(--main-green);
 }
 
-.header {
+.details-header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
 .participant-details {
+  background-color: var(--highlight-bg);
+  border-radius: 10px;
+  height: calc(100vh - 166px);
   padding: 40px;
+  margin: 40px auto;
+  width: 80%;
 }
 
 .showcased-section {
   display: flex;
   flex-direction: row;
+  height: calc(100% - 110px);
   overflow: hidden;
   width: 100%;
 }
@@ -27,12 +33,39 @@
 }
 
 .section-selectors {
-  display: flex;
+  background-color: var(--main-yellow);
+  border-radius: 5px;
+  font-weight: 700;
+  margin-right: 5px;
+  padding: 10px 15px 9px 15px;
+  align-self: center;
+}
+
+.section-selectors:hover {
+  background-color: var(--main-btn-hover);
+}
+
+.selected-section {
+  background-color: var(--crisol-orange);
+}
+
+.selectors-container {
   width: 50%;
-  justify-content: space-around;
-  margin-top: 20px;
+  display: flex;
+  justify-content: start;
+  height: 50px;
 }
 
 .displayed-information {
   display: flex;
+}
+
+.details-nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+.hide-buttons {
+  display: none;
 }

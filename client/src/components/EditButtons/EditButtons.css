@@ -5,21 +5,27 @@
 .edit-buttons {
   display: flex;
   flex-direction: row-reverse;
+
 }
 
 .edit-buttons > div >button {
   padding: 10px 15px;
-  background-color: orange;
+  background-color: var(--main-yellow);
   font-weight: 700;
   border: none;
   border-radius: 5px;
   margin-left: 5px;
 }
+
 .edit-buttons > div> button:last-child{
   background-color: #d2d2d2;
-
 }
+
+.edit-buttons > div> button:first-child{
+  background-color: var(--main-light-orange);
+}
+
 .edit-buttons > div> button:hover {
-  background-color: orangered;
+  background-color: var(--main-btn-hover);
   cursor: pointer;
 }

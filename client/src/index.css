@@ -1,14 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
 :root {
   --light-bg: #f4f3f1;
-  --highlight-bg: #efd9c3;
+  --highlight-bg: #f2e0ce;
   --main-light-orange: #ffaa67;
   --main-btn-hover: #f28939;
   --main-dark-orange: #da674a;
-  --main-yellow: #ffcd79;
+  --main-yellow: #f9c670;
   --main-green: #39998e;
   --main-dark: #1c1d1d;
   --main-red: #ff4557;
   --main-dark-gray: #aebfd1;
+  --main-medium-gray: #c5d2de;
   --main-light-gray: #f2f5f7;
   --main-dark-purple: #57455a;
   --main-btn-letters: #2e2115;
@@ -18,15 +21,15 @@
 
 body {
   margin: 0;
-  font-family: 'avenir', sans-serif;
-  font-size: large;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   background-color: var(--light-bg);
 }
 
 * {
   box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  font-size: large;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
   transition: all 0.3s ease;

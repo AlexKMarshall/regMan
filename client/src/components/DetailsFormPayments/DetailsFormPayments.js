@@ -4,10 +4,14 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { PaymentDetail, Popup, StatusLight } from '@/components';
 import './DetailsFormPayments.css'
 
-const DetailsFormPayments = ({ details, setDetails }) => {
+const DetailsFormPayments = ({ details, setDetails, setDisplayEdit }) => {
   const [popupInfo, setPopupInfo] = useState({});
   const { getAccessTokenSilently } = useAuth0();
   const [paymentDetails, setPaymentDetails] = useState({});
+
+  useEffect(() => {
+    setDisplayEdit(false)
+  }, [])
 
   useEffect(() => {
     if (details && details.payments) {
