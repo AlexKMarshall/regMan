@@ -58,20 +58,30 @@ const Dashboard = () => {
       {popupBackground}
       <Router>
         <Navbar />
-        <Route path="/dashboard/list" exact render={() => (
+        <Route path="/dashboard/list" exact render={(props) => (
           <ParticipantList
+            {...props}
             participants={participants}
             promptPopup={promptPopup}
           />)}
         />
-        <Route path="/dashboard/groups" exact render={() => (
+        <Route path="/dashboard/groups" exact render={(props) => (
           <GroupsList
+            {...props}
             participants={participants}
             instruments={instruments}
             promptPopup={promptPopup}
           />)}
         />
-        <Route path="/dashboard/details/:id/:section" component={ParticipantDetails} />
+        <Route path="/dashboard/details/:id/:section" render={(props) => (
+          <ParticipantDetails
+            {...props}
+            participants={participants}
+            setParticipants={setParticipants}
+            instruments={instruments}
+
+          />)}
+        />
       </Router>
     </div>
   );

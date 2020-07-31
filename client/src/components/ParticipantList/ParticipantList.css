@@ -130,3 +130,18 @@
   font-weight: 700;
   /* font-size: 20px; */
 }
+
+.toggle-container {
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 0 10px 10px 0;
+}
+
+.toggle-vertical-align {
+  display: flex;
+  align-content: center;
+}
+
+.toggle-vertical-align > span {
+  margin-right: 10px;
+}

@@ -6,11 +6,10 @@ import { Loading, DetailsFormHealth, DetailsFormPayments, DetailsFormPersonal, S
 import moment from 'moment';
 import './ParticipantDetails.css'
 
-const ParticipantDetails = ({ match }) => {
+const ParticipantDetails = ({ match, instruments, participants, setParticipants }) => {
   const [details, setDetails] = useState({});
   const [oldDetails, setOldDetails] = useState({});
   const [isEditting, setIsEditting] = useState(false);
-  const [instruments, setInstruments] = useState([]);
   const [displayEdit, setDisplayEdit] = useState(true);
   const { getAccessTokenSilently } = useAuth0();
   const id = match.params.id;
@@ -24,8 +23,6 @@ const ParticipantDetails = ({ match }) => {
         setDetails({...details})
         setOldDetails({...details})
       })
-    ApiClient.getInstruments()
-      .then(instruments => setInstruments(instruments))
   },[]);
 
   const buttonFunctionality = {
@@ -35,6 +32,16 @@ const ParticipantDetails = ({ match }) => {
     submitChanges: () => {
       getAccessTokenSilently()
       .then(token => ApiClient.putParticipantChanges(details, token))
+      setParticipants(oldList => {
+        const filtered = oldList.filter(attendant => attendant.id !== +id)
+        const complete = [...filtered, details]
+        complete.sort((a, b) => {
+          const sortA = a.last_name
+          const sortB = b.last_name
+          return sortA.localeCompare(sortB, 'es', {sensitivity: 'base', ignorePunctuation: true})
+        })
+        return complete;
+      })
       setOldDetails(details)
       setIsEditting(!isEditting);
     },
@@ -87,7 +94,6 @@ const ParticipantDetails = ({ match }) => {
             <SmartLink to="health" value="Health Details" match={match} isEditting={isEditting} />
             <SmartLink to="payments" value="Payment Details" match={match} isEditting={isEditting} />
           </div>
-          {console.log(displayEdit)}
           <div className="edit-buttons" >
             <div className={displayEdit ? '' : 'hide-buttons'}>
               <EditButtons isEditting={isEditting} buttonFunctionality={buttonFunctionality} />
