@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import ApiClient from '@/services/ApiClient';
 import { useAuth0 } from '@auth0/auth0-react';
 import { PaymentItem, Popup, StatusLight } from '@/components';
-import './DetailsFormPayments.css'
+import './PaymentsDetails.css'
 
-const DetailsFormPayments = ({ details, setDetails, setDisplayEdit }) => {
+const PaymentsDetails = ({ details, setDetails, setDisplayEdit }) => {
   const [popupInfo, setPopupInfo] = useState({});
   const { getAccessTokenSilently } = useAuth0();
   const [paymentDetails, setPaymentDetails] = useState({});
@@ -123,4 +123,4 @@ const DetailsFormPayments = ({ details, setDetails, setDisplayEdit }) => {
   );
 }
 
-export default DetailsFormPayments;
+export default PaymentsDetails;

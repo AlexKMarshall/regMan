@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { EditButtons } from '@/components';
-import './DetailsFormHealth.css';
+import './HealthDetails.css';
 
-const DetailsFormHealth = ({ details, isEditting, handleChange, setDisplayEdit }) => {
+const HealthDetails = ({ details, isEditting, handleChange, setDisplayEdit }) => {
 
   useEffect(() => {
     setDisplayEdit(true)
@@ -33,4 +32,4 @@ const DetailsFormHealth = ({ details, isEditting, handleChange, setDisplayEdit }
   );
 }
 
-export default DetailsFormHealth;
+export default HealthDetails;

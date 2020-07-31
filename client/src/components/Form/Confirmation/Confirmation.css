@@ -1,0 +1,26 @@
+.confirmation-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.confirmation {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 40px;
+  background-color: var(--highlight-bg);
+  box-shadow: 0 0 2px gray;
+  border-radius: 10px;
+  text-align: center;
+  margin: auto;
+  max-width: 750px;
+}
+
+.confirmation-button {
+  margin-top: 25px;
+}
+
+.confirmation-text > p {
+  margin-top: 10px;
+}

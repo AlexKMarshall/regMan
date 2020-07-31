@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
 import ApiClient from '@/services/ApiClient';
 import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { Loading, DetailsFormHealth, DetailsFormPayments, DetailsFormPersonal, StatusLight, SmartLink, EditButtons } from '@/components';
+import { Loading, HealthDetails, PaymentsDetails, PersonalDetails, StatusLight, SmartLink, EditButtons } from '@/components';
 import moment from 'moment';
 import './ParticipantDetails.css'
 
-const ParticipantDetails = ({ match, instruments, participants, setParticipants }) => {
+const ParticipantDetails = ({ match, instruments, setParticipants }) => {
   const [details, setDetails] = useState({});
   const [oldDetails, setOldDetails] = useState({});
   const [isEditting, setIsEditting] = useState(false);
@@ -63,21 +63,21 @@ const ParticipantDetails = ({ match, instruments, participants, setParticipants 
         }))
         break;
 
-        case 'instrumentId':
-          const [instr] = instruments.filter(instrument => instrument.id === +target.value);
-          setDetails(details => ({
-            ...details,
-            instrumentId: target.value,
-            instrument: instr
-          }))
-
+      case 'instrumentId':
+        const [instr] = instruments.filter(instrument => instrument.id === +target.value);
+        setDetails(details => ({
+          ...details,
+          instrumentId: target.value,
+          instrument: instr
+        }))
+        break;
       default:
         return setDetails(details => ({...details, [target.name]: target.value}));
     }
   }
 
   const { isLoading } = useAuth0();
-  if (isLoading || details == {} || instruments == []) return (<Loading/>)
+  if (isLoading || details === {} || instruments === []) return (<Loading/>)
 
   return (
     <div className="participant-details">
@@ -102,7 +102,7 @@ const ParticipantDetails = ({ match, instruments, participants, setParticipants 
         </div>
         <div className="showcased-section">
           <Route path={`/dashboard/details/${match.params.id}/personal`} render={(props) => (
-            <DetailsFormPersonal
+            <PersonalDetails
               {...props}
               details={details}
               isEditting={isEditting}
@@ -113,7 +113,7 @@ const ParticipantDetails = ({ match, instruments, participants, setParticipants 
             />)}
           />
           <Route path={`/dashboard/details/${match.params.id}/health`} render={(props) => (
-            <DetailsFormHealth
+            <HealthDetails
               {...props}
               details={details}
               isEditting={isEditting}
@@ -123,7 +123,7 @@ const ParticipantDetails = ({ match, instruments, participants, setParticipants 
             />)}
           />
           <Route path={`/dashboard/details/${match.params.id}/payments`} render={(props) => (
-            <DetailsFormPayments
+            <PaymentsDetails
               {...props}
               details={details}
               setDetails={setDetails}

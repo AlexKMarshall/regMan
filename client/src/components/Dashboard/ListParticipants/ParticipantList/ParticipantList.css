@@ -37,7 +37,7 @@
 }
 
 .grid-header {
-  background-color: var(--header-bg);
+  background-color: var(--header-bg) !important;
   color: white;
   font-weight: 600;
   padding: 15px 0;

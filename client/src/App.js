@@ -9,7 +9,6 @@ import {
   Error500,
   Form,
   Loading,
-  Navbar,
   PrivateRoute,
 } from '@/components'
 import '@/App.css';

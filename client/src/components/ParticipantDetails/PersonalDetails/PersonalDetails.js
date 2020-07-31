@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import moment from 'moment';
-import {EditButtons} from '@/components'
-import './DetailsFormPersonal.css'
+import './PersonalDetails.css'
 
-const DetailsFormPersonal = ({details, instruments, isEditting, handleChange, setDisplayEdit}) => {
+const PersonalDetails = ({details, instruments, isEditting, handleChange, setDisplayEdit}) => {
 
   useEffect(() => {
     setDisplayEdit(true)
@@ -151,4 +150,4 @@ const DetailsFormPersonal = ({details, instruments, isEditting, handleChange, se
   );
 }
 
-export default DetailsFormPersonal;
+export default PersonalDetails;
