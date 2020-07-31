@@ -11,11 +11,12 @@
 }
 
 .popup {
-  width: 50%;
-  padding: 40px;
+  background-color: #eeeeee;
+  border-radius: 10px;;
   display: flex;
   flex-direction: column;
-  background-color: #eeeeee;
+  padding: 40px;
+  width: 50%;
 }
 
 .popup-buttons {
@@ -30,11 +31,21 @@
   border-radius: 5px;
   border: none;
   box-shadow: 0 0 2px grey;
+  width: 150px;
 }
 
-.popup-buttons > button:last-child {
-  background-color: rgb(233, 68, 68);
+.popup-buttons > button:first-child {
+  background-color: #d2d2d2;
 }
+
+.popup-buttons > button:first-child:hover {
+  background-color: var(--main-btn-hover);
+}
+
 .popup-buttons > button:hover {
-  box-shadow: 0 0 4px black;
+  box-shadow: 0 0 4px grey;
+}
+
+.delete-confirmation {
+  text-align: center;
 }

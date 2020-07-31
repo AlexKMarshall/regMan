@@ -24,8 +24,9 @@
 }
 
 .payments-list {
-  height: calc(100% - 62px);
+  height: calc(100% - 123px);
   overflow-y: scroll;
+  background-color: #e4e4e4;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -46,8 +47,6 @@
   grid-template-columns: 2fr 2fr 1fr;
   grid-template-areas: "date type amount"
 }
-
-
 
 .payment-detail:after {
   content: "";
