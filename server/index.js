@@ -15,7 +15,7 @@ const SERVER_PORT = process.env.SERVER_PORT || 3005;
 db.sequelize.sync(); //{force: true}
 
 const corsConfig = {
-  origin: 'http://localhost:3000',
+  origin: process.env.CLIENT_HOST,
   credentials: true,
 }
 
