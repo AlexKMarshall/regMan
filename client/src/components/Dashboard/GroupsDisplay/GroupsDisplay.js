@@ -12,7 +12,18 @@ const GroupsDisplay = ({ participants, instruments}) => {
 
   const generateData = () => {
     setNumParticipants(participants.length)
-    const underageParticipants = participants.filter(participant => participant.is_underage)
+    const underageParticipants = [];
+    const instrumentDistribution = {
+      Fiddle: [],
+      Cello: [],
+      Guitar: [],
+      Flute: [],
+      'Fiddle Beginners': []
+    };
+    participants.forEach(participant => {
+      participant.is_underage && underageParticipants.push(participant);
+      instrumentDistribution[participant.instrument.name].push(participant)
+    })
     setNumUnderage(underageParticipants.length)
     const instrNamesArray = []
     const instrMaxArray = []
