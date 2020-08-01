@@ -2,7 +2,9 @@ const { instrument } = require('../models');
 
 exports.getInstruments = async (req, res) => {
   try {
-    const instruments = await instrument.findAll();
+    const instruments = await instrument.findAll({
+      order: [['id', 'asc']]
+    });
     res.status(200);
     res.json(instruments);
   } catch (error) {
@@ -22,14 +24,14 @@ exports.postInstrument = async (req, res) => {
   }
 };
 
-exports.putInstrument = async (req, res) => {
+exports.putInstruments = async (req, res) => {
   try {
-    const [rowsUpdated, [ updatedInstrument ]] = await instrument.update( // eslint-disable-line no-unused-vars
-      {...req.body},
-      {returning: true, where: {id: req.params.id}}
-    );
+    await req.body.forEach(async instr => await instrument.update({max_attendants: instr.max_attendants}, {where: {id: instr.id}}));
+    const updatedInstruments = await instrument.findAll({
+      order: [['id', 'asc']]
+    });
     res.status(200);
-    res.json(updatedInstrument);
+    res.json(updatedInstruments);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);

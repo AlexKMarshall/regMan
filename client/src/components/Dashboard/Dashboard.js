@@ -70,6 +70,7 @@ const Dashboard = () => {
             {...props}
             participants={participants.filter(participant => participant.registration_status !== 'Cancelled')}
             instruments={instruments}
+            setInstruments={setInstruments}
           />)}
         />
         <Route path="/dashboard/details/:id/:section" render={(props) => (

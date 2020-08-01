@@ -78,7 +78,7 @@ function getInstruments () {
 }
 
 function putEditInstrument (instrument, token) {
-  return fetchFromDb(`instruments/${instrument._id}`, {
+  return fetchFromDb('instruments', {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${token}`,

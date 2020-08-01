@@ -13,7 +13,7 @@ router.get('/payments/:id', paymentsController.getPaymentsByAttendantId);
 router.post('/payments', paymentsController.postNewPayment);
 router.put('/payments/update/:id', paymentsController.putUpdatePayment);
 
-router.put('/instruments/:id', instrumentsController.putInstrument)
+router.put('/instruments', instrumentsController.putInstruments)
 // router.post('/instruments', instrumentsController.postInstrument)
 // router.delete('/instruments/:id', instrumentsController.deleteInstrument)
 
