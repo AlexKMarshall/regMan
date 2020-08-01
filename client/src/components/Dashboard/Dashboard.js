@@ -3,7 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import ApiClient from '@/services/ApiClient';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './Dashboard.css'
-import {  Popup, ParticipantList, GroupsList, ParticipantDetails, Navbar } from '@/components';
+import {  Popup, ParticipantList, GroupsDisplay, ParticipantDetails, Navbar } from '@/components';
 
 const Dashboard = () => {
   const [participants, setParticipants] = useState([]);
@@ -66,17 +66,15 @@ const Dashboard = () => {
           />)}
         />
         <Route path="/dashboard/groups" exact render={(props) => (
-          <GroupsList
+          <GroupsDisplay
             {...props}
-            participants={participants}
+            participants={participants.filter(participant => participant.registration_status !== 'Cancelled')}
             instruments={instruments}
-            promptPopup={promptPopup}
           />)}
         />
         <Route path="/dashboard/details/:id/:section" render={(props) => (
           <ParticipantDetails
             {...props}
-            participants={participants}
             setParticipants={setParticipants}
             instruments={instruments}
 

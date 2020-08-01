@@ -6,9 +6,8 @@ import EditButtons from './Resources/EditButtons';
 import Error404 from './Errors/Error404';
 import Error500 from './Errors/Error500';
 import Form from "./Form";
-import GroupsList from './Dashboard/GroupsList';
+import GroupsDisplay from './Dashboard/GroupsDisplay';
 import HealthDetails from './ParticipantDetails/HealthDetails';
-import InstrumentList from './Dashboard/GroupsList/InstrumentList';
 import Loading from './Resources/Loading';
 import Navbar from "./Resources/Navbar";
 import ParticipantDetails from "./ParticipantDetails";
@@ -32,9 +31,8 @@ export {
   Error404,
   Error500,
   Form,
-  GroupsList,
+  GroupsDisplay,
   HealthDetails,
-  InstrumentList,
   Loading,
   Navbar,
   ParticipantDetails,
