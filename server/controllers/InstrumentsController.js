@@ -26,7 +26,17 @@ exports.postInstrument = async (req, res) => {
 
 exports.putInstruments = async (req, res) => {
   try {
-    await req.body.forEach(async instr => await instrument.update({max_attendants: instr.max_attendants}, {where: {id: instr.id}}));
+    let i = 0;
+    const instr = req.body;
+    await instrument.update({max_attendants: instr[i].max_attendants}, {where: {id: instr[i].id}});
+    i++;
+    await instrument.update({max_attendants: instr[i].max_attendants}, {where: {id: instr[i].id}});
+    i++;
+    await instrument.update({max_attendants: instr[i].max_attendants}, {where: {id: instr[i].id}});
+    i++;
+    await instrument.update({max_attendants: instr[i].max_attendants}, {where: {id: instr[i].id}});
+    i++;
+    await instrument.update({max_attendants: instr[i].max_attendants}, {where: {id: instr[i].id}});
     const updatedInstruments = await instrument.findAll({
       order: [['id', 'asc']]
     });
