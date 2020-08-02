@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth0 } from "@auth0/auth0-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
 
 import LogoutButton from "./logout-button";
 import LoginButton from "./login-button";
@@ -29,6 +29,7 @@ const Navbar = ({match}) => {
           </li>
         </ul>
       ) : (<div></div>)}
+      <a href="/"><div className="crisol-logo"></div></a>
       {isAuthenticated ? <LogoutButton /> : <LoginButton />}
     </nav>
   );

@@ -3,7 +3,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import ApiClient from '@/services/ApiClient';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './Dashboard.css'
-import {  Popup, ParticipantList, GroupsDisplay, ParticipantDetails, Navbar } from '@/components';
+import {  Popup, ParticipantList, GroupsDisplay, ParticipantDetails, Navbar, Form } from '@/components';
 
 const Dashboard = () => {
   const [participants, setParticipants] = useState([]);
@@ -58,29 +58,31 @@ const Dashboard = () => {
       {popupBackground}
       <Router>
         <Navbar />
-        <Route path="/dashboard/list" exact render={(props) => (
-          <ParticipantList
-            {...props}
-            participants={participants}
-            promptPopup={promptPopup}
-          />)}
-        />
-        <Route path="/dashboard/groups" exact render={(props) => (
-          <GroupsDisplay
-            {...props}
-            participants={participants.filter(participant => participant.registration_status !== 'Cancelled')}
-            instruments={instruments}
-            setInstruments={setInstruments}
-          />)}
-        />
-        <Route path="/dashboard/details/:id/:section" render={(props) => (
-          <ParticipantDetails
-            {...props}
-            setParticipants={setParticipants}
-            instruments={instruments}
+        <div className="dashboard">
+          <Route path="/dashboard/list" exact render={(props) => (
+            <ParticipantList
+              {...props}
+              participants={participants}
+              promptPopup={promptPopup}
+            />)}
+          />
+          <Route path="/dashboard/groups" exact render={(props) => (
+            <GroupsDisplay
+              {...props}
+              participants={participants.filter(participant => participant.registration_status !== 'Cancelled')}
+              instruments={instruments}
+              setInstruments={setInstruments}
+            />)}
+          />
+          <Route path="/dashboard/details/:id/:section" render={(props) => (
+            <ParticipantDetails
+              {...props}
+              setParticipants={setParticipants}
+              instruments={instruments}
 
-          />)}
-        />
+            />)}
+          />
+        </div>
       </Router>
     </div>
   );

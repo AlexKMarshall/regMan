@@ -44,6 +44,9 @@ const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
       instrNamesArray.push(instr.name)
       instrMaxArray.push(instr.max_attendants)
     })
+    // for (let i = 0; i < 100; i++) {
+    //   ageFreq[i] = 0;
+    // }
     if (agesArray) {
       for (let el of agesArray){
         if (ageFreq.hasOwnProperty(el)) ageFreq[el] += 1;
@@ -84,7 +87,13 @@ const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
       labels: instrumentNames,
       datasets: [{
         label: 'registrered participants',
-        data: [instrDistribution['Flute'].length, instrDistribution['Fiddle'].length, instrDistribution['Cello'].length, instrDistribution['Guitar'].length, instrDistribution['Fiddle Beginner'].length],
+        data: [
+          instrDistribution['Flute'].length,
+          instrDistribution['Fiddle'].length,
+          instrDistribution['Cello'].length,
+          instrDistribution['Guitar'].length,
+          instrDistribution['Fiddle Beginner'].length
+        ],
         backgroundColor: ['#f7bd92', '#90f3e7', '#7ea4cc', '#ff808c', '#a17fa7']
       },
       {
@@ -158,100 +167,128 @@ const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
 
   return (
     <div className="charts-container" >
-      <div className="chart-underage" style={{height: '400px', width: '400px'}}>
-        <Doughnut data={underageData} options={{
-          responsive: true,
-          title: {text: 'Percentage of underage attendants', display: true},
-        }}/>
-      </div>
-      <div className="chart-max-instr-distribution" style={{height: '400px', width: '400px'}}>
-        <Doughnut data={instrMaxDistributionData} options={{
-          responsive: true,
-          title: {text: 'Distribution of spots per instrument', display: true}
-          }}
-        />
-      </div>
-      <div className="chart-ocupation-instrument" style={{height: '400px', width: '400px'}}>
-        <Bar data={participantsDitrByInstr} options={{
-          maintainAspectRatio: false,
-          responsive: true,
-          title: {text: 'Group ocupation vs maximum attendants', display: true},
-          legend: {display: false},
-          scales: {
-            yAxes: [
-              {
-                ticks: {
-                  autoSkip: true,
-                  maxTicksLimit: 2,
-                  beginAtZero: true,
-                },
-                gridLines: {
-                  display: false,
+      <div className="chart-grid">
+        <div className="chart-card">
+          <div className="groups-setup">
+            <form>
+              <div className="fields">
+                {instrClone.length && console.log(instrClone[0].max_attendants)}
+                {
+                  instrClone.length && instrClone.map(instr => (
+                    <div key={'instr'+instr.id} className="graph-field">
+                      <label htmlFor={instr.name}>{instr.name}</label>
+                      <input type="number" min="0" name={instr.name} value={instr.max_attendants} onChange={handleChange}/>
+                    </div>
+                  ))
                 }
-              }
-            ]
-          }
-        }}/>
-      </div>
-      <div className="chart-remaining-spots" style={{height: '400px', width: '400px'}}>
-        <Doughnut data={availableSpotsData} options={{
-          responsive: true,
-          title: {text: 'total remaining spots', display: true},
-        }}/>
-      </div>
-      <div className="chart-ocupation-instrument" style={{height: '400px', width: '800px'}}>
-        <Line data={ageFreqData} options={{
-          responsive: true,
-          title: {text: 'age distribution', display: true},
-          legend: {display: false},
-          scales: {
-            yAxes: [
-              {
-                ticks: {
-                  autoSkip: true,
-                  maxTicksLimit: 2,
-                  beginAtZero: true,
-                },
-                gridLines: {
-                  display: false,
-                }
-              }
-            ],
-            xAxes: [
-              {
-                ticks: {
-                  autoSkip: true,
-                  maxTicksLimit: 99,
-                  beginAtZero: true
-                }
-              }
-            ]
-          }
-        }}/>
-      </div>
-      <div className="groups-setup">
-        <form>
-          <div className="fields">
-            {instrClone.length && console.log(instrClone[0].max_attendants)}
-            {
-              instrClone.length && instrClone.map(instr => (
-                <div key={'instr'+instr.id} className="field">
-                  <label htmlFor={instr.name}>{instr.name}</label>
-                  {/* {console.log(instr.name, instr.max_attendants, instr)} */}
-                  <input type="number" min="0" name={instr.name} value={instr.max_attendants} onChange={handleChange}/>
-                </div>
-              ))
-            }
+              </div>
+              <div className="total-participants">
+                Total Spots: {instrClone.length && instrClone.reduce((acc, el) => acc + el.max_attendants, 0)}
+              </div>
+              <div className="groups-setup-btn">
+                <button onClick={submitMaxValues}>Update Group Limits</button>
+                <button onClick={cancelChanges}>Cancel Changes</button>
+              </div>
+            </form>
           </div>
-          <div className="total-participants">
-            Total Spots: {instrClone.length && instrClone.reduce((acc, el) => acc + el.max_attendants, 0)}
-          </div>
-          <div className="groups-setup-btn">
-            <button onClick={submitMaxValues}>Update Group Limits</button>
-            <button onClick={cancelChanges}>Cancel Changes</button>
-          </div>
-        </form>
+        </div>
       </div>
+      <div className="chart-grid">
+        <div className="chart-card" >
+          <div className="chart-max-instr-distribution" style={{height: '300px'}}>
+            <Doughnut data={instrMaxDistributionData} options={{
+              maintainAspectRatio: false,
+              responsive: true,
+              title: {text: 'Distribution of spots per instrument', display: true}
+              }}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="chart-grid">
+        <div className="chart-card">
+          <div className="chart-ocupation-instrument" style={{height: '300px'}}>
+            <Bar data={participantsDitrByInstr} options={{
+              maintainAspectRatio: false,
+              responsive: true,
+              title: {text: 'Group ocupation vs maximum attendants', display: true},
+              legend: {display: false},
+              scales: {
+                yAxes: [
+                  {
+                    ticks: {
+                      autoSkip: true,
+                      maxTicksLimit: 2,
+                      beginAtZero: true,
+                    },
+                    gridLines: {
+                      display: false,
+                    }
+                  }
+                ]
+              }
+            }}/>
+          </div>
+        </div>
+      </div>
+      <div className="chart-grid">
+        <div className="chart-card">
+          <div className="chart-remaining-spots" style={{height: '300px'}}>
+            <Doughnut data={availableSpotsData} options={{
+              maintainAspectRatio: false,
+              responsive: true,
+              title: {text: 'total remaining spots', display: true},
+            }}/>
+          </div>
+        </div>
+      </div>
+      <div className="chart-grid">
+        <div className="chart-card">
+          <div className="chart-underage" style={{height: '300px'}}>
+            <Doughnut data={underageData} options={{
+              maintainAspectRatio: false,
+              responsive: true,
+              title: {text: 'Percentage of underage attendants', display: true},
+            }}/>
+          </div>
+        </div>
+      </div>
+      <div className="chart-grid">
+        <div className="chart-card">
+          <div className="chart-ocupation-instrument" style={{height: '350px', width: '350px'}}>
+            <Line data={ageFreqData} options={{
+              maintainAspectRatio: false,
+              responsive: true,
+              title: {text: 'age distribution', display: true},
+              legend: {display: false},
+              scales: {
+                xAxes: [
+                  {
+                    ticks: {
+                      min: 0,
+                      max: 100,
+                      maxTicksLimit: 10
+                    }
+                  }
+                ],
+                yAxes: [
+                  {
+                    ticks: {
+                      autoSkip: true,
+                      maxTicksLimit: 2,
+                      beginAtZero: true,
+                    },
+                    gridLines: {
+                      display: false,
+                    }
+                  }
+                ]
+              }
+            }}/>
+          </div>
+        </div>
+      </div>
+      <div className="white-space"></div>
     </div>
   );
 }
