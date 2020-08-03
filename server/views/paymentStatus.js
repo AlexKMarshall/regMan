@@ -4,7 +4,7 @@ exports.paymentStatus = (paymentData) => {
   const { payments } = paymentData
   const course_price = 60000;
   const amount_paid = payments.reduce((acc, el) => {
-    const value = el.type_of_payment === 'Payment' ? +el.amount_paid : -el.amount_paid;
+    const value = el.type_of_payment === 'Refund' ? -el.amount_paid : +el.amount_paid;
     return acc + value;
   }, 0);
   const amount_due = course_price - amount_paid;
@@ -27,8 +27,8 @@ exports.paymentStatus = (paymentData) => {
             <p>Here's list of all the payments received until today. If you've made any other payments, we might have missed it. Please send us the receipt so that we can track them down.</p>
             <ul>
             ${payments.map(payment => {
-              const value = payment.type_of_payment === 'Payment' ? +payment.amount_paid : -payment.amount_paid;
-              return `<li>${Number.parseFloat(value/100).toFixed(2)}€ received on ${moment(payment.payment_date).format('DD/MM/YYYY')}</li>`
+              const value = payment.type_of_payment === 'Refund' ? -payment.amount_paid : +payment.amount_paid;
+              return `<li>${Number.parseFloat(value/100).toFixed(2)}€ ${payment.type_of_payment === 'Refund' ? 'refunded' : (payment.type_of_payment === 'Payment' ? 'received' : 'applied discount')} on ${moment(payment.payment_date).format('DD/MM/YYYY')}</li>`
             }).join('')}
             </ul>`)}
             <p>As usual, don't hesitate to contact us if you have any doubts.</p>

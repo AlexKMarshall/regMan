@@ -17,7 +17,7 @@ const PaymentsDetails = ({ details, setDetails, setDisplayEdit }) => {
     if (details && details.payments) {
       const course_price = 60000;
       const amount_paid = details.payments.reduce((acc, el) => {
-        const value = el.type_of_payment === 'Payment' ? +el.amount_paid : -el.amount_paid;
+        const value = el.type_of_payment === 'Refund' ? -el.amount_paid : +el.amount_paid;
         return acc + value;
       }, 0);
       const amount_due = course_price - amount_paid;

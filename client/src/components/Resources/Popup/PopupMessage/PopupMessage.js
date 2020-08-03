@@ -26,18 +26,29 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
             <div className="fields">
               <div className="field">
                 <label htmlFor="payment_date">Payment date:</label>
-                <input type="date" name="payment_date" onChange={handleChange} required/>
+                <input type="date" name="payment_date" defaultValue={moment().format('YYYY-MM-DD')} onChange={handleChange} required/>
               </div>
               <div className="field">
                 <label htmlFor="type_of_payment">Select the type of payment:</label>
                 <select name="type_of_payment" value={info.type_of_payment} onChange={handleChange} required>
                   <option value="Payment">Payment</option>
                   <option value="Refund">Refund</option>
+                  <option value="Discount (5%)">Discount (5%)</option>
                 </select>
               </div>
               <div className="field">
                 <label htmlFor="amount_paid">Amount paid:</label>
-                <input type="number" step="0.01" placeholder="0.00" name="amount_paid" onChange={handleChange} required/>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder={info.type_of_payment === 'Discount (5%)' ? '30.00' : '0.00'}
+                  disabled={info.type_of_payment === 'Discount (5%)' ? true : false}
+                  className={info.type_of_payment === 'Discount (5%)' ? 'disabled' : ''}
+                  name="amount_paid"
+                  onChange={handleChange}
+                  required
+                  />
               </div>
             </div>
           </div>
@@ -58,11 +69,21 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
                 <select name="type_of_payment" value={info.type_of_payment} onChange={handleChange} required>
                   <option value="Payment">Payment</option>
                   <option value="Refund">Refund</option>
+                  <option value="Discount (5%)">Discount (5%)</option>
                 </select>
               </div>
               <div className="field">
                 <label htmlFor="amount_paid">Amount paid:</label>
-                <input type="number" step="0.01" name="amount_paid" value={Number.parseFloat(info.amount_paid).toFixed(2)} onChange={handleChange} required/>
+                <input
+                  type="number"
+                  step="0.01"
+                  name="amount_paid"
+                  value={Number.parseFloat(info.amount_paid).toFixed(2)}
+                  disabled={info.type_of_payment === 'Discount (5%)' ? true : false}
+                  className={info.type_of_payment === 'Discount (5%)' ? 'disabled' : ''}
+                  onChange={handleChange}
+                  required
+                />
               </div>
             </div>
           </div>
