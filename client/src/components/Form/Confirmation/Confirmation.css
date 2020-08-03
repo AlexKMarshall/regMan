@@ -1,7 +1,9 @@
 .confirmation-container {
-  height: 100%;
+  position: relative;
+  height: calc(100vh - 86px);
   display: flex;
   justify-content: center;
+  top: 86px;
 }
 
 .confirmation {

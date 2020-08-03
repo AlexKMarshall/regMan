@@ -1,6 +1,7 @@
 const { attendant, instrument, payment } = require('../models');
 const { sendEmail } = require('../services/SendEmail'); // eslint-disable-line no-unused-vars
 const { welcomeEmail } = require('../views/welcome-email');// eslint-disable-line no-unused-vars
+const { waitlist } = require('../views/wait-list');// eslint-disable-line no-unused-vars
 
 exports.getAll = async (req, res) => {
   try {
@@ -22,10 +23,17 @@ exports.getAll = async (req, res) => {
 
 exports.postNewAttendant = async (req, res) => {
   try {
+    const [ selInstr ] = await instrument.findAll({where: {id: req.body.instrumentId}});
+    const attendantsOnSelInstr = await attendant.findAll({where: {instrumentId: req.body.instrumentId}})
+
+    if(attendantsOnSelInstr.length > selInstr.max_attendants) req.body.registration_status = 'Waitlist';
+
     const newAttendant = await attendant.create(req.body);
-    const selInstr = await instrument.findAll({where: {id: newAttendant.instrumentId}});
-    newAttendant.instrument = selInstr[0].name
-    // sendEmail(newAttendant.email, welcomeEmail(newAttendant));
+    newAttendant.instrument = selInstr.name
+
+    newAttendant.registration_status === 'New'
+      ? sendEmail(newAttendant.email, welcomeEmail(newAttendant))
+      : sendEmail(newAttendant.email, waitlist(newAttendant))
     res.status(201);
     res.json(newAttendant);
   } catch (error) {
