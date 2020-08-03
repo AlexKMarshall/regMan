@@ -77,7 +77,7 @@ const Dashboard = () => {
           <Route path="/dashboard/groups" exact render={(props) => (
             <GroupsDisplay
               {...props}
-              participants={participants.filter(participant => participant.registration_status !== 'Cancelled')}
+              participants={participants.filter(participant => (participant.registration_status !== 'Cancelled' && participant.registration_status !== 'Waitlist'))}
               instruments={instruments}
               setInstruments={setInstruments}
             />)}

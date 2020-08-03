@@ -44,9 +44,6 @@ const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
       instrNamesArray.push(instr.name)
       instrMaxArray.push(instr.max_attendants)
     })
-    // for (let i = 0; i < 100; i++) {
-    //   ageFreq[i] = 0;
-    // }
     if (agesArray) {
       for (let el of agesArray){
         if (ageFreq.hasOwnProperty(el)) ageFreq[el] += 1;
@@ -275,8 +272,8 @@ const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
                   {
                     ticks: {
                       autoSkip: true,
-                      maxTicksLimit: 2,
                       beginAtZero: true,
+                      stepSize: 1
                     },
                     gridLines: {
                       display: false,
