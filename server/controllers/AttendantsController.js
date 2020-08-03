@@ -38,9 +38,9 @@ exports.postNewAttendant = async (req, res) => {
       attendantId: newAttendant.id
     })
     // Send email depending on availability
-    newAttendant.registration_status === 'New'
-      ? sendEmail(newAttendant, 'welcome')
-      : sendEmail(newAttendant, 'waitlist')
+    // newAttendant.registration_status === 'New'
+    //   ? sendEmail(newAttendant, 'welcome')
+    //   : sendEmail(newAttendant, 'waitlist')
     // send response to the client.
     res.status(201);
     res.json(newAttendant);

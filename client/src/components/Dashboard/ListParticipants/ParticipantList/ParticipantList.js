@@ -28,6 +28,11 @@ const ParticipantList = ({ participants, promptPopup }) => {
     }))
   }
 
+  function cancelSearch() {
+    setSearch('');
+    setSearchedParticipants(participants);
+  }
+
   function applyFilter () {
     return checked ? searchedParticipants.filter(participant => participant.registration_status !== 'Cancelled') : searchedParticipants
   }
@@ -35,7 +40,13 @@ const ParticipantList = ({ participants, promptPopup }) => {
   return (
     <div className="participants-list">
       <div className="search-and-filters">
-        <input className="search-bar" placeholder="Search..." value={search} onChange={handleSearch}></input>
+        <div className="search-bar">
+          <input className="search-input" placeholder="Search..." value={search} onChange={handleSearch} />
+          {console.log(search.lenght, search)}
+          <div className={'cancel-search' + (search === '' ? ' hidden' : '')} onClick={cancelSearch}>
+            <span className="cancel-cross" role="img" aria-label="cancel search">╳</span>
+          </div>
+        </div>
         <label className="toggle-vertical-align">
           <span>Filter cancelled registrations: </span>
           <Switch
@@ -62,7 +73,7 @@ const ParticipantList = ({ participants, promptPopup }) => {
         <div className="grid-item grid-delete grid-header-item">Delete</div>
       </div>
       <div className="list-container">
-        {searchedParticipants ? applyFilter().map(participant => (
+        {searchedParticipants.length ? applyFilter().map(participant => (
           <ParticipantItem
             key={'participant'+participant.id}
             participant={participant}
