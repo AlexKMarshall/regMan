@@ -26,7 +26,7 @@ exports.postNewAttendant = async (req, res) => {
     const [ selInstr ] = await instrument.findAll({where: {id: req.body.instrumentId}});
     const attendantsOnSelInstr = await attendant.findAll({where: {instrumentId: req.body.instrumentId}})
 
-    if(attendantsOnSelInstr.length > selInstr.max_attendants) req.body.registration_status = 'Waitlist';
+    if(attendantsOnSelInstr.length >= selInstr.max_attendants) req.body.registration_status = 'Waitlist';
 
     const newAttendant = await attendant.create(req.body);
     newAttendant.instrument = selInstr.name

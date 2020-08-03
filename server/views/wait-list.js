@@ -8,7 +8,7 @@ exports.waitlist = (participant) => {
           <div class="header" style="background-image: url('http://www.crisoldecuerda.com/wp-content/uploads/2020/01/Crisol-345.jpg'); background-size: cover; width: 100%; height: 250px;"></div>
           <div class="text" style="padding: 0 20px;">
             <h3>Hello ${participant.first_name}!!</h3>
-            <p>We've received your registration but unfortunately we're out of spots for ${participant.instrument}</p>
+            <p>We've received your registration but unfortunately we're out of spots for ${participant.instrument}.</p>
             <p>Don't worry. There's still hope!</p>
             <p>We've placed you in the waitlist and we'll contact you as soon as a spot opens up.</p>
             <br />
