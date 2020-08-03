@@ -92,7 +92,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
           instrDistribution['Guitar'].length,
           instrDistribution['Fiddle Beginner'].length
         ],
-        backgroundColor: ['#f7bd92', '#90f3e7', '#7ea4cc', '#ff808c', '#a17fa7']
+        backgroundColor: ['#f7bd92', '#89cfc7', '#7ea4cc', '#ff808c', '#a17fa7']
       },
       {
         label: 'maximum attendants',

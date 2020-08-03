@@ -12,6 +12,7 @@ router.put('/inscriptions/delete/:id', attendantsController.putDeleteAttendant);
 router.get('/payments/:id', paymentsController.getPaymentsByAttendantId);
 router.post('/payments', paymentsController.postNewPayment);
 router.put('/payments/update/:id', paymentsController.putUpdatePayment);
+router.post('/payments/sendStatus', paymentsController.sendStatus)
 
 router.put('/instruments', instrumentsController.putInstruments)
 // router.post('/instruments', instrumentsController.postInstrument)

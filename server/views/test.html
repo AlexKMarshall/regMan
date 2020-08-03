@@ -6,58 +6,26 @@
   <title>Document</title>
 </head>
 <body>
-  <div>
-    <style>
-      .email {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        background-color: #f4f3f1;
-      }
-      .mail-body {
-        background-color: #f2e0ce;
-        max-width: 600px;
-      }
-      .header {
-        background-image: url(http://www.crisoldecuerda.com/wp-content/uploads/2020/01/Crisol-345.jpg);
-        background-size: cover;
-        width: 100%;
-        height: 250px;
-      }
-      .text{
-        padding: 0 20px;
-      }
-      .signature {
-        background-image: url(http://www.crisoldecuerda.com/wp-content/uploads/2012/02/logo-black11.png);
-        width: 180px;
-        height: 52px;
-        margin: 0 0 30px 0;
-      }
-    </style>
-    <div class="email">
-      <div class="mail-body">
-        <div class="header"></div>
-        <div class="text">
-          <h3>Hello ${participant.first_name}!!</h3>
-          <p>We've received your registration and we want to welcome you to Crisol de Cuerda!</p>
-          <p>Here are the details that you've provided us. Let us know if we have to correct any of them:</p>
-          <ul>
-            <li>Name: ${participant.first_name}</li>
-            <li>Surname: ${participant.last_name} </li>
-            <li>Email: ${participant.email} </li>
-            <li>Date of birth: ${moment(participant.date_of_birth).format('DD-MM-YYYY')} </li>
-            <li>Street: ${participant.street} </li>
-            <li>City: ${participant.city} </li>
-            <li>Country: ${participant.country} </li>
-            <li>Instrument: ${participant.instrument} </li>
-            <li>Allergies: ${participant.allergies} </li>
-          </ul>
-          <p>Your registration will be complete once we receive the downpayment of 60€.</p>
-          <p>We will send you a confirmation email once the payment has been received.</p>
-          <p>Don't hessitate to contact us for further information.</p>
-          <p>See you this summer!</p>
-          <div class="signature"></div>
-        </div>
+  <div class="email" style="width: 100%; display: flex; justify-content: center; background-color: #f4f3f1">
+    <div class="mail-body" style="background-color: #f2e0ce; max-width: 600px; margin: 0 auto">
+      <div class="header" style="background-image: url('http://www.crisoldecuerda.com/wp-content/uploads/2020/01/Crisol-345.jpg'); background-size: cover; width: 100%; height: 250px;"></div>
+      <div class="text" style="padding: 0 20px;">
+        <h3>Hello ${paymentData.first_name},</h3>
+        ${paymentComplete
+          ? ("<p>We've received your last payment and your registration is complete. Now you just have to wait and practice your tunes until August.</p>")
+          : (`<p>This is just a friendly reminder of your payment status.</p>
+        <p>The course total is 600€ and until now we've received ${Number.parseFloat(amount_paid/100).toFixed(2)}€</p>
+        <p>Your total amount due before the 1st of June is <b>${Number.parseFloat(amount_due/100).toFixed(2)}€</b></p>
+        <p>Here's list of all the payments received until today. If you've made any other payments, we might have missed it. Please send us the receipt so that we can track them down.</p>
+        <ul>
+        ${payments.map(payment => {
+          const value = payment.type_of_payment === 'Payment' ? +payment.amount_paid : -payment.amount_paid;
+          return `<li>${Number.parseFloat(value/100).toFixed(2)}€ received on ${moment(payment.payment_date).format('DD/MM/YYYY')}</li>`
+        })}
+        </ul>`)}
+        <p>As usual, don't hesitate to contact us if you have any doubts.</p>
+        <p>All the best,</p>
+        <div class="signature" style="background-image: url(http://www.crisoldecuerda.com/wp-content/uploads/2012/02/logo-black11.png); width: 180px; height: 52px; margin: 0 0 30px 0;"></div>
       </div>
     </div>
   </div>

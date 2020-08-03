@@ -69,9 +69,20 @@ function putUpdatePayment (payment, token) {
   })
 }
 
-/**********************
-**  Payments' Calls  **
-***********************/
+function sendPaymentStatus(attendant, token) {
+  return fetchFromDb('payments/sendStatus', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(attendant)
+  })
+}
+
+/*************************
+**  Instruments' Calls  **
+**************************/
 
 function getInstruments () {
   return fetchFromDb('instruments');
@@ -107,12 +118,13 @@ async function fetchFromDb (url, options) {
 export default {
   getAllInscriptions,
   getDetails,
-  postNewAttendant,
-  putDeleteAttendant,
-  putParticipantChanges,
   getAttendantPayments,
-  postNewPayment,
-  putUpdatePayment,
   getInstruments,
+  postNewAttendant,
+  postNewPayment,
+  putDeleteAttendant,
   putEditInstrument,
+  putParticipantChanges,
+  putUpdatePayment,
+  sendPaymentStatus,
 }

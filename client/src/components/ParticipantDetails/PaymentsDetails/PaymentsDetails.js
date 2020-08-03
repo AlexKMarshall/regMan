@@ -62,6 +62,10 @@ const PaymentsDetails = ({ details, setDetails, setDisplayEdit }) => {
           })
           .then(setPopupInfo({}))
         break;
+      case 'Send Status':
+        ApiClient.sendPaymentStatus(info, token)
+          .then(setPopupInfo({}))
+        break;
       default:
         break;
     }
@@ -91,15 +95,28 @@ const PaymentsDetails = ({ details, setDetails, setDisplayEdit }) => {
             <div className="payment amount-due">Amount due: <b>{Number.parseFloat(paymentDetails.amount_due/100).toFixed(2) + ' €'}</b></div>
           </div>
         </div>
-        <div className="new-payment-button">
-          <button
-            onClick={()=> promptPopup({
-              attendantId: details.id,
-              type_of_payment: 'Payment'
-            }, 'Add Payment')}
-          >
-            Add new payment
-          </button>
+        <div className="payment-buttons">
+          <div className="send-payment-status">
+            <button
+              onClick={() => promptPopup({
+                attendantId: details.id,
+                email: details.email,
+                first_name: details.first_name
+              }, 'Send Status')}
+            >
+              Send payment status
+            </button>
+          </div>
+          <div className="new-payment-button">
+            <button
+              onClick={()=> promptPopup({
+                attendantId: details.id,
+                type_of_payment: 'Payment'
+              }, 'Add Payment')}
+            >
+              Add new payment
+            </button>
+          </div>
         </div>
       </div>
       <div className="payment-grid grid-header">

@@ -47,6 +47,7 @@
 
 .graph-field > label {
   width: fit-content;
+  margin-bottom: 5px;
 }
 
 .graph-field > input {

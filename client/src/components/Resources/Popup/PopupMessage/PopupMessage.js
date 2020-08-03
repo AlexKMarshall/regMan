@@ -13,7 +13,7 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
     switch (type) {
       case 'Delete':
         return (
-          <div className="delete-confirmation">
+          <div className="popup-text">
             {`Are you sure that you want to delete ${info.first_name} ${info.last_name}'${info.last_name[info.last_name.length - 1] === 's' ? '' : 's'} registration?`}
           </div>
         )
@@ -65,6 +65,12 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
                 <input type="number" step="0.01" name="amount_paid" value={Number.parseFloat(info.amount_paid).toFixed(2)} onChange={handleChange} required/>
               </div>
             </div>
+          </div>
+        )
+      case 'Send Status':
+        return (
+          <div className="popup-text">
+            {`Do you want to send the updated payment status to ${info.first_name} (${info.email})?`}
           </div>
         )
         default:

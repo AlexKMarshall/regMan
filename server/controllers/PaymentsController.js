@@ -1,4 +1,5 @@
 const { payment } = require('../models');
+const { sendEmail } = require('../services/SendEmail'); // eslint-disable-line no-unused-vars
 
 exports.getPaymentsByAttendantId = async (req, res) => {
   try {
@@ -30,6 +31,18 @@ exports.putUpdatePayment = async (req, res) => {
     );
     res.status(200)
     res.json(updatedPayment)
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+}
+
+exports.sendStatus = async (req, res) => {
+  try {
+    const payments = await payment.findAll({where: {attendantId: req.body.attendantId}})
+    req.body.payments = payments;
+    sendEmail(req.body, 'payments');
+    res.sendStatus(204);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);

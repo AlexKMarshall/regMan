@@ -28,8 +28,8 @@
   background-color: #e4e4e4;
   display: grid;
   grid-template-rows: auto;
-  grid-template-columns: 5.75fr 1fr 2.5fr 5.75fr 2fr 2fr 1.5fr;
-  grid-template-areas: "name status-light status email underage instrument delete"
+  grid-template-columns: 5.75fr 1fr 2.5fr 2fr 5.75fr 2fr 1.5fr;
+  grid-template-areas: "name status-light status instrument email underage delete"
 }
 
 .participant-grid:hover {
@@ -49,6 +49,10 @@
 
 .grid-header-item {
   border-right: 1px solid gray
+}
+
+.grid-header-item:last-child {
+  border: none;
 }
 
 .grid-item{

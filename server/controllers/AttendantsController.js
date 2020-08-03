@@ -1,7 +1,5 @@
 const { attendant, instrument, payment } = require('../models');
 const { sendEmail } = require('../services/SendEmail'); // eslint-disable-line no-unused-vars
-const { welcomeEmail } = require('../views/welcome-email');// eslint-disable-line no-unused-vars
-const { waitlist } = require('../views/wait-list');// eslint-disable-line no-unused-vars
 
 exports.getAll = async (req, res) => {
   try {
@@ -32,8 +30,8 @@ exports.postNewAttendant = async (req, res) => {
     newAttendant.instrument = selInstr.name
 
     newAttendant.registration_status === 'New'
-      ? sendEmail(newAttendant.email, welcomeEmail(newAttendant))
-      : sendEmail(newAttendant.email, waitlist(newAttendant))
+      ? sendEmail(newAttendant, 'welcome')
+      : sendEmail(newAttendant, 'waitlist')
     res.status(201);
     res.json(newAttendant);
   } catch (error) {

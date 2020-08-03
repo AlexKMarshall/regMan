@@ -69,3 +69,7 @@
 .no-payments {
   margin: 20px auto;
 }
+
+.payment-buttons {
+  display: flex;
+}
