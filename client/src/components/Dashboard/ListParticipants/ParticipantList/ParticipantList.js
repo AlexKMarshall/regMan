@@ -4,13 +4,17 @@ import Switch from 'react-switch';
 import './ParticipantList.css';
 
 const ParticipantList = ({ participants, promptPopup }) => {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(localStorage.getItem('checkedFilter')? true : false);
   const [search, setSearch] = useState('');
   const [searchedParticipants, setSearchedParticipants] = useState([]);
 
   useEffect(() => {
     setSearchedParticipants(participants);
   }, [participants]);
+
+  useEffect(()=> {
+    checked ? localStorage.setItem('checkedFilter', checked) : localStorage.removeItem('checkedFilter');
+  },[checked])
 
   function handleSwitch(checked) {
     setChecked(checked)
