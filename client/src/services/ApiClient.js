@@ -100,7 +100,7 @@ async function fetchFromDb (url, options) {
   }
   catch (err) {
     console.log(`Error fetching [${options && options.method}] ${url}: `, err);
-    // <Redirect to={{pathname: '/error500', state: {error: err}}} />
+    return {error: true,  err}
   }
 };
 

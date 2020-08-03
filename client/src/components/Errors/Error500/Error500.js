@@ -1,12 +1,14 @@
 import React from 'react';
+import { Navbar } from '@/components';
 
-const Error500 = ({location}) => {
-  const error = location.state.error;
+const Error500 = () => {
   return (
-    <div className="error">
-      <h2>Error 500: Internal server error.</h2>
-      <div>{error}</div>
-      {console.log(error)}
+    <div>
+      <Navbar />
+      <div className="error">
+        <h2>Error 500: Internal server error.</h2>
+        <a href="/"><button>Back to the form</button></a>
+      </div>
     </div>
   );
 }

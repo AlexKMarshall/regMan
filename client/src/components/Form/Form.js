@@ -22,10 +22,13 @@ const Form = () => {
   const [registration, setRegistration] = useState(newRegistration);
   const [redirectToConfirmation, setRedirect] = useState(false);
   const [instruments, setInstruments] = useState([]);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     ApiClient.getInstruments()
-      .then(instruments => setInstruments(instruments))
+      .then(instruments => {
+        if (instruments.error) setError(true);
+        else setInstruments(instruments)})
   }, []);
 
   useEffect(() => {
@@ -50,7 +53,7 @@ const Form = () => {
   function clearForm () {
     setRegistration(newRegistration);
   }
-
+  if (error) return (<Redirect to={'/error500'} />)
   if (redirectToConfirmation) return (<Redirect to="/confirmation"/>)
 
   return (

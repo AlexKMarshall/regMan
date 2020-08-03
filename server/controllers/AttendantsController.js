@@ -5,7 +5,6 @@ const { welcomeEmail } = require('../views/welcome-email');// eslint-disable-lin
 exports.getAll = async (req, res) => {
   try {
     const attendantsList = await attendant.findAll({
-      // attributes: [ 'id', 'first_name', 'last_name', 'is_underage', 'email', 'registration_status'],
       include: [{
         model: instrument,
         attributes: ['id', 'name']
