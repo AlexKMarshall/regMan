@@ -20,7 +20,9 @@ const Dashboard = () => {
         if(participants.error) setError(true);
         else setParticipants(participants)})
     ApiClient.getInstruments()
-      .then(instruments => setInstruments(instruments))
+      .then(instruments => {
+        if (instruments.error) setError(true);
+        else setInstruments(instruments)})
   }, []);
 
   function promptPopup (info, type) {
