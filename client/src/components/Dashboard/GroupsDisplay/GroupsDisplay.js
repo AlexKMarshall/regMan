@@ -43,6 +43,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
     instruments.map(instr => {
       instrNamesArray.push(instr.name)
       instrMaxArray.push(instr.max_attendants)
+      return true;
     })
     if (agesArray) {
       for (let el of agesArray){

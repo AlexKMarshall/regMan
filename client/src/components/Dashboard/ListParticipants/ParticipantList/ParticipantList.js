@@ -5,12 +5,10 @@ import './ParticipantList.css';
 
 const ParticipantList = ({ participants, promptPopup }) => {
   const [checked, setChecked] = useState(false);
-  const [filteredParticipants, setFilteredParticipants ] = useState(participants);
   const [search, setSearch] = useState('');
   const [searchedParticipants, setSearchedParticipants] = useState([]);
 
   useEffect(() => {
-    setFilteredParticipants(participants);
     setSearchedParticipants(participants);
   }, [participants]);
 
@@ -20,7 +18,10 @@ const ParticipantList = ({ participants, promptPopup }) => {
 
   function handleSearch({ target }) {
     setSearch(target.value);
-    setSearchedParticipants(filteredParticipants.filter(participant => Object.values(participant).join(' ').toLowerCase().includes(target.value.toLowerCase())))
+    setSearchedParticipants(participants.filter(participant => {
+      const searchValue = ''.concat(participant.first_name, ' ', participant.last_name, ' ', participant.registration_status, ' ', participant.email, ' ', participant.instrument.name)
+      return searchValue.toLowerCase().includes(target.value.toLowerCase())
+    }))
   }
 
   function applyFilter () {
@@ -30,7 +31,7 @@ const ParticipantList = ({ participants, promptPopup }) => {
   return (
     <div className="participants-list">
       <div className="search-and-filters">
-        <input className="search-bar" placeholder="Search..." value={search} onChange={handleSearch}/>
+        <input className="search-bar" placeholder="Search..." value={search} onChange={handleSearch}></input>
         <label className="toggle-vertical-align">
           <span>Filter cancelled registrations: </span>
           <Switch
