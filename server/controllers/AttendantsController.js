@@ -1,5 +1,6 @@
 const { attendant, instrument, payment } = require('../models');
 const { sendEmail } = require('../services/SendEmail'); // eslint-disable-line no-unused-vars
+const { Op } = require('sequelize');
 const moment = require('moment')
 
 exports.getAll = async (req, res) => {
@@ -27,7 +28,15 @@ exports.postNewAttendant = async (req, res) => {
   try {
     // find the max number of attendants for the requested instrument and the number of attendants already registered
     const [ selInstr ] = await instrument.findAll({where: {id: req.body.instrumentId}});
-    const attendantsOnSelInstr = await attendant.findAll({where: {instrumentId: req.body.instrumentId, displayed: true}})
+    const attendantsOnSelInstr = await attendant.findAll({
+      where: {
+        instrumentId: req.body.instrumentId,
+        displayed: true,
+        registration_status: {
+          [Op.ne]: 'Cancelled'
+        }
+      }
+    })
     // Change registration status if group is full.
     if(attendantsOnSelInstr.length >= selInstr.max_attendants) req.body.registration_status = 'Waitlist';
     // Create DB entry and store instrument name to be used in the email.
@@ -41,9 +50,9 @@ exports.postNewAttendant = async (req, res) => {
       attendantId: newAttendant.id
     })
     // Send email depending on availability
-    // newAttendant.registration_status === 'New'
-    //   ? sendEmail(newAttendant, 'welcome')
-    //   : sendEmail(newAttendant, 'waitlist')
+    newAttendant.registration_status === 'New'
+      ? sendEmail(newAttendant, 'welcome')
+      : sendEmail(newAttendant, 'waitlist')
     // send response to the client.
     res.status(201);
     res.json(newAttendant);

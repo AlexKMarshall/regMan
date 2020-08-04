@@ -54,9 +54,9 @@ const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
     setNumParticipants(participants.length);
     setNumUnderage(underageParticipants.length);
     setInstrumentNames(instrNamesArray);
-    setInstrMaxSpots(instrMaxArray);
-    setInstrDistribution(instrumentDistribution);
-    setMaxSpots(totalSpots);
+    setInstrMaxSpots(() => instrMaxArray);
+    setInstrDistribution(() => instrumentDistribution);
+    setMaxSpots(() => totalSpots);
     setAgeFrequency(ageFreq);
   }
 
@@ -86,10 +86,10 @@ const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
       datasets: [{
         label: 'registrered participants',
         data: [
-          instrDistribution['Flute'].length,
           instrDistribution['Fiddle'].length,
           instrDistribution['Cello'].length,
           instrDistribution['Guitar'].length,
+          instrDistribution['Flute'].length,
           instrDistribution['Fiddle Beginner'].length
         ],
         backgroundColor: ['#f7bd92', '#89cfc7', '#7ea4cc', '#ff808c', '#a17fa7']
@@ -106,10 +106,10 @@ const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
       datasets: [{
         label: 'remaining spots',
         data: [
-          instrDistribution['Flute'].length,
           instrDistribution['Fiddle'].length,
           instrDistribution['Cello'].length,
           instrDistribution['Guitar'].length,
+          instrDistribution['Flute'].length,
           instrDistribution['Fiddle Beginner'].length,
           maxSpots - participants.length
         ],
