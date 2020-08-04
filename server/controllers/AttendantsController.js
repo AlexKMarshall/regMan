@@ -10,7 +10,10 @@ exports.getAll = async (req, res) => {
         attributes: ['id', 'name']
       }],
       where: { displayed: true },
-      order: [['last_name', 'asc']]
+      order: [
+        ['last_name', 'asc'],
+        ['first_name', 'asc']
+      ]
     });
     res.status(200);
     res.json(attendantsList);

@@ -81,14 +81,18 @@ const ParticipantList = ({ participants, promptPopup }) => {
         <div className="grid-item grid-delete grid-header-item">Delete</div>
       </div>
       <div className="list-container">
-        {searchedParticipants.length ? applyFilter().map(participant => (
-          <ParticipantItem
-            key={'participant'+participant.id}
-            participant={participant}
-            promptPopup={promptPopup}
-          />
-        )) :
-        (<h3>No one has registered yet.</h3>)
+        {
+          participants.length
+          ? (searchedParticipants.length
+            ? applyFilter().map(participant => (
+              <ParticipantItem
+                key={'participant'+participant.id}
+                participant={participant}
+                promptPopup={promptPopup}
+              />
+            ))
+            : (<h3>No matching records for your search</h3>))
+          : (<h3>No one has registered yet.</h3>)
         }
       </div>
 
