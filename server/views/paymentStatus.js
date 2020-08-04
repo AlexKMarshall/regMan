@@ -1,8 +1,11 @@
 const moment = require('moment');
 
+// html of the payment status email. css has to be hardcoded for nodemail to interpret it correctly
 exports.paymentStatus = (paymentData) => {
+
+  // Calculations of the amounts payed and due
   const { payments } = paymentData
-  const course_price = 60000;
+  const course_price = process.env.COURSE_PRICE;
   const amount_paid = payments.reduce((acc, el) => {
     const value = el.type_of_payment === 'Refund' ? -el.amount_paid : +el.amount_paid;
     return acc + value;

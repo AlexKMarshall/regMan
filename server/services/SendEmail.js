@@ -3,7 +3,8 @@ const { welcomeEmail } = require('../views/welcome-email');
 const { waitlist } = require('../views/wait-list');
 const { paymentStatus } = require('../views/paymentStatus');
 
-
+// used to handle sending emails. It'll accept the emailData and a parameter that
+// selects the type of email to be sent.
 exports.sendEmail = async (emailData, typeOfMail) => {
   function subject () {
     switch (typeOfMail) {
@@ -16,6 +17,7 @@ exports.sendEmail = async (emailData, typeOfMail) => {
     }
   }
 
+  // Calls the different email bodies
   function emailContent () {
     switch (typeOfMail) {
       case 'welcome':
@@ -27,9 +29,10 @@ exports.sendEmail = async (emailData, typeOfMail) => {
     }
   }
 
+  // information to connect to the email provider account
   let transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
+    host: process.env.GMAIL_HOST,
+    port: process.env.GMAIL_PORT,
     secure: true,
     auth: {
       user: process.env.GMAIL_USER,
@@ -37,6 +40,7 @@ exports.sendEmail = async (emailData, typeOfMail) => {
     },
   });
 
+  // actual body of the email.
   transporter.sendMail({
     from: `"Crisol App testing" <${process.env.GMAIL_FROM}>`,
     to: `${emailData.email}, ${process.env.GMAIL_TO}`,

@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: true,
       }
     },
+
+    // Boolean value, used to apply discount upon registration.
+    // The age is calculated with the date when the camp begins minus the date of birth.
+    // calculated in the front-end and sent as a boolean.
     is_underage: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -77,6 +81,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       defaultValue: 'New'
     },
+
+    // used to filter if the row should be sent back to the client.
+    // by default true. When deleting an attendant it is set to false.
+    // this way the register is maintained in the DB but not shown.
     displayed: {
       type: DataTypes.BOOLEAN,
       allowNull: false,

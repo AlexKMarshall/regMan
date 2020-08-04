@@ -7,6 +7,9 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       }
     },
+
+    // maximum number of attendants per group. Used when registering a new attendant to
+    // determine his status as new registration or waitlist.
     max_attendants: {
       type: DataTypes.INTEGER,
       allowNull: false,

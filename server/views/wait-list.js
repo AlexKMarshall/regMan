@@ -1,3 +1,4 @@
+// html of the waitlist email. css has to be hardcoded for nodemail to interpret it correctly.
 exports.waitlist = (participant) => {
   return `
   <!DOCTYPE html>

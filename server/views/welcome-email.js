@@ -1,5 +1,6 @@
 const moment = require('moment');
 
+// html of the welcome email. css has to be hardcoded for nodemail to interpret it correctly
 exports.welcomeEmail = (participant) => {
   return `
   <!DOCTYPE html>

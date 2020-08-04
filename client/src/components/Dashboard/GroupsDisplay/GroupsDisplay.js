@@ -141,7 +141,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
     const newInstr = instrClone.map(instr => {
       if (instr.name !== target.name) return instr;
       else {
-        return {... instr, max_attendants: +target.value}
+        return {...instr, max_attendants: +target.value}
       }
     })
     setInstrClone(newInstr);

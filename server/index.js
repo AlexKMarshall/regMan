@@ -24,6 +24,9 @@ app.use(helmet());
 app.use(cors(corsConfig));
 app.use(express.json());
 
+// 2 separate routers, one with public endpoints and one with private ones
+// checkJwt checks credentials for a token, if there aren't, it won't allow access
+// to the private router
 app.use(publicRouter);
 app.use(checkJwt);
 app.use(privateRouter);
@@ -32,6 +35,6 @@ app.listen(SERVER_PORT, (err) => {
   if (err) {
     console.log(`😞 Sorry, something went wrong! ${err}`); // eslint-disable-line no-console
   } else {
-    console.log(`🎉 Server is listening on http://localhost:${SERVER_PORT}`); // eslint-disable-line no-console
+    console.log(`🎉 Server is listening on ${process.env.SERVER_URL}:${SERVER_PORT}`); // eslint-disable-line no-console
   }
 });

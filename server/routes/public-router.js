@@ -3,8 +3,12 @@ const router = require('express').Router();
 const attendantsController = require('../controllers/AttendantsController');
 const instrumentsController = require('../controllers/InstrumentsController');
 
+// Public routes, accessible without an authorisation token. Used for posting from the form.
 router.post('/inscriptions', attendantsController.postNewAttendant)
 router.get('/instruments',instrumentsController.getInstruments)
+
+// Disabled private routes. Useful to access the endpoints without the access token during development.
+
 // router.post('/instruments', instrumentsController.postInstrument)
 // router.put('/instruments/:id', instrumentsController.putInstrument)
 // router.delete('/instruments/:id', instrumentsController.deleteInstrument)

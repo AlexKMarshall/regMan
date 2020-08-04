@@ -82,9 +82,12 @@ exports.getDetails = async (req, res) => {
   }
 };
 
+// the name might be confusing. It's an update function that simulates the delition of a register.
+// The attendant's diplayed property is set to false and filtered in the other queries.
+// this way the DB is not destroyed and the register removed from view.
 exports.putDeleteAttendant = async (req, res) => {
   try {
-     await attendant.update(
+    await attendant.update(
       {displayed: false},
       {where: {id: req.params.id}}
     );
@@ -95,6 +98,8 @@ exports.putDeleteAttendant = async (req, res) => {
   }
 }
 
+// By default sequelize returns the number of updated rows. If returning is set to true, it retunrs an array
+// that has to be destructured to obtain the record value.
 exports.putUpdateAttendant = async (req, res) => {
   try {
     const [rowsUpdated, [ updatedAttendant ]] = await attendant.update( // eslint-disable-line no-unused-vars

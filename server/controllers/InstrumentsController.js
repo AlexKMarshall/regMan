@@ -13,19 +13,9 @@ exports.getInstruments = async (req, res) => {
   }
 };
 
-exports.postInstrument = async (req, res) => {
-  try {
-    const newInstrument = await instrument.create(req.body);
-    res.status(201);
-    res.json(newInstrument);
-  } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
-  }
-};
-
 exports.putInstruments = async (req, res) => {
   try {
+    // req.body is an array of instruments.
     for (let instr of req.body) {
       await instrument.update({max_attendants: instr.max_attendants}, {where: {id: instr.id}});
     }
@@ -34,6 +24,19 @@ exports.putInstruments = async (req, res) => {
     });
     res.status(200);
     res.json(updatedInstruments);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+};
+
+// only used in development. Never accessed from the client.
+
+exports.postInstrument = async (req, res) => {
+  try {
+    const newInstrument = await instrument.create(req.body);
+    res.status(201);
+    res.json(newInstrument);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
