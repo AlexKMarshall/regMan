@@ -135,7 +135,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
 
   useEffect(() => {
     chart()
-  }, [numUnderage, numParticipants, instrMaxSpots]);
+  }, [numUnderage, numParticipants, instrMaxSpots, maxSpots]);
 
   const handleChange = ({ target }) => {
     const newInstr = instrClone.map(instr => {
