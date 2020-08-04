@@ -4,16 +4,21 @@ import Switch from 'react-switch';
 import './ParticipantList.css';
 
 const ParticipantList = ({ participants, promptPopup }) => {
-  const [checked, setChecked] = useState(localStorage.getItem('checkedFilter')? true : false);
-  const [search, setSearch] = useState('');
+  const [checked, setChecked] = useState(localStorage.getItem('regmanCheckedFilter')? true : false);
+  const [search, setSearch] = useState(localStorage.getItem('regmanSearch') ? localStorage.getItem('regmanSearch') : '');
   const [searchedParticipants, setSearchedParticipants] = useState([]);
 
   useEffect(() => {
-    setSearchedParticipants(participants);
+    search
+      ? setSearchedParticipants(participants.filter(participant => {
+        const searchValue = ''.concat(participant.first_name, ' ', participant.last_name, ' ', participant.registration_status, ' ', participant.email, ' ', participant.instrument.name)
+        return searchValue.toLowerCase().includes(search.toLowerCase())
+      }))
+      : setSearchedParticipants(participants);
   }, [participants]);
 
   useEffect(()=> {
-    checked ? localStorage.setItem('checkedFilter', checked) : localStorage.removeItem('checkedFilter');
+    checked ? localStorage.setItem('regmanCheckedFilter', checked) : localStorage.removeItem('regmanCheckedFilter');
   },[checked])
 
   function handleSwitch(checked) {
@@ -22,6 +27,8 @@ const ParticipantList = ({ participants, promptPopup }) => {
 
   function handleSearch({ target }) {
     setSearch(target.value);
+    console.log('target value ',target.value)
+    target.value ? localStorage.setItem('regmanSearch', target.value) : localStorage.removeItem('regmanSearch')
     setSearchedParticipants(participants.filter(participant => {
       const searchValue = ''.concat(participant.first_name, ' ', participant.last_name, ' ', participant.registration_status, ' ', participant.email, ' ', participant.instrument.name)
       return searchValue.toLowerCase().includes(target.value.toLowerCase())
@@ -30,6 +37,7 @@ const ParticipantList = ({ participants, promptPopup }) => {
 
   function cancelSearch() {
     setSearch('');
+    localStorage.removeItem('regmanSearch')
     setSearchedParticipants(participants);
   }
 
@@ -42,7 +50,7 @@ const ParticipantList = ({ participants, promptPopup }) => {
       <div className="search-and-filters">
         <div className="search-bar">
           <input className="search-input" placeholder="Search..." value={search} onChange={handleSearch} />
-          {console.log(search.lenght, search)}
+          {console.log(localStorage.getItem('regmanSearch'))}
           <div className={'cancel-search' + (search === '' ? ' hidden' : '')} onClick={cancelSearch}>
             <span className="cancel-cross" role="img" aria-label="cancel search">╳</span>
           </div>
