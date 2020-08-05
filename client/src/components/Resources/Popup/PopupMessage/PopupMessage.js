@@ -1,6 +1,13 @@
 import React from 'react';
 import moment from 'moment';
 
+/*
+*  This component is comprised of a switch statement that selects the appropriate content of
+*  the popup based on the type property of popupInfo. The info will then be sent to the
+*  handler in the PopupComponent to be executed in their parent directory.
+*  handleChange is a function that handles the change of information in the forms inside the popups.
+*/
+
 const PopupMessage = ({ popupInfo, setPopupInfo }) => {
   const { info, type } = popupInfo;
 
@@ -11,12 +18,16 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
 
   const message = () => {
     switch (type) {
+      // will prompt when attempting to delete a contact by the DeleteParticipantButton component.
+      // It's just a verification to make sure that a record is not deleted accidentally
       case 'Delete':
         return (
           <div className="popup-text">
             {`Are you sure that you want to delete ${info.first_name} ${info.last_name}'${info.last_name[info.last_name.length - 1] === 's' ? '' : 's'} registration?`}
           </div>
         )
+      // will prompt when creating a new payment from the new-payment-button in the PaymentsDetails component.
+      // It creates a new payment in the database
       case 'Add Payment':
         return (
           <div className="form-section">
@@ -53,6 +64,9 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
             </div>
           </div>
         )
+
+      // will be prompted when clicking on the PaymentItem component in the PaymensDetails.
+      // It updates the contents of an existing payment.
       case 'Save Payment':
         return (
           <div className="form-section">
@@ -88,6 +102,9 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
             </div>
           </div>
         )
+
+      // Confirmation prompt. Will be called from the send-payment-status button in the PaymentsComponent.
+      // will reach an endpoint in the API to send an email to the attendant with all his payments' records information.
       case 'Send Status':
         return (
           <div className="popup-text">

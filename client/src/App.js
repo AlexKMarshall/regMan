@@ -16,8 +16,10 @@ import '@/App.css';
 function App() {
   const { isLoading } = useAuth0();
 
+  // Auth0 provides an isLoading boolean, useful to load a spinner while authenticating.
   if (isLoading) return (<Loading/>)
 
+  // TODO: The component Error500 doesn't work for all failed fetches yet. It has to be evaluated in every fetch request.
   return (
     <div className="App">
       <Router>

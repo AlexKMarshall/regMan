@@ -1,3 +1,8 @@
+// imports all components and exports them so that they can be called from any where simply
+// by importing '@/components' and destructuring the desired component.
+// All components are created with an index.js in the root directory to avoid
+// duplication in the pathings.
+
 import Auth0ProviderWithHistory from './Resources/Auth';
 import Confirmation from './Form/Confirmation';
 import Dashboard from "./Dashboard";

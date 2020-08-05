@@ -1,6 +1,7 @@
 import React from 'react';
 import './loading.css'
 
+// nice spinner for loading pages.
 const Loading = () => {
   return (
     <div className="loader-container">

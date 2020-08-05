@@ -6,6 +6,11 @@ import LogoutButton from "./logout-button";
 import LoginButton from "./login-button";
 import './Navbar.css'
 
+
+// navbar. sits at the top of the page. Rendering changes depending on the authentication
+// status of the user. When logged in will display menu items and a logout button.
+// When logged out will only display the logo and a login button
+
 const Navbar = ({match}) => {
   const { isAuthenticated } = useAuth0();
 
@@ -29,6 +34,8 @@ const Navbar = ({match}) => {
           </li>
         </ul>
       ) : (<div></div>)}
+
+      {/* Needs to be an "a" tag. NavLink and Link will get stuck in the nested router and not redirect properly. */}
       <a href="/"><div className="crisol-logo"></div></a>
       {isAuthenticated ? <LogoutButton /> : <LoginButton />}
     </nav>

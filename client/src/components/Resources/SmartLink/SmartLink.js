@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-// Attempt to disable links based on current url and click events.
+// Replaces react-router-dom's Link. If the content of the section isEditting, it will prompt an alert
+// to save the changes before changing the section. Once the changes are saved, isEditting is set as false
+// and the links will act normally.
 
 const SmartLink = ({isEditting, match, to, value}) => {
   if (isEditting) {

@@ -131,6 +131,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
   useEffect(() => {
     generateData()
     setInstrClone([...instruments])
+    setMaxSpots(instruments.reduce((acc, el) => (acc + el.max_attendants),0))
   }, [participants, instruments]);
 
   useEffect(() => {

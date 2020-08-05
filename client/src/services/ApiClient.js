@@ -19,6 +19,8 @@ function postNewAttendant (registration) {
   });
 };
 
+// The name is confusing. It's a put request that mimics the deletion of a record from the database.
+// Records are not actually deleted, just not retrieved when getAll is called.
 function putDeleteAttendant (id, token) {
   return fetchFromDb(`inscriptions/delete/${id}`, {
     method: 'PUT',

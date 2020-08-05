@@ -8,6 +8,7 @@ import './index.css';
 import App from './App';
 require('dotenv').config();
 
+// Auth0ProviderWithHistory provides access to Auth0 tokens throughout the application
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

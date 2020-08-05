@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './StatusLight.css'
 
+
+// renders a rounded div with a class matching the background color.
+// a switch statement renders the right class for each record status.
+
 const StatusLight = ({status}) => {
-  const [lightColor, setLightColor] = useState('red')
+  const [lightColor, setLightColor] = useState('transparent')
 
   useEffect(() =>{
     switch (status) {
