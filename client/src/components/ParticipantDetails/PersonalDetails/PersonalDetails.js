@@ -2,12 +2,15 @@ import React, { useEffect } from 'react';
 import moment from 'moment';
 import './PersonalDetails.css'
 
+// Just a big form with all the properties that can be edited.
 const PersonalDetails = ({details, instruments, isEditting, handleChange, setDisplayEdit}) => {
 
+  // shows the edit buttons when navigating to the tab.
   useEffect(() => {
     setDisplayEdit(true)
   }, [])
 
+  // the 'disabled' css property sets the background and cursor when fields are disabled.
   let disabled = !isEditting ? 'disabled' : '';
 
   return (

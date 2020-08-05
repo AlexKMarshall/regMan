@@ -3,6 +3,7 @@ import './HealthDetails.css';
 
 const HealthDetails = ({ details, isEditting, handleChange, setDisplayEdit }) => {
 
+  // displays the edit buttons in the ParticipantDetails component
   useEffect(() => {
     setDisplayEdit(true)
   }, [])

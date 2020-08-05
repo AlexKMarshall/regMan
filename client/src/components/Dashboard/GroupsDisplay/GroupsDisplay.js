@@ -5,6 +5,14 @@ import ApiClient from '@/services/ApiClient';
 import { useAuth0 } from "@auth0/auth0-react";
 import './GroupsDisplay.css'
 
+/**
+ * Don't be scared! There are a lot of state properties. All of them are used for statistics.
+ * They are set in the generateData function.
+ * The chart function creates objects that chart.js can insterpret to render the graphs.
+ * 2 useEffect function set the data for the graphs at the begining and whenever there are changes.
+ *
+ * handleChange, submitMaxValues & cancelChanges are used to control the form that modifies the max_attendants property of the instruments.
+ */
 const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
   const [underageData, setUnderageData] = useState({});
   const [instrMaxDistributionData, setInstrMaxDistributionData] = useState({});
@@ -164,6 +172,9 @@ const GroupsDisplay = ({ participants, instruments, setInstruments}) => {
     setInstrClone(instruments)
   };
 
+  // this is a lot of fun... react-chartjs-2 is a library that makes making charts easier.
+  // in doing so, it makes styling mooooooore complicated. This is why style is hardcoded into every chart.
+  // All the charts accept a configuration object that regulates different properties of the display (axes, ticks, gridlines...)
   return (
     <div className="charts-container" >
       <div className="chart-grid">
