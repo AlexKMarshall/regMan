@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import ApiClient from '@/services/ApiClient';
+import ApiClient from '@app/services/ApiClient';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import './Dashboard.css';
 import {
@@ -10,7 +10,7 @@ import {
   ParticipantDetails,
   Navbar,
   Error500,
-} from '@/components';
+} from '@app/components';
 
 // Acts as the main page for logged in users. It has its own router.
 const Dashboard = () => {

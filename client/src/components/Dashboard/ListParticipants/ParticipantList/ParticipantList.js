@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ParticipantItem } from '@/components';
+import { ParticipantItem } from '@app/components';
 import Switch from 'react-switch';
 import './ParticipantList.css';
 

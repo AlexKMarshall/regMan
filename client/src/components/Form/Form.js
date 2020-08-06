@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import ApiClient from '@/services/ApiClient';
+import ApiClient from '@app/services/ApiClient';
 import moment from 'moment';
-import { Navbar } from '@/components';
+import { Navbar } from '@app/components';
 import './Form.css';
 
 // default value for the form

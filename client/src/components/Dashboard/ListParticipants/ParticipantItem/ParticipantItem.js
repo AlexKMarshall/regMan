@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusLight, DeleteParticipantButton } from '@/components';
+import { StatusLight, DeleteParticipantButton } from '@app/components';
 import { Link } from 'react-router-dom';
 
 // list item for each participant. It links to the details component and prompts the deleteParticipantButton

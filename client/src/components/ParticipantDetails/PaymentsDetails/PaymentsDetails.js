@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import ApiClient from '@/services/ApiClient';
+import ApiClient from '@app/services/ApiClient';
 import { useAuth0 } from '@auth0/auth0-react';
-import { PaymentItem, Popup, StatusLight } from '@/components';
+import { PaymentItem, Popup, StatusLight } from '@app/components';
 import './PaymentsDetails.css';
 
 /**
