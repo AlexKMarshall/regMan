@@ -1,2 +1,2 @@
-import SmartLink from './SmartLink';
+import SmartLink from "./SmartLink";
 export default SmartLink;

@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react';
-import './HealthDetails.css';
+import React, { useEffect } from "react";
+import "./HealthDetails.css";
 
-const HealthDetails = ({ details, isEditting, handleChange, setDisplayEdit }) => {
-
+const HealthDetails = ({
+  details,
+  isEditting,
+  handleChange,
+  setDisplayEdit,
+}) => {
   // displays the edit buttons in the ParticipantDetails component
   useEffect(() => {
-    setDisplayEdit(true)
-  }, [])
+    setDisplayEdit(true);
+  }, []);
 
-  let disabled = !isEditting ? 'disabled' : '';
+  let disabled = !isEditting ? "disabled" : "";
   return (
     <section id="health-details">
       <div className="form-section">
@@ -31,6 +35,6 @@ const HealthDetails = ({ details, isEditting, handleChange, setDisplayEdit }) =>
       </div>
     </section>
   );
-}
+};
 
 export default HealthDetails;

@@ -1,4 +1,4 @@
-const moment = require('moment');
+const moment = require("moment");
 
 // html of the welcome email. css has to be hardcoded for nodemail to interpret it correctly
 exports.welcomeEmail = (participant) => {
@@ -17,7 +17,9 @@ exports.welcomeEmail = (participant) => {
               <li>Name: ${participant.first_name}</li>
               <li>Surname: ${participant.last_name} </li>
               <li>Email: ${participant.email} </li>
-              <li>Date of birth: ${moment(participant.date_of_birth).format('DD-MM-YYYY')} </li>
+              <li>Date of birth: ${moment(participant.date_of_birth).format(
+                "DD-MM-YYYY"
+              )} </li>
               <li>Street: ${participant.street} </li>
               <li>City: ${participant.city} </li>
               <li>Country: ${participant.country} </li>
@@ -34,5 +36,5 @@ exports.welcomeEmail = (participant) => {
       </div>
     </body>
   </html>
-`
-}
+`;
+};

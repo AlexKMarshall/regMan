@@ -1,20 +1,22 @@
-const { attendant, instrument, payment } = require('../models');
-const { sendEmail } = require('../services/SendEmail'); // eslint-disable-line no-unused-vars
-const { Op } = require('sequelize');
-const moment = require('moment')
+const { attendant, instrument, payment } = require("../models");
+const { sendEmail } = require("../services/SendEmail"); // eslint-disable-line no-unused-vars
+const { Op } = require("sequelize");
+const moment = require("moment");
 
 exports.getAll = async (req, res) => {
   try {
     const attendantsList = await attendant.findAll({
-      include: [{
-        model: instrument,
-        attributes: ['id', 'name']
-      }],
+      include: [
+        {
+          model: instrument,
+          attributes: ["id", "name"],
+        },
+      ],
       where: { displayed: true },
       order: [
-        ['last_name', 'asc'],
-        ['first_name', 'asc']
-      ]
+        ["last_name", "asc"],
+        ["first_name", "asc"],
+      ],
     });
     res.status(200);
     res.json(attendantsList);
@@ -27,32 +29,36 @@ exports.getAll = async (req, res) => {
 exports.postNewAttendant = async (req, res) => {
   try {
     // find the max number of attendants for the requested instrument and the number of attendants already registered
-    const [ selInstr ] = await instrument.findAll({where: {id: req.body.instrumentId}});
+    const [selInstr] = await instrument.findAll({
+      where: { id: req.body.instrumentId },
+    });
     const attendantsOnSelInstr = await attendant.findAll({
       where: {
         instrumentId: req.body.instrumentId,
         displayed: true,
         registration_status: {
-          [Op.ne]: 'Cancelled'
-        }
-      }
-    })
+          [Op.ne]: "Cancelled",
+        },
+      },
+    });
     // Change registration status if group is full.
-    if(attendantsOnSelInstr.length >= selInstr.max_attendants) req.body.registration_status = 'Waitlist';
+    if (attendantsOnSelInstr.length >= selInstr.max_attendants)
+      req.body.registration_status = "Waitlist";
     // Create DB entry and store instrument name to be used in the email.
     const newAttendant = await attendant.create(req.body);
-    newAttendant.instrument = selInstr.name
+    newAttendant.instrument = selInstr.name;
     // if attendant is underage, apply 5% discount
-    newAttendant.is_underage && await payment.create({
-      payment_date: moment(),
-      amount_paid: 3000,
-      type_of_payment: 'Discount (5%)',
-      attendantId: newAttendant.id
-    })
+    newAttendant.is_underage &&
+      (await payment.create({
+        payment_date: moment(),
+        amount_paid: 3000,
+        type_of_payment: "Discount (5%)",
+        attendantId: newAttendant.id,
+      }));
     // Send email depending on availability
-    newAttendant.registration_status === 'New'
-      ? sendEmail(newAttendant, 'welcome')
-      : sendEmail(newAttendant, 'waitlist')
+    newAttendant.registration_status === "New"
+      ? sendEmail(newAttendant, "welcome")
+      : sendEmail(newAttendant, "waitlist");
     // send response to the client.
     res.status(201);
     res.json(newAttendant);
@@ -69,12 +75,12 @@ exports.getDetails = async (req, res) => {
         instrument,
         {
           model: payment,
-          as: 'payments'
-        }
+          as: "payments",
+        },
       ],
-      where: {id: req.params.id}
-    })
-    res.status(200)
+      where: { id: req.params.id },
+    });
+    res.status(200);
     res.json(attendantDetails);
   } catch (error) {
     console.log(error);
@@ -88,29 +94,29 @@ exports.getDetails = async (req, res) => {
 exports.putDeleteAttendant = async (req, res) => {
   try {
     await attendant.update(
-      {displayed: false},
-      {where: {id: req.params.id}}
+      { displayed: false },
+      { where: { id: req.params.id } }
     );
-    res.sendStatus(204)
+    res.sendStatus(204);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
   }
-}
+};
 
 // By default sequelize returns the number of updated rows. If returning is set to true, it retunrs an array
 // that has to be destructured to obtain the record value.
 exports.putUpdateAttendant = async (req, res) => {
   try {
-    const [rowsUpdated, [ updatedAttendant ]] = await attendant.update( // eslint-disable-line no-unused-vars
-      {...req.body},
-      {returning: true, where: {id: req.params.id}}
+    const [rowsUpdated, [updatedAttendant]] = await attendant.update(
+      // eslint-disable-line no-unused-vars
+      { ...req.body },
+      { returning: true, where: { id: req.params.id } }
     );
-    res.status(200)
-    res.json(updatedAttendant)
+    res.status(200);
+    res.json(updatedAttendant);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
   }
-}
-
+};

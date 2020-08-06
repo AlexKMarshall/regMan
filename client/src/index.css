@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap");
 
 :root {
   --light-bg: #f4f3f1;
@@ -26,7 +26,7 @@ body {
 
 * {
   box-sizing: border-box;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: large;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -62,15 +62,15 @@ button:focus {
 }
 
 .white-space {
-  height: 50px
+  height: 50px;
 }
 
 .error {
   display: flex;
   flex-direction: column;
   position: absolute;
-  top: calc((100vh - 86px)/2 + 86px);
-  transform: translateY(-50%)
+  top: calc((100vh - 86px) / 2 + 86px);
+  transform: translateY(-50%);
 }
 
 .error > a {

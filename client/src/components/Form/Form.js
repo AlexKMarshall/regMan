@@ -1,26 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
-import ApiClient from '@/services/ApiClient';
-import moment from 'moment';
-import { Navbar } from '@/components';
-import './Form.css'
+import React, { useState, useEffect } from "react";
+import { Redirect } from "react-router-dom";
+import ApiClient from "@/services/ApiClient";
+import moment from "moment";
+import { Navbar } from "@/components";
+import "./Form.css";
 
 // default value for the form
 const newRegistration = {
-  first_name: '',
-  last_name: '',
-  email: '',
-  date_of_birth: '',
-  street: '',
-  city: '',
-  country: '',
-  allergies: '',
+  first_name: "",
+  last_name: "",
+  email: "",
+  date_of_birth: "",
+  street: "",
+  city: "",
+  country: "",
+  allergies: "",
   accepts_tos: false,
-}
+};
 
 // Pretty long form for registration.
 const Form = () => {
-
   const [registration, setRegistration] = useState(newRegistration);
   // when set to true, will render the confirmation page.
   const [redirectToConfirmation, setRedirect] = useState(false);
@@ -28,41 +27,51 @@ const Form = () => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    ApiClient.getInstruments()
-      .then(instruments => {
-        if (instruments.error) setError(true);
-        else setInstruments(instruments)})
+    ApiClient.getInstruments().then((instruments) => {
+      if (instruments.error) setError(true);
+      else setInstruments(instruments);
+    });
   }, []);
 
   useEffect(() => {
-    const fiddle = instruments.filter(instrument => instrument.name === 'Fiddle')[0];
-    fiddle && setRegistration(registration => ({...registration, instrumentId: fiddle.id}))
+    const fiddle = instruments.filter(
+      (instrument) => instrument.name === "Fiddle"
+    )[0];
+    fiddle &&
+      setRegistration((registration) => ({
+        ...registration,
+        instrumentId: fiddle.id,
+      }));
   }, [instruments]);
 
-  function submitHandler (e) {
+  function submitHandler(e) {
     e.preventDefault();
     const courseStart = moment(process.env.REACT_APP_COURSE_START);
     const dateBirth = moment(registration.date_of_birth);
     // checks if the attendant will be 18 when the camp starts. If not, sets a flag for underage.
     // this is used in the backend to apply a discount to the attendant.
-    courseStart.diff(dateBirth, 'years') < 18 && (registration.is_underage = true);
+    courseStart.diff(dateBirth, "years") < 18 &&
+      (registration.is_underage = true);
     ApiClient.postNewAttendant(registration);
     setRedirect(true);
   }
 
   // handles change for all the fields. accepts_tos is a checkbox, so it needs a different target
-  function handleChange ({target}) {
-    const value = target.name === 'accepts_tos' ? target.checked : target.value;
-    setRegistration(oldRegistration => ({...oldRegistration, [target.name]: value}))
+  function handleChange({ target }) {
+    const value = target.name === "accepts_tos" ? target.checked : target.value;
+    setRegistration((oldRegistration) => ({
+      ...oldRegistration,
+      [target.name]: value,
+    }));
   }
 
-  function clearForm () {
+  function clearForm() {
     setRegistration(newRegistration);
   }
 
   // handles errirs with the API calls or redirects the user to the confirmation page.
-  if (error) return (<Redirect to={'/error500'} />)
-  if (redirectToConfirmation) return (<Redirect to="/confirmation"/>)
+  if (error) return <Redirect to={"/error500"} />;
+  if (redirectToConfirmation) return <Redirect to="/confirmation" />;
 
   return (
     <div>
@@ -184,7 +193,14 @@ const Form = () => {
                       value={registration.instrumentId}
                       onChange={handleChange}
                     >
-                      {instruments.map(instrument => <option key={'instrument'+instrument.id} value={instrument.id}>{instrument.name}</option>)}
+                      {instruments.map((instrument) => (
+                        <option
+                          key={"instrument" + instrument.id}
+                          value={instrument.id}
+                        >
+                          {instrument.name}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -192,7 +208,10 @@ const Form = () => {
               <div className="form-section">
                 <div className="description">
                   <h3>Medical Information</h3>
-                  <p>Let us know about any medical information that might be rellevant during the camp</p>
+                  <p>
+                    Let us know about any medical information that might be
+                    rellevant during the camp
+                  </p>
                 </div>
                 <div className="fields">
                   <div className="field">
@@ -210,7 +229,10 @@ const Form = () => {
               <div className="form-section">
                 <div className="description">
                   <h3>Terms of Service</h3>
-                  <p>Please accept the terms of service and click send to submit your registration</p>
+                  <p>
+                    Please accept the terms of service and click send to submit
+                    your registration
+                  </p>
                 </div>
                 <div className="fields">
                   <div className="field accept-tos">
@@ -222,13 +244,18 @@ const Form = () => {
                       onChange={handleChange}
                       required
                     />
-                    <label htmlFor="accepts_tos"> I accept the terms of service.</label>
+                    <label htmlFor="accepts_tos">
+                      {" "}
+                      I accept the terms of service.
+                    </label>
                   </div>
                 </div>
               </div>
               <div className="form-btns">
                 <button type="submit">Send my registration</button>
-                <button className="clear-form" onClick={clearForm}>Clear Form</button>
+                <button className="clear-form" onClick={clearForm}>
+                  Clear Form
+                </button>
               </div>
             </form>
           </div>
@@ -237,6 +264,6 @@ const Form = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Form;

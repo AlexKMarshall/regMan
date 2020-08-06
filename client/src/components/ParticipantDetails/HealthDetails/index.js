@@ -1,2 +1,2 @@
-import HealthDetails from './HealthDetails';
+import HealthDetails from "./HealthDetails";
 export default HealthDetails;

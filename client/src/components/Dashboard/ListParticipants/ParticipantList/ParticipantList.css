@@ -18,11 +18,11 @@
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .list-container {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
-.participants-list{
+.participants-list {
   padding: 0 50px 0 50px;
   height: calc(100vh - 86px);
   width: 100%;
@@ -33,7 +33,7 @@
   display: grid;
   grid-template-rows: auto;
   grid-template-columns: 5.75fr 1fr 2.5fr 2fr 5.75fr 2fr 1.5fr;
-  grid-template-areas: "name status-light status instrument email underage delete"
+  grid-template-areas: "name status-light status instrument email underage delete";
 }
 
 .participant-grid:hover {
@@ -52,14 +52,14 @@
 }
 
 .grid-header-item {
-  border-right: 1px solid gray
+  border-right: 1px solid gray;
 }
 
 .grid-header-item:last-child {
   border: none;
 }
 
-.grid-item{
+.grid-item {
   padding: 5px 15px;
   align-self: center;
   justify-self: stretch;
@@ -71,7 +71,7 @@
 }
 
 .grid-participants-total {
-  grid-column: 5 / span 3
+  grid-column: 5 / span 3;
 }
 
 .grid-status-title {
@@ -156,7 +156,7 @@
   margin-right: 10px;
 }
 
-.search-bar  {
+.search-bar {
   background-color: #ffffff;
   display: flex;
   justify-content: space-between;

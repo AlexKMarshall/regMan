@@ -1,13 +1,13 @@
-const moment = require('moment');
+const moment = require("moment");
 
 // html of the payment status email. css has to be hardcoded for nodemail to interpret it correctly
 exports.paymentStatus = (paymentData) => {
-
   // Calculations of the amounts payed and due
-  const { payments } = paymentData
+  const { payments } = paymentData;
   const course_price = process.env.COURSE_PRICE;
   const amount_paid = payments.reduce((acc, el) => {
-    const value = el.type_of_payment === 'Refund' ? -el.amount_paid : +el.amount_paid;
+    const value =
+      el.type_of_payment === "Refund" ? -el.amount_paid : +el.amount_paid;
     return acc + value;
   }, 0);
   const amount_due = course_price - amount_paid;
@@ -22,18 +22,35 @@ exports.paymentStatus = (paymentData) => {
           <div class="header" style="background-image: url('http://www.crisoldecuerda.com/wp-content/uploads/2020/01/Crisol-345.jpg'); background-size: cover; width: 100%; height: 250px;"></div>
           <div class="text" style="padding: 0 20px;">
             <h3>Hello ${paymentData.first_name},</h3>
-            ${paymentComplete
-              ? ("<p>We've received your last payment and your registration is complete. Now you just have to wait and practice your tunes until August.</p>")
-              : (`<p>This is just a friendly reminder of your payment status.</p>
-            <p>The course total is 600€ and until now we've received ${Number.parseFloat(amount_paid/100).toFixed(2)}€.</p>
-            <p>Your total amount due before the 1st of June is <b>${Number.parseFloat(amount_due/100).toFixed(2)}€</b>.</p>
+            ${
+              paymentComplete
+                ? "<p>We've received your last payment and your registration is complete. Now you just have to wait and practice your tunes until August.</p>"
+                : `<p>This is just a friendly reminder of your payment status.</p>
+            <p>The course total is 600€ and until now we've received ${Number.parseFloat(
+              amount_paid / 100
+            ).toFixed(2)}€.</p>
+            <p>Your total amount due before the 1st of June is <b>${Number.parseFloat(
+              amount_due / 100
+            ).toFixed(2)}€</b>.</p>
             <p>Here's list of all the payments received until today. If you've made any other payments, we might have missed it. Please send us the receipt so that we can track them down.</p>
             <ul>
-            ${payments.map(payment => {
-              const value = payment.type_of_payment === 'Refund' ? -payment.amount_paid : +payment.amount_paid;
-              return `<li>${Number.parseFloat(value/100).toFixed(2)}€ ${payment.type_of_payment === 'Refund' ? 'refunded' : (payment.type_of_payment === 'Payment' ? 'received' : 'applied discount')} on ${moment(payment.payment_date).format('DD/MM/YYYY')}</li>`
-            }).join('')}
-            </ul>`)}
+            ${payments
+              .map((payment) => {
+                const value =
+                  payment.type_of_payment === "Refund"
+                    ? -payment.amount_paid
+                    : +payment.amount_paid;
+                return `<li>${Number.parseFloat(value / 100).toFixed(2)}€ ${
+                  payment.type_of_payment === "Refund"
+                    ? "refunded"
+                    : payment.type_of_payment === "Payment"
+                    ? "received"
+                    : "applied discount"
+                } on ${moment(payment.payment_date).format("DD/MM/YYYY")}</li>`;
+              })
+              .join("")}
+            </ul>`
+            }
             <p>As usual, don't hesitate to contact us if you have any doubts.</p>
             <p>All the best,</p>
             <div class="signature" style="background-image: url(http://www.crisoldecuerda.com/wp-content/uploads/2012/02/logo-black11.png); width: 180px; height: 52px; margin: 0 0 30px 0;"></div>
@@ -42,5 +59,5 @@ exports.paymentStatus = (paymentData) => {
       </div>
     </body>
   </html>
-`
-}
+`;
+};

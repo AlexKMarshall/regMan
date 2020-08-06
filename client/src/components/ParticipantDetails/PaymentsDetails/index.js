@@ -1,2 +1,2 @@
-import PaymentsDetails from './PaymentsDetails';
+import PaymentsDetails from "./PaymentsDetails";
 export default PaymentsDetails;

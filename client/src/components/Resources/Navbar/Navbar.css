@@ -33,16 +33,16 @@ ul {
 
 li > a {
   color: white;
-  font-weight: 700;;
+  font-weight: 700;
 }
 
-.logout{
+.logout {
   background-color: var(--crisol-orange);
   font-size: 14px;
   color: black;
 }
 
-.logout:hover{
+.logout:hover {
   background-color: var(--main-light-orange);
 }
 
@@ -58,12 +58,13 @@ li > a {
 }
 
 .crisol-logo {
-  background-image: url('/logo-crisol.png');
+  background-image: url("/logo-crisol.png");
   background-size: cover;
   height: 46px;
   margin: 20px auto;
   position: absolute;
-  top: 0px; left: 50%;
+  top: 0px;
+  left: 50%;
   transform: translateX(-50%);
   width: 180px;
   cursor: pointer;

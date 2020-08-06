@@ -21,5 +21,5 @@ exports.waitlist = (participant) => {
       </div>
     </body>
   </html>
-`
-}
+`;
+};

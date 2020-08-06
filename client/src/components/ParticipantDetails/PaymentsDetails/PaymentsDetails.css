@@ -6,7 +6,7 @@
 }
 
 .payment {
-  padding-left: 25px
+  padding-left: 25px;
 }
 
 .amount-due {
@@ -38,8 +38,8 @@
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .payments-list {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 .payment-grid {
@@ -47,7 +47,7 @@
   display: grid;
   grid-template-rows: auto;
   grid-template-columns: 2fr 2fr 1fr;
-  grid-template-areas: "date type amount"
+  grid-template-areas: "date type amount";
 }
 
 .payment-detail:after {
