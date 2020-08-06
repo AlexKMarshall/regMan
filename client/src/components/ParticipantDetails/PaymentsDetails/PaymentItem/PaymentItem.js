@@ -5,6 +5,7 @@ import './PaymentItem.css'
 const PaymentItem = ({payment, promptPopup }) => {
   return (
     <div className="payment-detail">
+      {/*  A duplicate of the payment must be created in order to be able to cancel the changes in the popup*/}
       <div className="payment-detail payment-grid" onClick={() => {
         const changedPayment = {...payment, amount_paid: payment.amount_paid/100}
         promptPopup(changedPayment, 'Save Payment')

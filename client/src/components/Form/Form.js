@@ -5,6 +5,7 @@ import moment from 'moment';
 import { Navbar } from '@/components';
 import './Form.css'
 
+// default value for the form
 const newRegistration = {
   first_name: '',
   last_name: '',
@@ -17,9 +18,11 @@ const newRegistration = {
   accepts_tos: false,
 }
 
+// Pretty long form for registration.
 const Form = () => {
 
   const [registration, setRegistration] = useState(newRegistration);
+  // when set to true, will render the confirmation page.
   const [redirectToConfirmation, setRedirect] = useState(false);
   const [instruments, setInstruments] = useState([]);
   const [error, setError] = useState(false);
@@ -40,11 +43,14 @@ const Form = () => {
     e.preventDefault();
     const courseStart = moment(process.env.REACT_APP_COURSE_START);
     const dateBirth = moment(registration.date_of_birth);
+    // checks if the attendant will be 18 when the camp starts. If not, sets a flag for underage.
+    // this is used in the backend to apply a discount to the attendant.
     courseStart.diff(dateBirth, 'years') < 18 && (registration.is_underage = true);
     ApiClient.postNewAttendant(registration);
     setRedirect(true);
   }
 
+  // handles change for all the fields. accepts_tos is a checkbox, so it needs a different target
   function handleChange ({target}) {
     const value = target.name === 'accepts_tos' ? target.checked : target.value;
     setRegistration(oldRegistration => ({...oldRegistration, [target.name]: value}))
@@ -53,6 +59,8 @@ const Form = () => {
   function clearForm () {
     setRegistration(newRegistration);
   }
+
+  // handles errirs with the API calls or redirects the user to the confirmation page.
   if (error) return (<Redirect to={'/error500'} />)
   if (redirectToConfirmation) return (<Redirect to="/confirmation"/>)
 

@@ -3,11 +3,16 @@ import { ParticipantItem } from '@/components';
 import Switch from 'react-switch';
 import './ParticipantList.css';
 
+// Renders the list of attendants. It handles serches and filters for the list
 const ParticipantList = ({ participants, promptPopup }) => {
+  // boolean that is used to filter the cancelled participants from the list. Stored in localstorage
   const [checked, setChecked] = useState(localStorage.getItem('regmanCheckedFilter')? true : false);
+  // search string. Stored in localstorage so that the search is not lost when moving between components.
   const [search, setSearch] = useState(localStorage.getItem('regmanSearch') ? localStorage.getItem('regmanSearch') : '');
+  // value displayed. All participants are filtered based on the search value. If '', all are shown.
   const [searchedParticipants, setSearchedParticipants] = useState([]);
 
+  // populating initial values for searchedParticipants based on whether search exists in localstorage or not.
   useEffect(() => {
     search
       ? setSearchedParticipants(participants.filter(participant => {
@@ -17,14 +22,17 @@ const ParticipantList = ({ participants, promptPopup }) => {
       : setSearchedParticipants(participants);
   }, [participants]);
 
+  // stores or removes checked from the localstorage
   useEffect(()=> {
     checked ? localStorage.setItem('regmanCheckedFilter', checked) : localStorage.removeItem('regmanCheckedFilter');
   },[checked])
 
+  // handles the switch component.
   function handleSwitch(checked) {
     setChecked(checked)
   }
 
+  // handles the search bar. Stores the search value in the localstorage and filters the participants.
   function handleSearch({ target }) {
     setSearch(target.value);
     console.log('target value ',target.value)
@@ -35,12 +43,14 @@ const ParticipantList = ({ participants, promptPopup }) => {
     }))
   }
 
+  // resets the search component.
   function cancelSearch() {
     setSearch('');
     localStorage.removeItem('regmanSearch')
     setSearchedParticipants(participants);
   }
 
+  // applies the switch filter for rendering
   function applyFilter () {
     return checked ? searchedParticipants.filter(participant => participant.registration_status !== 'Cancelled') : searchedParticipants
   }
@@ -50,11 +60,11 @@ const ParticipantList = ({ participants, promptPopup }) => {
       <div className="search-and-filters">
         <div className="search-bar">
           <input className="search-input" placeholder="Search..." value={search} onChange={handleSearch} />
-          {console.log(localStorage.getItem('regmanSearch'))}
           <div className={'cancel-search' + (search === '' ? ' hidden' : '')} onClick={cancelSearch}>
             <span className="cancel-cross" role="img" aria-label="cancel search">╳</span>
           </div>
         </div>
+        {/* the switch component has to be inside a label. It needs to have all the css properties passed down as props... ¬_¬ */}
         <label className="toggle-vertical-align">
           <span>Filter cancelled registrations: </span>
           <Switch
@@ -82,6 +92,7 @@ const ParticipantList = ({ participants, promptPopup }) => {
       </div>
       <div className="list-container">
         {
+          // double ternary operator ^_^ have fun
           participants.length
           ? (searchedParticipants.length
             ? applyFilter().map(participant => (

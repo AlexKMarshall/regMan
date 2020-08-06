@@ -15,10 +15,12 @@ exports.getInstruments = async (req, res) => {
 
 exports.putInstruments = async (req, res) => {
   try {
-    // req.body is an array of instruments.
+    // req.body is an array of instruments. The database has to be updated for each instrument individually
     for (let instr of req.body) {
       await instrument.update({max_attendants: instr.max_attendants}, {where: {id: instr.id}});
     }
+    // finally all the modified instruments are retrieved.
+    // Don't change the order! It's important for the graphs display in the Groups component of the frontend.
     const updatedInstruments = await instrument.findAll({
       order: [['id', 'asc']]
     });
