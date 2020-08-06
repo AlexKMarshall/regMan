@@ -3,32 +3,32 @@ module.exports = (sequelize, DataTypes) => {
     first_name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: true,
-      }
+      },
     },
     last_name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: true,
-      }
+      },
     },
     date_of_birth: {
       type: DataTypes.DATE,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: true,
         isDate: true,
-      }
+      },
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: true,
         isEmail: true,
-      }
+      },
     },
 
     // Boolean value, used to apply discount upon registration.
@@ -37,31 +37,31 @@ module.exports = (sequelize, DataTypes) => {
     is_underage: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: true,
       },
-      defaultValue: false
+      defaultValue: false,
     },
     street: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: true,
-      }
+      },
     },
     city: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: true,
-      }
+      },
     },
     country: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: true,
-      }
+      },
     },
     allergies: {
       type: DataTypes.TEXT,
@@ -69,17 +69,17 @@ module.exports = (sequelize, DataTypes) => {
     accepts_tos: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: true,
-      }
+      },
     },
     registration_status: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: true,
       },
-      defaultValue: 'New'
+      defaultValue: 'New',
     },
 
     // used to filter if the row should be sent back to the client.
@@ -88,16 +88,16 @@ module.exports = (sequelize, DataTypes) => {
     displayed: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: true,
       },
-      defaultValue: true
+      defaultValue: true,
     },
   });
 
-  attendant.associate = model => {
-    attendant.belongsTo(model.instrument)
-    attendant.hasMany(model.payment)
+  attendant.associate = (model) => {
+    attendant.belongsTo(model.instrument);
+    attendant.hasMany(model.payment);
   };
   return attendant;
-}
+};

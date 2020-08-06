@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import { Auth0ProviderWithHistory } from "@/components";
+import { Auth0ProviderWithHistory } from '@/components';
 
 import './index.css';
 

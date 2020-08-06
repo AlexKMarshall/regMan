@@ -1,6 +1,6 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import { Auth0Provider } from "@auth0/auth0-react";
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { Auth0Provider } from '@auth0/auth0-react';
 
 // Component provided by Auth0. Takes care of the login process by controlling
 // the route where the user will be sent back. The parameters for domain, clientId, audience and

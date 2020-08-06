@@ -1,14 +1,19 @@
 import React, { useEffect } from 'react';
 import moment from 'moment';
-import './PersonalDetails.css'
+import './PersonalDetails.css';
 
 // Just a big form with all the properties that can be edited.
-const PersonalDetails = ({details, instruments, isEditting, handleChange, setDisplayEdit}) => {
-
+const PersonalDetails = ({
+  details,
+  instruments,
+  isEditting,
+  handleChange,
+  setDisplayEdit,
+}) => {
   // shows the edit buttons when navigating to the tab.
   useEffect(() => {
-    setDisplayEdit(true)
-  }, [])
+    setDisplayEdit(true);
+  }, []);
 
   // the 'disabled' css property sets the background and cursor when fields are disabled.
   let disabled = !isEditting ? 'disabled' : '';
@@ -22,15 +27,22 @@ const PersonalDetails = ({details, instruments, isEditting, handleChange, setDis
         <div className="fields">
           <div className="field instrument">
             <label htmlFor="instrumentId">Registered for: </label>
-              <select
-                className={disabled}
-                name="instrumentId"
-                value={details.instrumentId}
-                onChange={handleChange}
-                disabled={!isEditting}
+            <select
+              className={disabled}
+              name="instrumentId"
+              value={details.instrumentId}
+              onChange={handleChange}
+              disabled={!isEditting}
+            >
+              {instruments.map((instrument) => (
+                <option
+                  key={'instrument' + instrument.id}
+                  value={instrument.id}
                 >
-                {instruments.map(instrument => <option key={'instrument'+instrument.id} value={instrument.id}>{instrument.name}</option>)}
-              </select>
+                  {instrument.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="field registration-status">
             <label htmlFor="registration_status">Registration status: </label>
@@ -40,7 +52,7 @@ const PersonalDetails = ({details, instruments, isEditting, handleChange, setDis
               value={details.registration_status}
               onChange={handleChange}
               disabled={!isEditting}
-              >
+            >
               <option value="New">New</option>
               <option value="Accepted">Accepted</option>
               <option value="Paid">Paid</option>
@@ -65,7 +77,7 @@ const PersonalDetails = ({details, instruments, isEditting, handleChange, setDis
               value={details.first_name}
               onChange={handleChange}
               readOnly={!isEditting}
-              />
+            />
           </div>
           <div className="field surname">
             <label htmlFor="last_name">Surname: </label>
@@ -76,7 +88,7 @@ const PersonalDetails = ({details, instruments, isEditting, handleChange, setDis
               value={details.last_name}
               onChange={handleChange}
               readOnly={!isEditting}
-              />
+            />
           </div>
         </div>
         <div className="fields">
@@ -89,7 +101,7 @@ const PersonalDetails = ({details, instruments, isEditting, handleChange, setDis
               value={details.email}
               onChange={handleChange}
               readOnly={!isEditting}
-              />
+            />
           </div>
           <div className="field date_of_birth">
             <label htmlFor="date_of_birth">Date of Birth: </label>
@@ -100,13 +112,18 @@ const PersonalDetails = ({details, instruments, isEditting, handleChange, setDis
               value={moment(details.date_of_birth).format('YYYY-MM-DD')}
               onChange={handleChange}
               readOnly={!isEditting}
-              />
+            />
             <label htmlFor="age">
               Age at the beginning of camp: <b>{details.age} </b>
-              {details.is_underage
-                ? (<span role="img" aria-label="underage">🔞</span>)
-                : (<span role="img" aria-label="underage">✅</span>)
-              }
+              {details.is_underage ? (
+                <span role="img" aria-label="underage">
+                  🔞
+                </span>
+              ) : (
+                <span role="img" aria-label="underage">
+                  ✅
+                </span>
+              )}
             </label>
           </div>
         </div>
@@ -123,7 +140,7 @@ const PersonalDetails = ({details, instruments, isEditting, handleChange, setDis
               value={details.street}
               onChange={handleChange}
               readOnly={!isEditting}
-              />
+            />
           </div>
           <div className="field city">
             <label htmlFor="city">City: </label>
@@ -134,7 +151,7 @@ const PersonalDetails = ({details, instruments, isEditting, handleChange, setDis
               value={details.city}
               onChange={handleChange}
               readOnly={!isEditting}
-              />
+            />
           </div>
           <div className="field country">
             <label htmlFor="country">Country: </label>
@@ -151,6 +168,6 @@ const PersonalDetails = ({details, instruments, isEditting, handleChange, setDis
       </div>
     </section>
   );
-}
+};
 
 export default PersonalDetails;

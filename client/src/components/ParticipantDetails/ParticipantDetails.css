@@ -80,7 +80,7 @@
 .participant-details:before {
   position: absolute;
   border-radius: 30px;
-  content: "";
+  content: '';
   bottom: 25px;
   right: 0px;
   height: 50px;
@@ -88,19 +88,19 @@
   background: #777;
   z-index: -1;
   -webkit-box-shadow: 10px 25px 15px #80808080;
-	-moz-box-shadow: 10px 25px 15px #80808080;
-	box-shadow: 10px 25px 15px #80808080;
-	-webkit-transform: rotate(3deg);
-	-moz-transform: rotate(3deg);
-	-o-transform: rotate(3deg);
-	-ms-transform: rotate(3deg);
-	transform: rotate(3deg);
+  -moz-box-shadow: 10px 25px 15px #80808080;
+  box-shadow: 10px 25px 15px #80808080;
+  -webkit-transform: rotate(3deg);
+  -moz-transform: rotate(3deg);
+  -o-transform: rotate(3deg);
+  -ms-transform: rotate(3deg);
+  transform: rotate(3deg);
 }
 
 .participant-details:after {
   position: absolute;
   border-radius: 30px;
-  content: "";
+  content: '';
   bottom: 0px;
   right: 20px;
   height: 75%;
@@ -109,10 +109,10 @@
   z-index: -1;
   box-shadow: 20px 5px 15px #80808080;
   -webkit-box-shadow: 20px 5px 15px #80808080;
-	-moz-box-shadow: 20px 5px 15px #80808080;
-	-webkit-transform: rotate(-3deg);
-	-moz-transform: rotate(-3deg);
-	-o-transform: rotate(-3deg);
-	-ms-transform: rotate(-3deg);
-	transform: rotate(-3deg);
+  -moz-box-shadow: 20px 5px 15px #80808080;
+  -webkit-transform: rotate(-3deg);
+  -moz-transform: rotate(-3deg);
+  -o-transform: rotate(-3deg);
+  -ms-transform: rotate(-3deg);
+  transform: rotate(-3deg);
 }

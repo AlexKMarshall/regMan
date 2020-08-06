@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0 } from '@auth0/auth0-react';
 import ApiClient from '@/services/ApiClient';
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import { Loading, HealthDetails, PaymentsDetails, PersonalDetails, StatusLight, SmartLink, EditButtons } from '@/components';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import {
+  Loading,
+  HealthDetails,
+  PaymentsDetails,
+  PersonalDetails,
+  StatusLight,
+  SmartLink,
+  EditButtons,
+} from '@/components';
 import moment from 'moment';
-import './ParticipantDetails.css'
-
+import './ParticipantDetails.css';
 
 /**
  * One of the main components. Has its own react-router to display the different details
@@ -36,14 +43,14 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
   // getAccessTokenSilently gets the token used for authentication in the backend server
   useEffect(() => {
     getAccessTokenSilently()
-      .then(token => ApiClient.getDetails(id, token))
-      .then(details => {
+      .then((token) => ApiClient.getDetails(id, token))
+      .then((details) => {
         // the age is calculated when the course starts. There's an env variable setup to determine the date.
         details.age = courseStarts.diff(details.date_of_birth, 'years');
-        setDetails({...details})
-        setOldDetails({...details})
-      })
-  },[]);
+        setDetails({ ...details });
+        setOldDetails({ ...details });
+      });
+  }, []);
 
   // This object contains the functionality of the editButtons.
   const buttonFunctionality = {
@@ -55,57 +62,66 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
     // sends changes to the API, sets the changes into 'details' and updates the participants list in
     // the dashboard component in the proper order.
     submitChanges: () => {
-      getAccessTokenSilently()
-      .then(token => ApiClient.putParticipantChanges(details, token))
-      setParticipants(oldList => {
-        const filtered = oldList.filter(attendant => attendant.id !== +id)
-        const complete = [...filtered, details]
+      getAccessTokenSilently().then((token) =>
+        ApiClient.putParticipantChanges(details, token)
+      );
+      setParticipants((oldList) => {
+        const filtered = oldList.filter((attendant) => attendant.id !== +id);
+        const complete = [...filtered, details];
         complete.sort((a, b) => {
-          const sortA = a.last_name
-          const sortB = b.last_name
-          return sortA.localeCompare(sortB, 'es', {sensitivity: 'base', ignorePunctuation: true})
-        })
+          const sortA = a.last_name;
+          const sortB = b.last_name;
+          return sortA.localeCompare(sortB, 'es', {
+            sensitivity: 'base',
+            ignorePunctuation: true,
+          });
+        });
         return complete;
-      })
+      });
       // updates oldDetails to match the new stored data.
-      setOldDetails(details)
+      setOldDetails(details);
       setIsEditting(!isEditting);
     },
     cancelChanges: () => {
       setDetails(oldDetails);
       setIsEditting(!isEditting);
-    }
-  }
+    },
+  };
 
   // Handles change for the different details sections. When changing the date of birth
   // or the instrument, further adjustments have to be done to other properties.
-  function handleChange ({target}) {
+  function handleChange({ target }) {
     switch (target.name) {
       case 'date_of_birth':
-        const newAge = courseStarts.diff(target.value, 'years')
-        setDetails(details => ({
+        const newAge = courseStarts.diff(target.value, 'years');
+        setDetails((details) => ({
           ...details,
           date_of_birth: target.value,
           age: newAge,
-          is_underage: newAge < 18
-        }))
+          is_underage: newAge < 18,
+        }));
         break;
 
       case 'instrumentId':
-        const [instr] = instruments.filter(instrument => instrument.id === +target.value);
-        setDetails(details => ({
+        const [instr] = instruments.filter(
+          (instrument) => instrument.id === +target.value
+        );
+        setDetails((details) => ({
           ...details,
           instrumentId: target.value,
-          instrument: instr
-        }))
+          instrument: instr,
+        }));
         break;
       default:
-        return setDetails(details => ({...details, [target.name]: target.value}));
+        return setDetails((details) => ({
+          ...details,
+          [target.name]: target.value,
+        }));
     }
   }
 
   const { isLoading } = useAuth0();
-  if (isLoading || details === {} || instruments === []) return (<Loading/>)
+  if (isLoading || details === {} || instruments === []) return <Loading />;
 
   return (
     <div className="details-container">
@@ -114,57 +130,86 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
           <div className="details-header">
             <div className="displayed-information">
               <StatusLight status={details.registration_status} />
-              <h3>{details.first_name} {details.last_name}</h3>
+              <h3>
+                {details.first_name} {details.last_name}
+              </h3>
             </div>
           </div>
           <div className="details-nav">
             <div className="selectors-container">
               {/* SmartLink will prevent users from changing tabs without saving the changes */}
-              <SmartLink to="personal" value="Personal Details" match={match} isEditting={isEditting} />
-              <SmartLink to="health" value="Health Details" match={match} isEditting={isEditting} />
-              <SmartLink to="payments" value="Payment Details" match={match} isEditting={isEditting} />
+              <SmartLink
+                to="personal"
+                value="Personal Details"
+                match={match}
+                isEditting={isEditting}
+              />
+              <SmartLink
+                to="health"
+                value="Health Details"
+                match={match}
+                isEditting={isEditting}
+              />
+              <SmartLink
+                to="payments"
+                value="Payment Details"
+                match={match}
+                isEditting={isEditting}
+              />
             </div>
-            <div className="edit-buttons" >
+            <div className="edit-buttons">
               <div className={displayEdit ? '' : 'hide-buttons'}>
-                <EditButtons isEditting={isEditting} buttonFunctionality={buttonFunctionality} />
+                <EditButtons
+                  isEditting={isEditting}
+                  buttonFunctionality={buttonFunctionality}
+                />
               </div>
             </div>
           </div>
           <div className="showcased-section">
-            <Route path={`/dashboard/details/${match.params.id}/personal`} render={(props) => (
-              <PersonalDetails
-                {...props}
-                details={details}
-                isEditting={isEditting}
-                instruments={instruments}
-                handleChange={handleChange}
-                buttonFunctionality={buttonFunctionality}
-                setDisplayEdit={setDisplayEdit}
-              />)}
+            <Route
+              path={`/dashboard/details/${match.params.id}/personal`}
+              render={(props) => (
+                <PersonalDetails
+                  {...props}
+                  details={details}
+                  isEditting={isEditting}
+                  instruments={instruments}
+                  handleChange={handleChange}
+                  buttonFunctionality={buttonFunctionality}
+                  setDisplayEdit={setDisplayEdit}
+                />
+              )}
             />
-            <Route path={`/dashboard/details/${match.params.id}/health`} render={(props) => (
-              <HealthDetails
-                {...props}
-                details={details}
-                isEditting={isEditting}
-                handleChange={handleChange}
-                buttonFunctionality={buttonFunctionality}
-                setDisplayEdit={setDisplayEdit}
-              />)}
+            <Route
+              path={`/dashboard/details/${match.params.id}/health`}
+              render={(props) => (
+                <HealthDetails
+                  {...props}
+                  details={details}
+                  isEditting={isEditting}
+                  handleChange={handleChange}
+                  buttonFunctionality={buttonFunctionality}
+                  setDisplayEdit={setDisplayEdit}
+                />
+              )}
             />
-            <Route path={`/dashboard/details/${match.params.id}/payments`} render={(props) => (
-              <PaymentsDetails
-                {...props}
-                details={details}
-                setDetails={setDetails}
-                setDisplayEdit={setDisplayEdit}
-              />)}
+            <Route
+              path={`/dashboard/details/${match.params.id}/payments`}
+              render={(props) => (
+                <PaymentsDetails
+                  {...props}
+                  details={details}
+                  setDetails={setDetails}
+                  setDisplayEdit={setDisplayEdit}
+                />
+              )}
             />
           </div>
         </Router>
       </div>
     </div>
   );
-}
+};
 
 export default ParticipantDetails;

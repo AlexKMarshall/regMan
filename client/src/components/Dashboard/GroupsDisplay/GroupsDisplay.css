@@ -30,15 +30,15 @@
   width: 100%;
 }
 
-.groups-setup > > form > .fields {
+.groups-setup > form > .fields {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 100%
+  width: 100%;
 }
 
 .graph-field {
-  display:flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   padding: 5px;
@@ -66,12 +66,12 @@
 
 .total-participants {
   text-align: center;
-  padding: 10px 0
+  padding: 10px 0;
 }
 
 .chart-card:before {
   position: absolute;
-  content: "";
+  content: '';
   bottom: 16px;
   right: 10px;
   top: 85%;
@@ -79,18 +79,18 @@
   background: #777;
   z-index: -1;
   -webkit-box-shadow: 10px 18px 15px #80808080;
-	-moz-box-shadow: 10px 18px 15px #80808080;
-	box-shadow: 10px 18px 15px #80808080;
-	-webkit-transform: rotate(3deg);
-	-moz-transform: rotate(3deg);
-	-o-transform: rotate(3deg);
-	-ms-transform: rotate(3deg);
-	transform: rotate(3deg);
+  -moz-box-shadow: 10px 18px 15px #80808080;
+  box-shadow: 10px 18px 15px #80808080;
+  -webkit-transform: rotate(3deg);
+  -moz-transform: rotate(3deg);
+  -o-transform: rotate(3deg);
+  -ms-transform: rotate(3deg);
+  transform: rotate(3deg);
 }
 
 .chart-card:after {
   position: absolute;
-  content: "";
+  content: '';
   bottom: 14px;
   left: 85%;
   top: 10%;
@@ -98,11 +98,11 @@
   background: #777;
   z-index: -1;
   -webkit-box-shadow: 10px 18px 15px #80808080;
-	-moz-box-shadow: 10px 18px 15px #80808080;
-	box-shadow: 10px 18px 15px #80808080;
-	-webkit-transform: rotate(-3deg);
-	-moz-transform: rotate(-3deg);
-	-o-transform: rotate(-3deg);
-	-ms-transform: rotate(-3deg);
-	transform: rotate(-3deg);
+  -moz-box-shadow: 10px 18px 15px #80808080;
+  box-shadow: 10px 18px 15px #80808080;
+  -webkit-transform: rotate(-3deg);
+  -moz-transform: rotate(-3deg);
+  -o-transform: rotate(-3deg);
+  -ms-transform: rotate(-3deg);
+  transform: rotate(-3deg);
 }

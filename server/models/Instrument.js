@@ -3,9 +3,9 @@ module.exports = (sequelize, DataTypes) => {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: true,
-      }
+      },
     },
 
     // maximum number of attendants per group. Used when registering a new attendant to
@@ -13,10 +13,10 @@ module.exports = (sequelize, DataTypes) => {
     max_attendants: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: true,
         isInt: true,
-      }
+      },
     },
   });
 
@@ -25,4 +25,4 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   return instrument;
-}
+};
