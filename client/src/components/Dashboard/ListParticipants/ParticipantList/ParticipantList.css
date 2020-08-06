@@ -33,7 +33,7 @@
   display: grid;
   grid-template-rows: auto;
   grid-template-columns: 5.75fr 1fr 2.5fr 2fr 5.75fr 2fr 1.5fr;
-  grid-template-areas: "name status-light status instrument email underage delete";
+  grid-template-areas: 'name status-light status instrument email underage delete';
 }
 
 .participant-grid:hover {
@@ -123,7 +123,7 @@
 }
 
 .participant-container:after {
-  content: "";
+  content: '';
   display: block;
   margin: 0 auto;
   width: 95%;

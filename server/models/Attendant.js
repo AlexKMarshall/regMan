@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const attendant = sequelize.define("attendant", {
+  const attendant = sequelize.define('attendant', {
     first_name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -79,7 +79,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: true,
       },
-      defaultValue: "New",
+      defaultValue: 'New',
     },
 
     // used to filter if the row should be sent back to the client.

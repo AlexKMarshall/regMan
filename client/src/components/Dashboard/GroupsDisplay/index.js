@@ -1,2 +1,2 @@
-import GroupsDisplay from "./GroupsDisplay";
+import GroupsDisplay from './GroupsDisplay';
 export default GroupsDisplay;

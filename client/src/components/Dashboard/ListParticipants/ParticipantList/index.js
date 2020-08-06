@@ -1,2 +1,2 @@
-import ParticipantList from "./ParticipantList";
+import ParticipantList from './ParticipantList';
 export default ParticipantList;

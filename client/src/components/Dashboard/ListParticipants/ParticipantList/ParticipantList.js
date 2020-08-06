@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { ParticipantItem } from "@/components";
-import Switch from "react-switch";
-import "./ParticipantList.css";
+import React, { useState, useEffect } from 'react';
+import { ParticipantItem } from '@/components';
+import Switch from 'react-switch';
+import './ParticipantList.css';
 
 // Renders the list of attendants. It handles serches and filters for the list
 const ParticipantList = ({ participants, promptPopup }) => {
   // boolean that is used to filter the cancelled participants from the list. Stored in localstorage
   const [checked, setChecked] = useState(
-    localStorage.getItem("regmanCheckedFilter") ? true : false
+    localStorage.getItem('regmanCheckedFilter') ? true : false
   );
   // search string. Stored in localstorage so that the search is not lost when moving between components.
   const [search, setSearch] = useState(
-    localStorage.getItem("regmanSearch")
-      ? localStorage.getItem("regmanSearch")
-      : ""
+    localStorage.getItem('regmanSearch')
+      ? localStorage.getItem('regmanSearch')
+      : ''
   );
   // value displayed. All participants are filtered based on the search value. If '', all are shown.
   const [searchedParticipants, setSearchedParticipants] = useState([]);
@@ -23,15 +23,15 @@ const ParticipantList = ({ participants, promptPopup }) => {
     search
       ? setSearchedParticipants(
           participants.filter((participant) => {
-            const searchValue = "".concat(
+            const searchValue = ''.concat(
               participant.first_name,
-              " ",
+              ' ',
               participant.last_name,
-              " ",
+              ' ',
               participant.registration_status,
-              " ",
+              ' ',
               participant.email,
-              " ",
+              ' ',
               participant.instrument.name
             );
             return searchValue.toLowerCase().includes(search.toLowerCase());
@@ -43,8 +43,8 @@ const ParticipantList = ({ participants, promptPopup }) => {
   // stores or removes checked from the localstorage
   useEffect(() => {
     checked
-      ? localStorage.setItem("regmanCheckedFilter", checked)
-      : localStorage.removeItem("regmanCheckedFilter");
+      ? localStorage.setItem('regmanCheckedFilter', checked)
+      : localStorage.removeItem('regmanCheckedFilter');
   }, [checked]);
 
   // handles the switch component.
@@ -55,21 +55,21 @@ const ParticipantList = ({ participants, promptPopup }) => {
   // handles the search bar. Stores the search value in the localstorage and filters the participants.
   function handleSearch({ target }) {
     setSearch(target.value);
-    console.log("target value ", target.value);
+    console.log('target value ', target.value);
     target.value
-      ? localStorage.setItem("regmanSearch", target.value)
-      : localStorage.removeItem("regmanSearch");
+      ? localStorage.setItem('regmanSearch', target.value)
+      : localStorage.removeItem('regmanSearch');
     setSearchedParticipants(
       participants.filter((participant) => {
-        const searchValue = "".concat(
+        const searchValue = ''.concat(
           participant.first_name,
-          " ",
+          ' ',
           participant.last_name,
-          " ",
+          ' ',
           participant.registration_status,
-          " ",
+          ' ',
           participant.email,
-          " ",
+          ' ',
           participant.instrument.name
         );
         return searchValue.toLowerCase().includes(target.value.toLowerCase());
@@ -79,8 +79,8 @@ const ParticipantList = ({ participants, promptPopup }) => {
 
   // resets the search component.
   function cancelSearch() {
-    setSearch("");
-    localStorage.removeItem("regmanSearch");
+    setSearch('');
+    localStorage.removeItem('regmanSearch');
     setSearchedParticipants(participants);
   }
 
@@ -88,7 +88,7 @@ const ParticipantList = ({ participants, promptPopup }) => {
   function applyFilter() {
     return checked
       ? searchedParticipants.filter(
-          (participant) => participant.registration_status !== "Cancelled"
+          (participant) => participant.registration_status !== 'Cancelled'
         )
       : searchedParticipants;
   }
@@ -104,7 +104,7 @@ const ParticipantList = ({ participants, promptPopup }) => {
             onChange={handleSearch}
           />
           <div
-            className={"cancel-search" + (search === "" ? " hidden" : "")}
+            className={'cancel-search' + (search === '' ? ' hidden' : '')}
             onClick={cancelSearch}
           >
             <span
@@ -155,7 +155,7 @@ const ParticipantList = ({ participants, promptPopup }) => {
             searchedParticipants.length ? (
               applyFilter().map((participant) => (
                 <ParticipantItem
-                  key={"participant" + participant.id}
+                  key={'participant' + participant.id}
                   participant={participant}
                   promptPopup={promptPopup}
                 />

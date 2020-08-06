@@ -71,7 +71,7 @@
 
 .chart-card:before {
   position: absolute;
-  content: "";
+  content: '';
   bottom: 16px;
   right: 10px;
   top: 85%;
@@ -90,7 +90,7 @@
 
 .chart-card:after {
   position: absolute;
-  content: "";
+  content: '';
   bottom: 14px;
   left: 85%;
   top: 10%;

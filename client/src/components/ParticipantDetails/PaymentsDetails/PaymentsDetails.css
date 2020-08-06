@@ -47,11 +47,11 @@
   display: grid;
   grid-template-rows: auto;
   grid-template-columns: 2fr 2fr 1fr;
-  grid-template-areas: "date type amount";
+  grid-template-areas: 'date type amount';
 }
 
 .payment-detail:after {
-  content: "";
+  content: '';
   display: block;
   margin: 0 auto;
   width: 95%;

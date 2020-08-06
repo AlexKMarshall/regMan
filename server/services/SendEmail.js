@@ -1,18 +1,18 @@
-const nodemailer = require("nodemailer");
-const { welcomeEmail } = require("../views/welcome-email");
-const { waitlist } = require("../views/wait-list");
-const { paymentStatus } = require("../views/paymentStatus");
+const nodemailer = require('nodemailer');
+const { welcomeEmail } = require('../views/welcome-email');
+const { waitlist } = require('../views/wait-list');
+const { paymentStatus } = require('../views/paymentStatus');
 
 // used to handle sending emails. It'll accept the emailData and a parameter that
 // selects the type of email to be sent.
 exports.sendEmail = async (emailData, typeOfMail) => {
   function subject() {
     switch (typeOfMail) {
-      case "welcome":
-        return "Welcome to Crisol!";
-      case "waitlist":
+      case 'welcome':
+        return 'Welcome to Crisol!';
+      case 'waitlist':
         return "We're sorry, you're on the waitlist";
-      case "payments":
+      case 'payments':
         return "We've received your payment!";
     }
   }
@@ -20,11 +20,11 @@ exports.sendEmail = async (emailData, typeOfMail) => {
   // Calls the different email bodies
   function emailContent() {
     switch (typeOfMail) {
-      case "welcome":
+      case 'welcome':
         return welcomeEmail(emailData);
-      case "waitlist":
+      case 'waitlist':
         return waitlist(emailData);
-      case "payments":
+      case 'payments':
         return paymentStatus(emailData);
     }
   }
@@ -46,12 +46,12 @@ exports.sendEmail = async (emailData, typeOfMail) => {
       from: `"Crisol App testing" <${process.env.GMAIL_FROM}>`,
       to: `${emailData.email}, ${process.env.GMAIL_TO}`,
       subject: subject(),
-      text: "Information from Crisol de Cuerda",
+      text: 'Information from Crisol de Cuerda',
       html: emailContent(),
     },
     (err, data) => {
-      if (err) console.log("Sending email failed: ", err);
-      else console.log("Email sent 🎉🎉: ", data);
+      if (err) console.log('Sending email failed: ', err);
+      else console.log('Email sent 🎉🎉: ', data);
     }
   );
 };

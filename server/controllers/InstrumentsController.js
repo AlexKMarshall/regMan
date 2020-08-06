@@ -1,9 +1,9 @@
-const { instrument } = require("../models");
+const { instrument } = require('../models');
 
 exports.getInstruments = async (req, res) => {
   try {
     const instruments = await instrument.findAll({
-      order: [["id", "asc"]],
+      order: [['id', 'asc']],
     });
     res.status(200);
     res.json(instruments);
@@ -25,7 +25,7 @@ exports.putInstruments = async (req, res) => {
     // finally all the modified instruments are retrieved.
     // Don't change the order! It's important for the graphs display in the Groups component of the frontend.
     const updatedInstruments = await instrument.findAll({
-      order: [["id", "asc"]],
+      order: [['id', 'asc']],
     });
     res.status(200);
     res.json(updatedInstruments);

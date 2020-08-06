@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import moment from "moment";
-import { Doughnut, Bar, Line } from "react-chartjs-2";
-import ApiClient from "@/services/ApiClient";
-import { useAuth0 } from "@auth0/auth0-react";
-import "./GroupsDisplay.css";
+import React, { useState, useEffect } from 'react';
+import moment from 'moment';
+import { Doughnut, Bar, Line } from 'react-chartjs-2';
+import ApiClient from '@/services/ApiClient';
+import { useAuth0 } from '@auth0/auth0-react';
+import './GroupsDisplay.css';
 
 /**
  * Don't be scared! There are a lot of state properties. All of them are used for statistics.
@@ -40,7 +40,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
       Cello: [],
       Guitar: [],
       Flute: [],
-      "Fiddle Beginner": [],
+      'Fiddle Beginner': [],
     };
     const totalSpots = instrMaxSpots.reduce((acc, el) => acc + el, 0);
     participants.forEach((participant) => {
@@ -49,7 +49,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
       agesArray.push(
         moment(process.env.REACT_APP_COURSE_START).diff(
           participant.date_of_birth,
-          "years"
+          'years'
         )
       );
     });
@@ -75,12 +75,12 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
 
   const chart = () => {
     setUnderageData({
-      labels: ["Underage Participants", "Adult Participants"],
+      labels: ['Underage Participants', 'Adult Participants'],
       datasets: [
         {
-          label: "percentage of underage participants",
+          label: 'percentage of underage participants',
           data: [numUnderage, numParticipants - numUnderage],
-          backgroundColor: ["#39998e", "#57455a"],
+          backgroundColor: ['#39998e', '#57455a'],
           borderWidth: 1,
         },
       ],
@@ -89,74 +89,74 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
       labels: instrumentNames,
       datasets: [
         {
-          label: "distribution of max attendants per instrument",
+          label: 'distribution of max attendants per instrument',
           data: instrMaxSpots,
           backgroundColor: [
-            "#f28939",
-            "#39998e",
-            "#347dca",
-            "#ff4557",
-            "#57455a",
+            '#f28939',
+            '#39998e',
+            '#347dca',
+            '#ff4557',
+            '#57455a',
           ],
           borderWidth: 1,
         },
       ],
     });
-    instrDistribution["Fiddle"] &&
+    instrDistribution['Fiddle'] &&
       setParticipantsDitrByInstr({
         labels: instrumentNames,
         datasets: [
           {
-            label: "registrered participants",
+            label: 'registrered participants',
             data: [
-              instrDistribution["Fiddle"].length,
-              instrDistribution["Cello"].length,
-              instrDistribution["Guitar"].length,
-              instrDistribution["Flute"].length,
-              instrDistribution["Fiddle Beginner"].length,
+              instrDistribution['Fiddle'].length,
+              instrDistribution['Cello'].length,
+              instrDistribution['Guitar'].length,
+              instrDistribution['Flute'].length,
+              instrDistribution['Fiddle Beginner'].length,
             ],
             backgroundColor: [
-              "#f7bd92",
-              "#89cfc7",
-              "#7ea4cc",
-              "#ff808c",
-              "#a17fa7",
+              '#f7bd92',
+              '#89cfc7',
+              '#7ea4cc',
+              '#ff808c',
+              '#a17fa7',
             ],
           },
           {
-            label: "maximum attendants",
+            label: 'maximum attendants',
             data: instrMaxSpots,
             backgroundColor: [
-              "#f28939",
-              "#39998e",
-              "#347dca",
-              "#ff4557",
-              "#571f61",
+              '#f28939',
+              '#39998e',
+              '#347dca',
+              '#ff4557',
+              '#571f61',
             ],
           },
         ],
       });
-    instrDistribution["Fiddle"] &&
+    instrDistribution['Fiddle'] &&
       setAvailableSpotsData({
-        labels: [...instrumentNames, "Remaining Spots"],
+        labels: [...instrumentNames, 'Remaining Spots'],
         datasets: [
           {
-            label: "remaining spots",
+            label: 'remaining spots',
             data: [
-              instrDistribution["Fiddle"].length,
-              instrDistribution["Cello"].length,
-              instrDistribution["Guitar"].length,
-              instrDistribution["Flute"].length,
-              instrDistribution["Fiddle Beginner"].length,
+              instrDistribution['Fiddle'].length,
+              instrDistribution['Cello'].length,
+              instrDistribution['Guitar'].length,
+              instrDistribution['Flute'].length,
+              instrDistribution['Fiddle Beginner'].length,
               maxSpots - participants.length,
             ],
             backgroundColor: [
-              "#f28939",
-              "#39998e",
-              "#347dca",
-              "#ff4557",
-              "#57455a",
-              "#b1b1b1",
+              '#f28939',
+              '#39998e',
+              '#347dca',
+              '#ff4557',
+              '#57455a',
+              '#b1b1b1',
             ],
           },
         ],
@@ -165,10 +165,10 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
       labels: Object.keys(ageFrequency),
       datasets: [
         {
-          label: "age distribution",
+          label: 'age distribution',
           data: Object.values(ageFrequency),
-          backgroundColor: "#ff77006a",
-          borderColor: "#ff7900",
+          backgroundColor: '#ff77006a',
+          borderColor: '#ff7900',
           borderWidth: 2,
         },
       ],
@@ -200,7 +200,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
     getAccessTokenSilently()
       .then((token) => ApiClient.putEditInstrument(instrClone, token))
       .then((instr) => {
-        console.log("fetch return", instr[0].max_attendants);
+        console.log('fetch return', instr[0].max_attendants);
         setInstruments(instr);
         setInstrClone(instr);
       });
@@ -224,7 +224,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
                 {instrClone.length && console.log(instrClone[0].max_attendants)}
                 {instrClone.length &&
                   instrClone.map((instr) => (
-                    <div key={"instr" + instr.id} className="graph-field">
+                    <div key={'instr' + instr.id} className="graph-field">
                       <label htmlFor={instr.name}>{instr.name}</label>
                       <input
                         type="number"
@@ -237,7 +237,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
                   ))}
               </div>
               <div className="total-participants">
-                Total Spots:{" "}
+                Total Spots:{' '}
                 {instrClone.length &&
                   instrClone.reduce((acc, el) => acc + el.max_attendants, 0)}
               </div>
@@ -253,7 +253,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
         <div className="chart-card">
           <div
             className="chart-max-instr-distribution"
-            style={{ height: "300px" }}
+            style={{ height: '300px' }}
           >
             <Doughnut
               data={instrMaxDistributionData}
@@ -261,7 +261,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
                 maintainAspectRatio: false,
                 responsive: true,
                 title: {
-                  text: "Distribution of spots per instrument",
+                  text: 'Distribution of spots per instrument',
                   display: true,
                 },
               }}
@@ -273,7 +273,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
         <div className="chart-card">
           <div
             className="chart-ocupation-instrument"
-            style={{ height: "300px" }}
+            style={{ height: '300px' }}
           >
             <Bar
               data={participantsDitrByInstr}
@@ -281,7 +281,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
                 maintainAspectRatio: false,
                 responsive: true,
                 title: {
-                  text: "Group ocupation vs maximum attendants",
+                  text: 'Group ocupation vs maximum attendants',
                   display: true,
                 },
                 legend: { display: false },
@@ -306,13 +306,13 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
       </div>
       <div className="chart-grid">
         <div className="chart-card">
-          <div className="chart-remaining-spots" style={{ height: "300px" }}>
+          <div className="chart-remaining-spots" style={{ height: '300px' }}>
             <Doughnut
               data={availableSpotsData}
               options={{
                 maintainAspectRatio: false,
                 responsive: true,
-                title: { text: "total remaining spots", display: true },
+                title: { text: 'total remaining spots', display: true },
               }}
             />
           </div>
@@ -320,14 +320,14 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
       </div>
       <div className="chart-grid">
         <div className="chart-card">
-          <div className="chart-underage" style={{ height: "300px" }}>
+          <div className="chart-underage" style={{ height: '300px' }}>
             <Doughnut
               data={underageData}
               options={{
                 maintainAspectRatio: false,
                 responsive: true,
                 title: {
-                  text: "Percentage of underage attendants",
+                  text: 'Percentage of underage attendants',
                   display: true,
                 },
               }}
@@ -339,14 +339,14 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
         <div className="chart-card">
           <div
             className="chart-ocupation-instrument"
-            style={{ height: "350px", width: "350px" }}
+            style={{ height: '350px', width: '350px' }}
           >
             <Line
               data={ageFreqData}
               options={{
                 maintainAspectRatio: false,
                 responsive: true,
-                title: { text: "age distribution", display: true },
+                title: { text: 'age distribution', display: true },
                 legend: { display: false },
                 scales: {
                   xAxes: [

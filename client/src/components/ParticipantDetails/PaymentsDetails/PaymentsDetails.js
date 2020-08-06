@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import ApiClient from "@/services/ApiClient";
-import { useAuth0 } from "@auth0/auth0-react";
-import { PaymentItem, Popup, StatusLight } from "@/components";
-import "./PaymentsDetails.css";
+import React, { useEffect, useState } from 'react';
+import ApiClient from '@/services/ApiClient';
+import { useAuth0 } from '@auth0/auth0-react';
+import { PaymentItem, Popup, StatusLight } from '@/components';
+import './PaymentsDetails.css';
 
 /**
  * Controls the payments' section of the code. It has a lot of code because it controls the
@@ -25,14 +25,14 @@ const PaymentsDetails = ({ details, setDetails, setDisplayEdit }) => {
       // reduces all the payments to find the total amount paid until the moment.
       const amount_paid = details.payments.reduce((acc, el) => {
         const value =
-          el.type_of_payment === "Refund" ? -el.amount_paid : +el.amount_paid;
+          el.type_of_payment === 'Refund' ? -el.amount_paid : +el.amount_paid;
         return acc + value;
       }, 0);
       const amount_due = course_price - amount_paid;
-      let payment_status = "pending";
+      let payment_status = 'pending';
       // Automatically changes the payment_status depending on the amount due/paid. This will, in turn, change the light indicator.
-      amount_paid >= 6000 && (payment_status = "downpayment");
-      amount_due === 0 && (payment_status = "payment complete");
+      amount_paid >= 6000 && (payment_status = 'downpayment');
+      amount_due === 0 && (payment_status = 'payment complete');
       setPaymentDetails({
         course_price,
         amount_paid,
@@ -59,7 +59,7 @@ const PaymentsDetails = ({ details, setDetails, setDisplayEdit }) => {
     const token = await getAccessTokenSilently();
     switch (type) {
       // sets a new payment
-      case "Add Payment":
+      case 'Add Payment':
         info.amount_paid *= 100;
         ApiClient.postNewPayment(info, token)
           .then((newPayment) => {
@@ -67,12 +67,12 @@ const PaymentsDetails = ({ details, setDetails, setDisplayEdit }) => {
               ...details,
               payments: [...details.payments, newPayment],
             }));
-            return "";
+            return '';
           })
           .then(setPopupInfo({}));
         break;
       // stores the changes made to a payment
-      case "Save Payment":
+      case 'Save Payment':
         info.amount_paid *= 100;
         ApiClient.putUpdatePayment(info, token)
           .then((updatedPayment) => {
@@ -83,13 +83,13 @@ const PaymentsDetails = ({ details, setDetails, setDisplayEdit }) => {
               newPayments.push(updatedPayment);
               return { ...oldDetails, payments: newPayments };
             });
-            return "";
+            return '';
           })
           .then(setPopupInfo({}));
         break;
       // calls sendPaymentStatus, which will trigger a function in the backend to send an email
       // to the attendant with his payment status.
-      case "Send Status":
+      case 'Send Status':
         ApiClient.sendPaymentStatus(info, token).then(setPopupInfo({}));
         break;
       default:
@@ -106,7 +106,7 @@ const PaymentsDetails = ({ details, setDetails, setDisplayEdit }) => {
       setPopupInfo={setPopupInfo}
     />
   ) : (
-    ""
+    ''
   );
 
   return (
@@ -124,20 +124,20 @@ const PaymentsDetails = ({ details, setDetails, setDisplayEdit }) => {
           <div className="payment-information">
             {/* All payment values are stored as integers to avoid decimal problems. They are transformed to decimals here */}
             <div className="payment course-price">
-              Course price:{" "}
+              Course price:{' '}
               {Number.parseFloat(paymentDetails.course_price / 100).toFixed(2) +
-                " €"}
+                ' €'}
             </div>
             <div className="payment amount-paid">
-              Amount paid:{" "}
+              Amount paid:{' '}
               {Number.parseFloat(paymentDetails.amount_paid / 100).toFixed(2) +
-                " €"}
+                ' €'}
             </div>
             <div className="payment amount-due">
-              Amount due:{" "}
+              Amount due:{' '}
               <b>
                 {Number.parseFloat(paymentDetails.amount_due / 100).toFixed(2) +
-                  " €"}
+                  ' €'}
               </b>
             </div>
           </div>
@@ -154,7 +154,7 @@ const PaymentsDetails = ({ details, setDetails, setDisplayEdit }) => {
                     email: details.email,
                     first_name: details.first_name,
                   },
-                  "Send Status"
+                  'Send Status'
                 )
               }
             >
@@ -168,9 +168,9 @@ const PaymentsDetails = ({ details, setDetails, setDisplayEdit }) => {
                 promptPopup(
                   {
                     attendantId: details.id,
-                    type_of_payment: "Payment",
+                    type_of_payment: 'Payment',
                   },
-                  "Add Payment"
+                  'Add Payment'
                 )
               }
             >
@@ -192,7 +192,7 @@ const PaymentsDetails = ({ details, setDetails, setDisplayEdit }) => {
           details && details.payments && details.payments.length ? (
             details.payments.map((payment) => (
               <PaymentItem
-                key={"payment" + payment.id}
+                key={'payment' + payment.id}
                 payment={payment}
                 promptPopup={promptPopup}
               />

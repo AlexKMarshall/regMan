@@ -1,2 +1,2 @@
-import ParticipantDetails from "./ParticipantDetails";
+import ParticipantDetails from './ParticipantDetails';
 export default ParticipantDetails;

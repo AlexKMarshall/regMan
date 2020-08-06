@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import "./HealthDetails.css";
+import React, { useEffect } from 'react';
+import './HealthDetails.css';
 
 const HealthDetails = ({
   details,
@@ -12,7 +12,7 @@ const HealthDetails = ({
     setDisplayEdit(true);
   }, []);
 
-  let disabled = !isEditting ? "disabled" : "";
+  let disabled = !isEditting ? 'disabled' : '';
   return (
     <section id="health-details">
       <div className="form-section">

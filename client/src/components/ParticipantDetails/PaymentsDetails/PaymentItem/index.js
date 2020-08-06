@@ -1,2 +1,2 @@
-import PaymentItem from "./PaymentItem";
+import PaymentItem from './PaymentItem';
 export default PaymentItem;

@@ -1,12 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
-import { Auth0ProviderWithHistory } from "@/components";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { Auth0ProviderWithHistory } from '@/components';
 
-import "./index.css";
+import './index.css';
 
-import App from "./App";
-require("dotenv").config();
+import App from './App';
+require('dotenv').config();
 
 // Auth0ProviderWithHistory provides access to Auth0 tokens throughout the application
 ReactDOM.render(
@@ -17,5 +17,5 @@ ReactDOM.render(
       </Auth0ProviderWithHistory>
     </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root')
 );

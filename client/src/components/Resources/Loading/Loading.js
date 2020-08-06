@@ -1,5 +1,5 @@
-import React from "react";
-import "./loading.css";
+import React from 'react';
+import './loading.css';
 
 // nice spinner for loading pages.
 const Loading = () => {

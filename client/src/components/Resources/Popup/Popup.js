@@ -1,6 +1,6 @@
-import React from "react";
-import "./Popup.css";
-import { PopupMessage } from "@/components";
+import React from 'react';
+import './Popup.css';
+import { PopupMessage } from '@/components';
 
 /* Popups are divided in 2 components. All functionality is handled in their parent component.
  *  CancelPopupAction will reset popupInfo to {}, cancelling the render in the parent component.

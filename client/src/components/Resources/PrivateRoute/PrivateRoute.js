@@ -1,7 +1,7 @@
-import React from "react";
-import { Route } from "react-router-dom";
-import { withAuthenticationRequired } from "@auth0/auth0-react";
-import { Loading } from "@/components";
+import React from 'react';
+import { Route } from 'react-router-dom';
+import { withAuthenticationRequired } from '@auth0/auth0-react';
+import { Loading } from '@/components';
 
 // Replaces react-router-dom's Route. It checks if the user is authenticated before allowing access to the
 // specified route.

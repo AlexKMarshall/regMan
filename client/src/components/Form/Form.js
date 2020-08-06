@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { Redirect } from "react-router-dom";
-import ApiClient from "@/services/ApiClient";
-import moment from "moment";
-import { Navbar } from "@/components";
-import "./Form.css";
+import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
+import ApiClient from '@/services/ApiClient';
+import moment from 'moment';
+import { Navbar } from '@/components';
+import './Form.css';
 
 // default value for the form
 const newRegistration = {
-  first_name: "",
-  last_name: "",
-  email: "",
-  date_of_birth: "",
-  street: "",
-  city: "",
-  country: "",
-  allergies: "",
+  first_name: '',
+  last_name: '',
+  email: '',
+  date_of_birth: '',
+  street: '',
+  city: '',
+  country: '',
+  allergies: '',
   accepts_tos: false,
 };
 
@@ -35,7 +35,7 @@ const Form = () => {
 
   useEffect(() => {
     const fiddle = instruments.filter(
-      (instrument) => instrument.name === "Fiddle"
+      (instrument) => instrument.name === 'Fiddle'
     )[0];
     fiddle &&
       setRegistration((registration) => ({
@@ -50,7 +50,7 @@ const Form = () => {
     const dateBirth = moment(registration.date_of_birth);
     // checks if the attendant will be 18 when the camp starts. If not, sets a flag for underage.
     // this is used in the backend to apply a discount to the attendant.
-    courseStart.diff(dateBirth, "years") < 18 &&
+    courseStart.diff(dateBirth, 'years') < 18 &&
       (registration.is_underage = true);
     ApiClient.postNewAttendant(registration);
     setRedirect(true);
@@ -58,7 +58,7 @@ const Form = () => {
 
   // handles change for all the fields. accepts_tos is a checkbox, so it needs a different target
   function handleChange({ target }) {
-    const value = target.name === "accepts_tos" ? target.checked : target.value;
+    const value = target.name === 'accepts_tos' ? target.checked : target.value;
     setRegistration((oldRegistration) => ({
       ...oldRegistration,
       [target.name]: value,
@@ -70,7 +70,7 @@ const Form = () => {
   }
 
   // handles errirs with the API calls or redirects the user to the confirmation page.
-  if (error) return <Redirect to={"/error500"} />;
+  if (error) return <Redirect to={'/error500'} />;
   if (redirectToConfirmation) return <Redirect to="/confirmation" />;
 
   return (
@@ -195,7 +195,7 @@ const Form = () => {
                     >
                       {instruments.map((instrument) => (
                         <option
-                          key={"instrument" + instrument.id}
+                          key={'instrument' + instrument.id}
                           value={instrument.id}
                         >
                           {instrument.name}
@@ -245,7 +245,7 @@ const Form = () => {
                       required
                     />
                     <label htmlFor="accepts_tos">
-                      {" "}
+                      {' '}
                       I accept the terms of service.
                     </label>
                   </div>

@@ -104,7 +104,7 @@ select {
 
 .front-picture {
   background-color: #000000;
-  background-image: url("/crisol-front.jpg");
+  background-image: url('/crisol-front.jpg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

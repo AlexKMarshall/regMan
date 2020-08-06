@@ -1,7 +1,7 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import "./Confirmation.css";
-import { Navbar } from "@/components/";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import './Confirmation.css';
+import { Navbar } from '@/components/';
 
 const Confirmation = () => {
   return (

@@ -1,6 +1,6 @@
-const { payment } = require("../models");
-const { sendEmail } = require("../services/SendEmail"); // eslint-disable-line no-unused-vars
-const moment = require("moment");
+const { payment } = require('../models');
+const { sendEmail } = require('../services/SendEmail'); // eslint-disable-line no-unused-vars
+const moment = require('moment');
 
 exports.getPaymentsByAttendantId = async (req, res) => {
   try {
@@ -18,7 +18,7 @@ exports.getPaymentsByAttendantId = async (req, res) => {
 exports.postNewPayment = async (req, res) => {
   try {
     // guarantees a value for discounts and payment dates.
-    if (req.body.type_of_payment === "Discount (5%)")
+    if (req.body.type_of_payment === 'Discount (5%)')
       req.body.amount_paid = (process.env.COURSE_PRICE * 5) / 100;
     if (!req.body.payment_date) req.body.payment_date = moment();
 
@@ -56,7 +56,7 @@ exports.sendStatus = async (req, res) => {
       where: { attendantId: req.body.attendantId },
     });
     req.body.payments = payments;
-    sendEmail(req.body, "payments");
+    sendEmail(req.body, 'payments');
     res.sendStatus(204);
   } catch (error) {
     console.log(error);

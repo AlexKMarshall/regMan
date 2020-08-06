@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const instrument = sequelize.define("instrument", {
+  const instrument = sequelize.define('instrument', {
     name: {
       type: DataTypes.STRING,
       allowNull: false,

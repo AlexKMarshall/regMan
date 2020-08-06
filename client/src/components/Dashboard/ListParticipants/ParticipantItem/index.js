@@ -1,2 +1,2 @@
-import ParticipantItem from "./ParticipantItem";
+import ParticipantItem from './ParticipantItem';
 export default ParticipantItem;

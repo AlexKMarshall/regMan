@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import ApiClient from "@/services/ApiClient";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import ApiClient from '@/services/ApiClient';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import {
   Loading,
   HealthDetails,
@@ -10,9 +10,9 @@ import {
   StatusLight,
   SmartLink,
   EditButtons,
-} from "@/components";
-import moment from "moment";
-import "./ParticipantDetails.css";
+} from '@/components';
+import moment from 'moment';
+import './ParticipantDetails.css';
 
 /**
  * One of the main components. Has its own react-router to display the different details
@@ -46,7 +46,7 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
       .then((token) => ApiClient.getDetails(id, token))
       .then((details) => {
         // the age is calculated when the course starts. There's an env variable setup to determine the date.
-        details.age = courseStarts.diff(details.date_of_birth, "years");
+        details.age = courseStarts.diff(details.date_of_birth, 'years');
         setDetails({ ...details });
         setOldDetails({ ...details });
       });
@@ -71,8 +71,8 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
         complete.sort((a, b) => {
           const sortA = a.last_name;
           const sortB = b.last_name;
-          return sortA.localeCompare(sortB, "es", {
-            sensitivity: "base",
+          return sortA.localeCompare(sortB, 'es', {
+            sensitivity: 'base',
             ignorePunctuation: true,
           });
         });
@@ -92,8 +92,8 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
   // or the instrument, further adjustments have to be done to other properties.
   function handleChange({ target }) {
     switch (target.name) {
-      case "date_of_birth":
-        const newAge = courseStarts.diff(target.value, "years");
+      case 'date_of_birth':
+        const newAge = courseStarts.diff(target.value, 'years');
         setDetails((details) => ({
           ...details,
           date_of_birth: target.value,
@@ -102,7 +102,7 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
         }));
         break;
 
-      case "instrumentId":
+      case 'instrumentId':
         const [instr] = instruments.filter(
           (instrument) => instrument.id === +target.value
         );
@@ -158,7 +158,7 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
               />
             </div>
             <div className="edit-buttons">
-              <div className={displayEdit ? "" : "hide-buttons"}>
+              <div className={displayEdit ? '' : 'hide-buttons'}>
                 <EditButtons
                   isEditting={isEditting}
                   buttonFunctionality={buttonFunctionality}

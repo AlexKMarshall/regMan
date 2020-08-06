@@ -1,10 +1,10 @@
-import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { NavLink } from 'react-router-dom';
 
-import LogoutButton from "./logout-button";
-import LoginButton from "./login-button";
-import "./Navbar.css";
+import LogoutButton from './logout-button';
+import LoginButton from './login-button';
+import './Navbar.css';
 
 // navbar. sits at the top of the page. Rendering changes depending on the authentication
 // status of the user. When logged in will display menu items and a logout button.

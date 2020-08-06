@@ -2,7 +2,7 @@
  **  Attendant's Calls  **
  *************************/
 function getAllInscriptions(token) {
-  return fetchFromDb("inscriptions", {
+  return fetchFromDb('inscriptions', {
     headers: { Authorization: `Bearer ${token}` },
   });
 }
@@ -14,10 +14,10 @@ function getDetails(id, token) {
 }
 
 function postNewAttendant(registration) {
-  return fetchFromDb("inscriptions", {
-    method: "POST",
+  return fetchFromDb('inscriptions', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(registration),
   });
@@ -27,7 +27,7 @@ function postNewAttendant(registration) {
 // Records are not actually deleted, just not retrieved when getAll is called.
 function putDeleteAttendant(id, token) {
   return fetchFromDb(`inscriptions/delete/${id}`, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -36,10 +36,10 @@ function putDeleteAttendant(id, token) {
 
 function putParticipantChanges(details, token) {
   return fetchFromDb(`inscriptions/update/${details.id}`, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(details),
   });
@@ -56,11 +56,11 @@ function getAttendantPayments(id, token) {
 }
 
 function postNewPayment(payment, token) {
-  return fetchFromDb("payments", {
-    method: "POST",
+  return fetchFromDb('payments', {
+    method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(payment),
   });
@@ -68,21 +68,21 @@ function postNewPayment(payment, token) {
 
 function putUpdatePayment(payment, token) {
   return fetchFromDb(`payments/update/${payment.id}`, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(payment),
   });
 }
 
 function sendPaymentStatus(attendant, token) {
-  return fetchFromDb("payments/sendStatus", {
-    method: "POST",
+  return fetchFromDb('payments/sendStatus', {
+    method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(attendant),
   });
@@ -93,15 +93,15 @@ function sendPaymentStatus(attendant, token) {
  **************************/
 
 function getInstruments() {
-  return fetchFromDb("instruments");
+  return fetchFromDb('instruments');
 }
 
 function putEditInstrument(instrument, token) {
-  return fetchFromDb("instruments", {
-    method: "PUT",
+  return fetchFromDb('instruments', {
+    method: 'PUT',
     headers: {
       Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(instrument),
   });

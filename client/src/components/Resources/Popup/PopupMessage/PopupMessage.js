@@ -1,5 +1,5 @@
-import React from "react";
-import moment from "moment";
+import React from 'react';
+import moment from 'moment';
 
 /*
  *  This component is comprised of a switch statement that selects the appropriate content of
@@ -20,19 +20,19 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
     switch (type) {
       // will prompt when attempting to delete a contact by the DeleteParticipantButton component.
       // It's just a verification to make sure that a record is not deleted accidentally
-      case "Delete":
+      case 'Delete':
         return (
           <div className="popup-text">
             {`Are you sure that you want to delete ${info.first_name} ${
               info.last_name
             }'${
-              info.last_name[info.last_name.length - 1] === "s" ? "" : "s"
+              info.last_name[info.last_name.length - 1] === 's' ? '' : 's'
             } registration?`}
           </div>
         );
       // will prompt when creating a new payment from the new-payment-button in the PaymentsDetails component.
       // It creates a new payment in the database
-      case "Add Payment":
+      case 'Add Payment':
         return (
           <div className="form-section">
             <div className="description">
@@ -44,7 +44,7 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
                 <input
                   type="date"
                   name="payment_date"
-                  defaultValue={moment().format("YYYY-MM-DD")}
+                  defaultValue={moment().format('YYYY-MM-DD')}
                   onChange={handleChange}
                   required
                 />
@@ -71,13 +71,13 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
                   step="0.01"
                   min="0"
                   placeholder={
-                    info.type_of_payment === "Discount (5%)" ? "30.00" : "0.00"
+                    info.type_of_payment === 'Discount (5%)' ? '30.00' : '0.00'
                   }
                   disabled={
-                    info.type_of_payment === "Discount (5%)" ? true : false
+                    info.type_of_payment === 'Discount (5%)' ? true : false
                   }
                   className={
-                    info.type_of_payment === "Discount (5%)" ? "disabled" : ""
+                    info.type_of_payment === 'Discount (5%)' ? 'disabled' : ''
                   }
                   name="amount_paid"
                   onChange={handleChange}
@@ -90,7 +90,7 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
 
       // will be prompted when clicking on the PaymentItem component in the PaymensDetails.
       // It updates the contents of an existing payment.
-      case "Save Payment":
+      case 'Save Payment':
         return (
           <div className="form-section">
             <div className="description">
@@ -102,7 +102,7 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
                 <input
                   type="date"
                   name="payment_date"
-                  value={moment(info.payment_date).format("YYYY-MM-DD")}
+                  value={moment(info.payment_date).format('YYYY-MM-DD')}
                   onChange={handleChange}
                   required
                 />
@@ -130,10 +130,10 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
                   name="amount_paid"
                   value={Number.parseFloat(info.amount_paid).toFixed(2)}
                   disabled={
-                    info.type_of_payment === "Discount (5%)" ? true : false
+                    info.type_of_payment === 'Discount (5%)' ? true : false
                   }
                   className={
-                    info.type_of_payment === "Discount (5%)" ? "disabled" : ""
+                    info.type_of_payment === 'Discount (5%)' ? 'disabled' : ''
                   }
                   onChange={handleChange}
                   required
@@ -145,7 +145,7 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
 
       // Confirmation prompt. Will be called from the send-payment-status button in the PaymentsComponent.
       // will reach an endpoint in the API to send an email to the attendant with all his payments' records information.
-      case "Send Status":
+      case 'Send Status':
         return (
           <div className="popup-text">
             {`Do you want to send the updated payment status to ${info.first_name} (${info.email})?`}

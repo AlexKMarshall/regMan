@@ -1,6 +1,6 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 
 import {
   Confirmation,
@@ -10,8 +10,8 @@ import {
   Form,
   Loading,
   PrivateRoute,
-} from "@/components";
-import "@/App.css";
+} from '@/components';
+import '@/App.css';
 
 function App() {
   const { isLoading } = useAuth0();

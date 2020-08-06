@@ -1,4 +1,4 @@
-const moment = require("moment");
+const moment = require('moment');
 
 // html of the payment status email. css has to be hardcoded for nodemail to interpret it correctly
 exports.paymentStatus = (paymentData) => {
@@ -7,7 +7,7 @@ exports.paymentStatus = (paymentData) => {
   const course_price = process.env.COURSE_PRICE;
   const amount_paid = payments.reduce((acc, el) => {
     const value =
-      el.type_of_payment === "Refund" ? -el.amount_paid : +el.amount_paid;
+      el.type_of_payment === 'Refund' ? -el.amount_paid : +el.amount_paid;
     return acc + value;
   }, 0);
   const amount_due = course_price - amount_paid;
@@ -37,18 +37,18 @@ exports.paymentStatus = (paymentData) => {
             ${payments
               .map((payment) => {
                 const value =
-                  payment.type_of_payment === "Refund"
+                  payment.type_of_payment === 'Refund'
                     ? -payment.amount_paid
                     : +payment.amount_paid;
                 return `<li>${Number.parseFloat(value / 100).toFixed(2)}€ ${
-                  payment.type_of_payment === "Refund"
-                    ? "refunded"
-                    : payment.type_of_payment === "Payment"
-                    ? "received"
-                    : "applied discount"
-                } on ${moment(payment.payment_date).format("DD/MM/YYYY")}</li>`;
+                  payment.type_of_payment === 'Refund'
+                    ? 'refunded'
+                    : payment.type_of_payment === 'Payment'
+                    ? 'received'
+                    : 'applied discount'
+                } on ${moment(payment.payment_date).format('DD/MM/YYYY')}</li>`;
               })
-              .join("")}
+              .join('')}
             </ul>`
             }
             <p>As usual, don't hesitate to contact us if you have any doubts.</p>

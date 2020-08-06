@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const payment = sequelize.define("payment", {
+  const payment = sequelize.define('payment', {
     // All payments will be stored as an integer to avoid decimal fluctuation.
     // Numbers should be divided by 100 when used.
     // Values are always positive. In case of a negative value,

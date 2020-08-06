@@ -1,6 +1,6 @@
-import React from "react";
-import { StatusLight, DeleteParticipantButton } from "@/components";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { StatusLight, DeleteParticipantButton } from '@/components';
+import { Link } from 'react-router-dom';
 
 // list item for each participant. It links to the details component and prompts the deleteParticipantButton
 const ParticipantItem = ({ participant, promptPopup }) => {

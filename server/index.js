@@ -1,13 +1,13 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const morgan = require("morgan");
-const helmet = require("helmet");
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const morgan = require('morgan');
+const helmet = require('helmet');
 
-const privateRouter = require("./routes/private-router");
-const publicRouter = require("./routes/public-router");
-const checkJwt = require("./services/jwt");
-const db = require("./models");
+const privateRouter = require('./routes/private-router');
+const publicRouter = require('./routes/public-router');
+const checkJwt = require('./services/jwt');
+const db = require('./models');
 
 const app = express();
 const SERVER_PORT = process.env.SERVER_PORT || 3005;
@@ -19,7 +19,7 @@ const corsConfig = {
   credentials: true,
 };
 
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors(corsConfig));
 app.use(express.json());

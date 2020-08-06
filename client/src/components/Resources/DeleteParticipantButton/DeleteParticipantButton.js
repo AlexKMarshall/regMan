@@ -1,5 +1,5 @@
-import React from "react";
-import "./DeleteParticipantButton.css";
+import React from 'react';
+import './DeleteParticipantButton.css';
 
 // just displays the delete utton. When clicked it'll call the promptPopup function from the parent component passing the 'Delete'
 // parameter to determine the content & functionality of the popup. Info is an object transmited from the parent component and
@@ -10,7 +10,7 @@ const DeleteParticipantButton = ({ info, promptPopup }) => {
     <div>
       <button
         className="delete-btn"
-        onClick={() => promptPopup(info, "Delete")}
+        onClick={() => promptPopup(info, 'Delete')}
       >
         <span role="img" aria-label="delete attendant record">
           🗑

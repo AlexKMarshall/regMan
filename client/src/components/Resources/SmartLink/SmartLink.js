@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 // Replaces react-router-dom's Link. If the content of the section isEditting, it will prompt an alert
 // to save the changes before changing the section. Once the changes are saved, isEditting is set as false
@@ -11,7 +11,7 @@ const SmartLink = ({ isEditting, match, to, value }) => {
       <div
         className="section-selectors"
         onClick={() =>
-          alert("You have to save the changes before changing the section")
+          alert('You have to save the changes before changing the section')
         }
       >
         <span>{value}</span>

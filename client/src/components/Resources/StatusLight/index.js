@@ -1,2 +1,2 @@
-import StatusLight from "./StatusLight";
+import StatusLight from './StatusLight';
 export default StatusLight;

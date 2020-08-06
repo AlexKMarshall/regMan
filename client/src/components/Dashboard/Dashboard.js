@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import ApiClient from "@/services/ApiClient";
-import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
-import "./Dashboard.css";
+import React, { useEffect, useState } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
+import ApiClient from '@/services/ApiClient';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import './Dashboard.css';
 import {
   Popup,
   ParticipantList,
@@ -10,7 +10,7 @@ import {
   ParticipantDetails,
   Navbar,
   Error500,
-} from "@/components";
+} from '@/components';
 
 // Acts as the main page for logged in users. It has its own router.
 const Dashboard = () => {
@@ -57,7 +57,7 @@ const Dashboard = () => {
     const { info, type } = popupInfo;
     const token = await getAccessTokenSilently();
     switch (type) {
-      case "Delete":
+      case 'Delete':
         ApiClient.putDeleteAttendant(info.id, token).then(() => {
           setParticipants((participants) =>
             participants.filter((participant) => participant.id !== info.id)
@@ -78,10 +78,10 @@ const Dashboard = () => {
       handlePopupAction={handlePopupAction}
     />
   ) : (
-    ""
+    ''
   );
 
-  if (error) return <Redirect to={"/error500"} />;
+  if (error) return <Redirect to={'/error500'} />;
 
   return (
     <div>
@@ -112,8 +112,8 @@ const Dashboard = () => {
                 {...props}
                 participants={participants.filter(
                   (participant) =>
-                    participant.registration_status !== "Cancelled" &&
-                    participant.registration_status !== "Waitlist"
+                    participant.registration_status !== 'Cancelled' &&
+                    participant.registration_status !== 'Waitlist'
                 )}
                 instruments={instruments}
                 setInstruments={setInstruments}

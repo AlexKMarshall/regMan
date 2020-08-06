@@ -80,7 +80,7 @@
 .participant-details:before {
   position: absolute;
   border-radius: 30px;
-  content: "";
+  content: '';
   bottom: 25px;
   right: 0px;
   height: 50px;
@@ -100,7 +100,7 @@
 .participant-details:after {
   position: absolute;
   border-radius: 30px;
-  content: "";
+  content: '';
   bottom: 0px;
   right: 20px;
   height: 75%;

@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import moment from "moment";
-import "./PersonalDetails.css";
+import React, { useEffect } from 'react';
+import moment from 'moment';
+import './PersonalDetails.css';
 
 // Just a big form with all the properties that can be edited.
 const PersonalDetails = ({
@@ -16,7 +16,7 @@ const PersonalDetails = ({
   }, []);
 
   // the 'disabled' css property sets the background and cursor when fields are disabled.
-  let disabled = !isEditting ? "disabled" : "";
+  let disabled = !isEditting ? 'disabled' : '';
 
   return (
     <section id="personal-details">
@@ -36,7 +36,7 @@ const PersonalDetails = ({
             >
               {instruments.map((instrument) => (
                 <option
-                  key={"instrument" + instrument.id}
+                  key={'instrument' + instrument.id}
                   value={instrument.id}
                 >
                   {instrument.name}
@@ -109,7 +109,7 @@ const PersonalDetails = ({
               className={disabled}
               type="date"
               name="date_of_birth"
-              value={moment(details.date_of_birth).format("YYYY-MM-DD")}
+              value={moment(details.date_of_birth).format('YYYY-MM-DD')}
               onChange={handleChange}
               readOnly={!isEditting}
             />
