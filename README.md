@@ -1,12 +1,18 @@
 # regMan
 CRM to manage registrations to summer camps
 
-2 separate installations are requiered: one for the backend and one for the frontend.
-Go to the server and run `npm i`.
-Go to the client and run `npm i`.
-
+## Setup
+2 separate installations are required: one for the backend and one for the frontend.
+### Backend
 Install Postgres and have it running in the default port.
-Sequelize will initiate a db called 'crisoltest_db'. Feel free to change it at your convenience.
+Go to the `/server` and run:
+ - `npm i`
+ - `npm run dbcreate` -> creates the DB in Postgres
+ - `npm run dbinit` -> creates the tables inside the created DB
+ - `npm run dbseed` -> seeds initial Data into the tables
+
+### Frontend
+Go to the client and run `npm i`.
 
 After this, run `npm start` in both the client and the server. The client uses CRACO to handle internal paths for the components. If you don't start the project with npm start, it won't work.
 In each folder you'll find a copy of the .env file with some mock data.

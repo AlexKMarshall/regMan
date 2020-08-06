@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js",
     "dbseed": "sequelize-cli db:seed:all",
-    "dbinit": "sequelize-cli db:migrate"
+    "dbinit": "sequelize-cli db:migrate",
+    "dbcreate": "createdb crisoltest_db"
   },
   "keywords": [],
   "author": "",
