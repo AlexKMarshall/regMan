@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { Doughnut, Bar, Line } from 'react-chartjs-2';
-import ApiClient from '@/services/ApiClient';
+import ApiClient from '@app/services/ApiClient';
 import { useAuth0 } from '@auth0/auth0-react';
 import './GroupsDisplay.css';
 

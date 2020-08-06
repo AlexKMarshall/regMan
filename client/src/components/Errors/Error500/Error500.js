@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar } from '@/components';
+import { Navbar } from '@app/components';
 
 const Error500 = () => {
   return (

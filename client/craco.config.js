@@ -1,16 +1,16 @@
 const path = require('path');
 
-// used to configure Craco. It changes pathing to the root directory to '@/'
+// used to configure Craco. It changes pathing to the root directory to '@app/'
 module.exports = {
   webpack: {
     alias: {
-      '@': path.resolve(__dirname, 'src/'),
+      '@app': path.resolve(__dirname, 'src/'),
     },
   },
   jest: {
     configure: {
       moduleNameMapper: {
-        '^@(.*)$': '<rootDir>/src$1',
+        '^@app(.*)$': '<rootDir>/src$1',
       },
     },
   },

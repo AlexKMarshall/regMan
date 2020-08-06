@@ -10,8 +10,8 @@ import {
   Form,
   Loading,
   PrivateRoute,
-} from '@/components';
-import '@/App.css';
+} from '@app/components';
+import '@app/App.css';
 
 function App() {
   const { isLoading } = useAuth0();

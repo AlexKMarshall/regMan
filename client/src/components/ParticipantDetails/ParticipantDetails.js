@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import ApiClient from '@/services/ApiClient';
+import ApiClient from '@app/services/ApiClient';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import {
   Loading,
@@ -10,7 +10,7 @@ import {
   StatusLight,
   SmartLink,
   EditButtons,
-} from '@/components';
+} from '@app/components';
 import moment from 'moment';
 import './ParticipantDetails.css';
 
