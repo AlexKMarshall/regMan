@@ -59,5 +59,8 @@
       "npm run format"
     ]
   },
+  "prettier": {
+    "singleQuote": true
+  },
   "dependencies": {}
 }
