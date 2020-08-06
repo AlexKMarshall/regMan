@@ -1,6 +1,6 @@
 const path = require('path');
 
-// used to configure Craco. It changes pathing to the root directory to '@/'
+// used to configure Craco. It changes pathing to the root directory to '@app/'
 module.exports = {
   webpack: {
     alias: {
