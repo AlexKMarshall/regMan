@@ -1,9 +1,11 @@
 import React from 'react';
 import { buildParticipant, render, screen } from '@test/test-utils';
+import userEvent from '@testing-library/user-event';
 import ParticipantList from './ParticipantList';
+import { getAllByRole } from '@testing-library/react';
 
-function buildParticipants({ maxNumber = 10 } = {}) {
-  const numberOfParticipants = Math.ceil(Math.random() * maxNumber);
+function buildParticipants({ maxNumber = 10, number } = {}) {
+  const numberOfParticipants = number ?? Math.ceil(Math.random() * maxNumber);
 
   let participants = [];
   for (let i = 0; i < numberOfParticipants; i++) {
@@ -28,5 +30,42 @@ describe('ParticipantList', () => {
     const emptyParticipants = buildParticipants({ maxNumber: 0 });
     render(<ParticipantList participants={emptyParticipants} />);
     expect(screen.getByText(/no one has registered yet/i)).toBeInTheDocument();
+  });
+
+  test('searching should filter on name and be clearable', async () => {
+    const participants = buildParticipants({
+      number: 2,
+    });
+    render(<ParticipantList participants={participants} />);
+    const [firstParticipant, secondParticipant] = participants;
+    const name1Regex = new RegExp(firstParticipant.first_name, 'g');
+    const name2Regex = new RegExp(secondParticipant.first_name, 'g');
+
+    const initialRows = screen.getAllByRole('row');
+    expect(initialRows).toHaveLength(2);
+
+    const searchInput = screen.getByPlaceholderText(/search/i);
+    await userEvent.type(searchInput, firstParticipant.first_name);
+
+    expect(screen.getAllByRole('row')).toHaveLength(1);
+    expect(
+      screen.getByRole('cell', {
+        name: name1Regex,
+      })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole('cell', { name: name2Regex })
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByLabelText(/cancel search/i));
+
+    expect(screen.getAllByRole('row')).toHaveLength(2);
+
+    // Having to use different queries here because the getByRole('cell') ones
+    // aren't finding the names. I'm guessing this might be to do with
+    // the component not re-rendering correctly, but for now these seem to work
+    const results = screen.getAllByRole('cell');
+    expect(results[0]).toHaveTextContent(firstParticipant.first_name);
+    expect(results[1]).toHaveTextContent(secondParticipant.first_name);
   });
 });

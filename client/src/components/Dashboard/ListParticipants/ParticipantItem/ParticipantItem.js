@@ -6,13 +6,12 @@ import { Link } from 'react-router-dom';
 const ParticipantItem = ({ participant, promptPopup }) => {
   return (
     <div className="participant-container">
-      <div className="participant-grid">
-        <Link
-          to={`/dashboard/details/${participant.id}/personal`}
-          className="grid-item grid-name"
-        >
-          {participant.last_name}, {participant.first_name}
-        </Link>
+      <div className="participant-grid" role="row">
+        <div className="grid-item grid-name" role="cell">
+          <Link to={`/dashboard/details/${participant.id}/personal`}>
+            {participant.last_name}, {participant.first_name}
+          </Link>
+        </div>
         <div className="grid-item grid-status-light">
           <StatusLight status={participant.registration_status} />
         </div>
