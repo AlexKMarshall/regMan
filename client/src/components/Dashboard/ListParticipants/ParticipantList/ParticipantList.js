@@ -116,22 +116,7 @@ const ParticipantList = ({ participants, promptPopup }) => {
           </div>
         </div>
         {/* the switch component has to be inside a label. It needs to have all the css properties passed down as props... ¬_¬ */}
-        <label className="toggle-vertical-align">
-          <span>Filter cancelled registrations: </span>
-          <Switch
-            onChange={handleSwitch}
-            checked={checked}
-            onColor="#f8d2ac"
-            onHandleColor="#ff7900"
-            handleDiameter={20}
-            uncheckedIcon={false}
-            checkedIcon={false}
-            boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
-            activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
-            height={13}
-            width={32}
-          />
-        </label>
+        <ToggleSwitch checked={checked} handleSwitch={handleSwitch} />
       </div>
       <div className="participant-grid grid-header">
         <div className="grid-item grid-name grid-header-item">Name</div>
@@ -170,5 +155,26 @@ const ParticipantList = ({ participants, promptPopup }) => {
     </div>
   );
 };
+
+function ToggleSwitch({ checked, handleSwitch }) {
+  return (
+    <label className="toggle-vertical-align">
+      <span>Filter cancelled registrations: </span>
+      <Switch
+        onChange={handleSwitch}
+        checked={checked}
+        onColor="#f8d2ac"
+        onHandleColor="#ff7900"
+        handleDiameter={20}
+        uncheckedIcon={false}
+        checkedIcon={false}
+        boxShadow="0px 1px 5px rgba(0, 0, 0, 0.6)"
+        activeBoxShadow="0px 0px 1px 10px rgba(0, 0, 0, 0.2)"
+        height={13}
+        width={32}
+      />
+    </label>
+  );
+}
 
 export default ParticipantList;
