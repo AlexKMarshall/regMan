@@ -6,7 +6,7 @@ import './ParticipantList.css';
 // Renders the list of attendants. It handles serches and filters for the list
 const ParticipantList = ({ participants, promptPopup }) => {
   // boolean that is used to filter the cancelled participants from the list. Stored in localstorage
-  const [checked, setChecked] = useState(
+  const [isCancelledFilterActive, setIsCancelledFilterActive] = useState(
     localStorage.getItem('regmanCheckedFilter') ? true : false
   );
   // search string. Stored in localstorage so that the search is not lost when moving between components.
@@ -42,14 +42,14 @@ const ParticipantList = ({ participants, promptPopup }) => {
 
   // stores or removes checked from the localstorage
   useEffect(() => {
-    checked
-      ? localStorage.setItem('regmanCheckedFilter', checked)
+    isCancelledFilterActive
+      ? localStorage.setItem('regmanCheckedFilter', isCancelledFilterActive)
       : localStorage.removeItem('regmanCheckedFilter');
-  }, [checked]);
+  }, [isCancelledFilterActive]);
 
   // handles the switch component.
   function handleSwitch(checked) {
-    setChecked(checked);
+    setIsCancelledFilterActive(checked);
   }
 
   // handles the search bar. Stores the search value in the localstorage and filters the participants.
@@ -85,7 +85,7 @@ const ParticipantList = ({ participants, promptPopup }) => {
 
   // applies the switch filter for rendering
   function applyFilter() {
-    return checked
+    return isCancelledFilterActive
       ? searchedParticipants.filter(
           (participant) => participant.registration_status !== 'Cancelled'
         )
@@ -116,7 +116,10 @@ const ParticipantList = ({ participants, promptPopup }) => {
           </div>
         </div>
         {/* the switch component has to be inside a label. It needs to have all the css properties passed down as props... ¬_¬ */}
-        <ToggleSwitch checked={checked} handleSwitch={handleSwitch} />
+        <ToggleSwitch
+          checked={isCancelledFilterActive}
+          handleSwitch={handleSwitch}
+        />
       </div>
       <div className="participant-grid grid-header">
         <div className="grid-item grid-name grid-header-item">Name</div>
