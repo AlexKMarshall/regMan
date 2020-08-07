@@ -47,8 +47,7 @@ const ParticipantList = ({ participants, promptPopup }) => {
   const [hideCancelled, setHideCancelled] = useHideCancelled();
   const [searchTerm, setSearchTerm] = useSearchTerm();
 
-  // handles the switch component.
-  function handleSwitch(checked) {
+  function toggleHideCancelled() {
     const newValue = !hideCancelled;
     setHideCancelled(newValue);
   }
@@ -113,7 +112,10 @@ const ParticipantList = ({ participants, promptPopup }) => {
           </div>
         </div>
         {/* the switch component has to be inside a label. It needs to have all the css properties passed down as props... ¬_¬ */}
-        <ToggleSwitch checked={hideCancelled} handleSwitch={handleSwitch} />
+        <ToggleSwitch
+          checked={hideCancelled}
+          handleSwitch={toggleHideCancelled}
+        />
       </div>
       <div className="participant-grid grid-header">
         <div className="grid-item grid-name grid-header-item">Name</div>
