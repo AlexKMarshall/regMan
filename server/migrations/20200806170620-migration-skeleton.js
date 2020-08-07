@@ -3,6 +3,12 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('instruments', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -28,6 +34,12 @@ module.exports = {
       },
     });
     await queryInterface.createTable('attendants', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
       first_name: {
         type: Sequelize.STRING,
         allowNull: false,
@@ -121,8 +133,23 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      instrumentId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'instruments',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
+      },
     });
     await queryInterface.createTable('payments', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+      },
       amount_paid: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -152,6 +179,15 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
+      },
+      attendantId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'attendants',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
       },
     });
   },
