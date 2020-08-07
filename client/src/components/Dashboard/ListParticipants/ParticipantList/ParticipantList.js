@@ -3,6 +3,7 @@ import { useLocation, useHistory } from 'react-router-dom';
 import { ParticipantItem } from '@app/components';
 import Switch from 'react-switch';
 import './ParticipantList.css';
+import { useMemo } from 'react';
 
 function useHideCancelled() {
   const history = useHistory();
@@ -53,21 +54,24 @@ const ParticipantList = ({ participants, promptPopup }) => {
   }
 
   function searchedItems() {
-    return participants.filter((participant) => {
-      const searchValue = ''.concat(
-        participant.first_name,
-        ' ',
-        participant.last_name,
-        ' ',
-        participant.registration_status,
-        ' ',
-        participant.email,
-        ' ',
-        participant.instrument.name
-      );
-      return searchValue.toLowerCase().includes(searchTerm.toLowerCase());
-    });
+    return participants.filter(searchPredicate);
   }
+
+  const searchPredicate = useCallback(
+    ({ first_name, last_name, registration_status, email, instrument }) => {
+      const participantString = `${first_name}${last_name}${registration_status}${email}${instrument.name}`;
+      const searchTermRegex = new RegExp(searchTerm, 'gi');
+      return searchTerm ? searchTermRegex.test(participantString) : true;
+    },
+    [searchTerm]
+  );
+
+  const cancelFilterPredicate = useCallback(
+    ({ registration_status }) => {
+      return hideCancelled ? registration_status !== 'Cancelled' : true;
+    },
+    [hideCancelled]
+  );
 
   function renderContent(content) {
     if (!participants.length) {
@@ -81,12 +85,12 @@ const ParticipantList = ({ participants, promptPopup }) => {
 
   // applies the switch filter for rendering
   function applyFilter() {
-    return hideCancelled
-      ? searchedItems().filter(
-          (participant) => participant.registration_status !== 'Cancelled'
-        )
-      : searchedItems();
+    return searchedItems().filter(cancelFilterPredicate);
   }
+
+  const filteredParticipants = useMemo(() => {
+    return participants.filter(searchPredicate).filter(cancelFilterPredicate);
+  }, [participants, cancelFilterPredicate, searchPredicate]);
 
   return (
     <div className="participants-list">
