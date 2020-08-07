@@ -52,11 +52,6 @@ const ParticipantList = ({ participants, promptPopup }) => {
     setHideCancelled(newValue);
   }
 
-  // handles the search bar. Stores the search value in the localstorage and filters the participants.
-  function handleSearch({ target }) {
-    setSearchTerm(target.value);
-  }
-
   function searchedItems() {
     return participants.filter((participant) => {
       const searchValue = ''.concat(
@@ -74,11 +69,6 @@ const ParticipantList = ({ participants, promptPopup }) => {
     });
   }
 
-  // resets the search component.
-  function cancelSearch() {
-    setSearchTerm('');
-  }
-
   // applies the switch filter for rendering
   function applyFilter() {
     return hideCancelled
@@ -91,27 +81,11 @@ const ParticipantList = ({ participants, promptPopup }) => {
   return (
     <div className="participants-list">
       <div className="search-and-filters">
-        <div className="search-bar">
-          <input
-            className="search-input"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={handleSearch}
-          />
-          <div
-            className={'cancel-search' + (searchTerm === '' ? ' hidden' : '')}
-            onClick={cancelSearch}
-          >
-            <span
-              className="cancel-cross"
-              role="img"
-              aria-label="cancel search"
-            >
-              ╳
-            </span>
-          </div>
-        </div>
-        {/* the switch component has to be inside a label. It needs to have all the css properties passed down as props... ¬_¬ */}
+        <SearchBar
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onCancel={() => setSearchTerm('')}
+        />
         <ToggleSwitch
           checked={hideCancelled}
           handleSwitch={toggleHideCancelled}
@@ -173,6 +147,27 @@ function ToggleSwitch({ checked, handleSwitch }) {
         width={32}
       />
     </label>
+  );
+}
+
+function SearchBar({ value, onChange, onCancel }) {
+  return (
+    <div className="search-bar">
+      <input
+        className="search-input"
+        placeholder="Search..."
+        value={value}
+        onChange={onChange}
+      />
+      <div
+        className={'cancel-search' + (value === '' ? ' hidden' : '')}
+        onClick={onCancel}
+      >
+        <span className="cancel-cross" role="img" aria-label="cancel search">
+          ╳
+        </span>
+      </div>
+    </div>
   );
 }
 
