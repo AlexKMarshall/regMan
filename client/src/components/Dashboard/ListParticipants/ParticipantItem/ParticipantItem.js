@@ -33,7 +33,7 @@ const ParticipantItem = ({ participant, promptPopup }) => {
               🔞
             </span>
           ) : (
-            <span role="img" aria-label="underage">
+            <span role="img" aria-label="adult">
               ✅
             </span>
           )}
