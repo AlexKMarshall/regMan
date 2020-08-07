@@ -20,6 +20,15 @@ const fakeUnderageParticipant = {
   is_underage: true,
 };
 
+const fakeAdultParticipant = {
+  first_name: 'An',
+  last_name: 'Adult',
+  email: 'adult@importantjob.com',
+  id: 567,
+  instrument: { name: 'penny whistle' },
+  is_underage: false,
+};
+
 describe('ParticipantItem', () => {
   test('it renders a participant', () => {
     render(
@@ -58,6 +67,17 @@ describe('ParticipantItem', () => {
     );
 
     expect(screen.getByLabelText('underage')).toBeInTheDocument();
-    expect(screen.queryByLabelText('not-underage')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('adult')).not.toBeInTheDocument();
+  });
+
+  test('it displays an icon for an adult participant', () => {
+    render(
+      <MemoryRouter>
+        <ParticipantItem participant={fakeAdultParticipant} />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByLabelText('adult')).toBeInTheDocument();
+    expect(screen.queryByLabelText('underage')).not.toBeInTheDocument();
   });
 });
