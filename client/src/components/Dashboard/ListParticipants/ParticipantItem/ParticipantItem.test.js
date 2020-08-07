@@ -29,13 +29,13 @@ const fakeAdultParticipant = {
   is_underage: false,
 };
 
+function renderWithRouter(ui, options) {
+  return render(<MemoryRouter>{ui}</MemoryRouter>, options);
+}
+
 describe('ParticipantItem', () => {
   test('it renders a participant', () => {
-    render(
-      <MemoryRouter>
-        <ParticipantItem participant={fakeParticipant} />
-      </MemoryRouter>
-    );
+    renderWithRouter(<ParticipantItem participant={fakeParticipant} />);
 
     const participantDetailLink = screen.getByRole('link', {
       name: `${fakeParticipant.last_name} , ${fakeParticipant.first_name}`,
@@ -60,22 +60,14 @@ describe('ParticipantItem', () => {
   });
 
   test('it displays an icon for an underage participant', () => {
-    render(
-      <MemoryRouter>
-        <ParticipantItem participant={fakeUnderageParticipant} />
-      </MemoryRouter>
-    );
+    renderWithRouter(<ParticipantItem participant={fakeUnderageParticipant} />);
 
     expect(screen.getByLabelText('underage')).toBeInTheDocument();
     expect(screen.queryByLabelText('adult')).not.toBeInTheDocument();
   });
 
   test('it displays an icon for an adult participant', () => {
-    render(
-      <MemoryRouter>
-        <ParticipantItem participant={fakeAdultParticipant} />
-      </MemoryRouter>
-    );
+    renderWithRouter(<ParticipantItem participant={fakeAdultParticipant} />);
 
     expect(screen.getByLabelText('adult')).toBeInTheDocument();
     expect(screen.queryByLabelText('underage')).not.toBeInTheDocument();
