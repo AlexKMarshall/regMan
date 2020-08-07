@@ -95,4 +95,13 @@ describe('ParticipantList', () => {
     expect(screen.getByText(activeNameRegExp)).toBeInTheDocument();
     expect(screen.queryByText(cancelledNameRegExp)).not.toBeInTheDocument();
   });
+
+  test('should display "no matching records" if search result is empty', async () => {
+    const participants = buildParticipants();
+
+    render(<ParticipantList participants={participants} />);
+    const searchInput = screen.getByPlaceholderText(/search/i);
+    await userEvent.type(searchInput, 'something that will not be found');
+    expect(screen.getByText(/no matching records/i)).toBeInTheDocument();
+  });
 });
