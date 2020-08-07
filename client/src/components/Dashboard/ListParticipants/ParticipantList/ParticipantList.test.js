@@ -68,4 +68,31 @@ describe('ParticipantList', () => {
     expect(results[0]).toHaveTextContent(firstParticipant.first_name);
     expect(results[1]).toHaveTextContent(secondParticipant.first_name);
   });
+
+  test('it should be possible to filter out participants that have cancelled', async () => {
+    const activeParticipant = buildParticipant({ registration_status: 'New' });
+    const cancelledParticipant = buildParticipant({
+      registration_status: 'Cancelled',
+    });
+    const participants = [activeParticipant, cancelledParticipant];
+    const activeNameRegExp = new RegExp(activeParticipant.first_name, 'gi');
+    const cancelledNameRegExp = new RegExp(
+      cancelledParticipant.first_name,
+      'gi'
+    );
+
+    render(<ParticipantList participants={participants} />);
+
+    expect(screen.getAllByRole('row')).toHaveLength(2);
+    expect(screen.getByText(activeNameRegExp)).toBeInTheDocument();
+    expect(screen.getByText(cancelledNameRegExp)).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByLabelText(/filter cancelled registrations/i)
+    );
+
+    expect(screen.getAllByRole('row')).toHaveLength(1);
+    expect(screen.getByText(activeNameRegExp)).toBeInTheDocument();
+    expect(screen.queryByText(cancelledNameRegExp)).not.toBeInTheDocument();
+  });
 });
