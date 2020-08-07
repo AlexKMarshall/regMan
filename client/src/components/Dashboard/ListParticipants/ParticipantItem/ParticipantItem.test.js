@@ -2,14 +2,19 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { ParticipantItem } from '@app/components';
 import { MemoryRouter } from 'react-router-dom';
+import faker from 'faker';
 
-const fakeParticipant = {
-  first_name: 'Jarvis',
-  last_name: 'Cocker',
-  email: 'jarvis@pulp.mus',
-  id: 123,
-  instrument: { name: 'accordian' },
-};
+function buildParticipant() {
+  return {
+    first_name: faker.name.firstName(),
+    last_name: faker.name.lastName(),
+    email: faker.internet.email(),
+    id: faker.random.uuid(),
+    instrument: {
+      name: faker.commerce.product(),
+    },
+  };
+}
 
 const fakeUnderageParticipant = {
   first_name: 'A',
@@ -35,6 +40,7 @@ function renderWithRouter(ui, options) {
 
 describe('ParticipantItem', () => {
   test('it renders a participant', () => {
+    const fakeParticipant = buildParticipant();
     renderWithRouter(<ParticipantItem participant={fakeParticipant} />);
 
     const participantDetailLink = screen.getByRole('link', {
