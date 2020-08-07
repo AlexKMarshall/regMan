@@ -19,4 +19,10 @@ describe('ParticipantList', () => {
       expect(screen.getByText(nameRegex)).toBeInTheDocument();
     });
   });
+
+  test('it should display message when there are no participants', () => {
+    const emptyParticipants = [];
+    render(<ParticipantList participants={emptyParticipants} />);
+    expect(screen.getByText(/no one has registered yet/i)).toBeInTheDocument();
+  });
 });
