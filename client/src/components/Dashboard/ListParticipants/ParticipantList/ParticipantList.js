@@ -69,6 +69,16 @@ const ParticipantList = ({ participants, promptPopup }) => {
     });
   }
 
+  function renderContent(content) {
+    if (!participants.length) {
+      return <h3>No one has registered yet.</h3>;
+    } else if (searchTerm && !applyFilter().length) {
+      return <h3>No matching records for your search</h3>;
+    } else {
+      return content;
+    }
+  }
+
   // applies the switch filter for rendering
   function applyFilter() {
     return hideCancelled
@@ -106,24 +116,15 @@ const ParticipantList = ({ participants, promptPopup }) => {
         <div className="grid-item grid-delete grid-header-item">Delete</div>
       </div>
       <div className="list-container">
-        {
-          // double ternary operator ^_^ have fun
-          participants.length ? (
-            searchedItems().length ? (
-              applyFilter().map((participant) => (
-                <ParticipantItem
-                  key={'participant' + participant.id}
-                  participant={participant}
-                  promptPopup={promptPopup}
-                />
-              ))
-            ) : (
-              <h3>No matching records for your search</h3>
-            )
-          ) : (
-            <h3>No one has registered yet.</h3>
-          )
-        }
+        {renderContent(
+          applyFilter().map((participant) => (
+            <ParticipantItem
+              key={'participant' + participant.id}
+              participant={participant}
+              promptPopup={promptPopup}
+            />
+          ))
+        )}
       </div>
     </div>
   );
