@@ -2,8 +2,8 @@ import React from 'react';
 import { buildParticipant, render, screen } from '@test/test-utils';
 import ParticipantList from './ParticipantList';
 
-function buildParticipants() {
-  const numberOfParticipants = Math.ceil(Math.random() * 10);
+function buildParticipants({ maxNumber = 10 } = {}) {
+  const numberOfParticipants = Math.ceil(Math.random() * maxNumber);
 
   let participants = [];
   for (let i = 0; i < numberOfParticipants; i++) {
@@ -25,7 +25,7 @@ describe('ParticipantList', () => {
   });
 
   test('it should display message when there are no participants', () => {
-    const emptyParticipants = [];
+    const emptyParticipants = buildParticipants({ maxNumber: 0 });
     render(<ParticipantList participants={emptyParticipants} />);
     expect(screen.getByText(/no one has registered yet/i)).toBeInTheDocument();
   });
