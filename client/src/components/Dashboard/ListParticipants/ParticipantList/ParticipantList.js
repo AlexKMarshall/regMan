@@ -53,10 +53,6 @@ const ParticipantList = ({ participants, promptPopup }) => {
     setHideCancelled(newValue);
   }
 
-  function searchedItems() {
-    return participants.filter(searchPredicate);
-  }
-
   const searchPredicate = useCallback(
     ({ first_name, last_name, registration_status, email, instrument }) => {
       const participantString = `${first_name}${last_name}${registration_status}${email}${instrument.name}`;
@@ -73,24 +69,19 @@ const ParticipantList = ({ participants, promptPopup }) => {
     [hideCancelled]
   );
 
+  const filteredParticipants = useMemo(() => {
+    return participants.filter(searchPredicate).filter(cancelFilterPredicate);
+  }, [participants, cancelFilterPredicate, searchPredicate]);
+
   function renderContent(content) {
     if (!participants.length) {
       return <h3>No one has registered yet.</h3>;
-    } else if (searchTerm && !applyFilter().length) {
+    } else if (searchTerm && !filteredParticipants.length) {
       return <h3>No matching records for your search</h3>;
     } else {
       return content;
     }
   }
-
-  // applies the switch filter for rendering
-  function applyFilter() {
-    return searchedItems().filter(cancelFilterPredicate);
-  }
-
-  const filteredParticipants = useMemo(() => {
-    return participants.filter(searchPredicate).filter(cancelFilterPredicate);
-  }, [participants, cancelFilterPredicate, searchPredicate]);
 
   return (
     <div className="participants-list">
@@ -121,7 +112,7 @@ const ParticipantList = ({ participants, promptPopup }) => {
       </div>
       <div className="list-container">
         {renderContent(
-          applyFilter().map((participant) => (
+          filteredParticipants.map((participant) => (
             <ParticipantItem
               key={'participant' + participant.id}
               participant={participant}
