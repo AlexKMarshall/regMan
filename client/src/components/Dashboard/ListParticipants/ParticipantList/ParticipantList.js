@@ -1,14 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useLocation, useHistory } from 'react-router-dom';
 import { ParticipantItem } from '@app/components';
 import Switch from 'react-switch';
 import './ParticipantList.css';
 
+function useHideCancelled() {
+  const history = useHistory();
+  const paramName = 'hideCancelled';
+  const location = useLocation();
+  const params = new URLSearchParams(useLocation().search);
+
+  const getHideCancelled = useCallback(() => {
+    const params = new URLSearchParams(location.search);
+    return params.get(paramName) === 'true';
+  }, [location]);
+
+  function setHideCancelled(value) {
+    params.set(paramName, value);
+    history.push(`?${params.toString()}`);
+  }
+
+  return [getHideCancelled(), setHideCancelled];
+}
+
 // Renders the list of attendants. It handles serches and filters for the list
 const ParticipantList = ({ participants, promptPopup }) => {
-  // boolean that is used to filter the cancelled participants from the list. Stored in localstorage
-  const [isCancelledFilterActive, setIsCancelledFilterActive] = useState(
-    localStorage.getItem('regmanCheckedFilter') ? true : false
-  );
+  const [hideCancelled, setHideCancelled] = useHideCancelled();
+
   // search string. Stored in localstorage so that the search is not lost when moving between components.
   const [search, setSearch] = useState(
     localStorage.getItem('regmanSearch')
@@ -40,16 +58,10 @@ const ParticipantList = ({ participants, promptPopup }) => {
       : setSearchedParticipants(participants);
   }, [participants]);
 
-  // stores or removes checked from the localstorage
-  useEffect(() => {
-    isCancelledFilterActive
-      ? localStorage.setItem('regmanCheckedFilter', isCancelledFilterActive)
-      : localStorage.removeItem('regmanCheckedFilter');
-  }, [isCancelledFilterActive]);
-
   // handles the switch component.
   function handleSwitch(checked) {
-    setIsCancelledFilterActive(checked);
+    const newValue = !hideCancelled;
+    setHideCancelled(newValue);
   }
 
   // handles the search bar. Stores the search value in the localstorage and filters the participants.
@@ -85,7 +97,7 @@ const ParticipantList = ({ participants, promptPopup }) => {
 
   // applies the switch filter for rendering
   function applyFilter() {
-    return isCancelledFilterActive
+    return hideCancelled
       ? searchedParticipants.filter(
           (participant) => participant.registration_status !== 'Cancelled'
         )
@@ -116,10 +128,7 @@ const ParticipantList = ({ participants, promptPopup }) => {
           </div>
         </div>
         {/* the switch component has to be inside a label. It needs to have all the css properties passed down as props... ¬_¬ */}
-        <ToggleSwitch
-          checked={isCancelledFilterActive}
-          handleSwitch={handleSwitch}
-        />
+        <ToggleSwitch checked={hideCancelled} handleSwitch={handleSwitch} />
       </div>
       <div className="participant-grid grid-header">
         <div className="grid-item grid-name grid-header-item">Name</div>
