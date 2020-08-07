@@ -55,7 +55,6 @@ const ParticipantList = ({ participants, promptPopup }) => {
   // handles the search bar. Stores the search value in the localstorage and filters the participants.
   function handleSearch({ target }) {
     setSearch(target.value);
-    console.log('target value ', target.value);
     target.value
       ? localStorage.setItem('regmanSearch', target.value)
       : localStorage.removeItem('regmanSearch');
