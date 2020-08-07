@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import { ParticipantItem } from '@app/components';
 import Switch from 'react-switch';
