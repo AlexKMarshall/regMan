@@ -4,7 +4,7 @@ import { ParticipantItem } from '@app/components';
 import { MemoryRouter } from 'react-router-dom';
 import faker from 'faker';
 
-function buildParticipant() {
+function buildParticipant(options) {
   return {
     first_name: faker.name.firstName(),
     last_name: faker.name.lastName(),
@@ -13,26 +13,10 @@ function buildParticipant() {
     instrument: {
       name: faker.commerce.product(),
     },
+    is_underage: faker.random.boolean(),
+    ...options,
   };
 }
-
-const fakeUnderageParticipant = {
-  first_name: 'A',
-  last_name: 'Child',
-  email: 'child@disney.com',
-  id: 234,
-  instrument: { name: 'sousaphone' },
-  is_underage: true,
-};
-
-const fakeAdultParticipant = {
-  first_name: 'An',
-  last_name: 'Adult',
-  email: 'adult@importantjob.com',
-  id: 567,
-  instrument: { name: 'penny whistle' },
-  is_underage: false,
-};
 
 function renderWithRouter(ui, options) {
   return render(<MemoryRouter>{ui}</MemoryRouter>, options);
@@ -66,6 +50,7 @@ describe('ParticipantItem', () => {
   });
 
   test('it displays an icon for an underage participant', () => {
+    const fakeUnderageParticipant = buildParticipant({ is_underage: true });
     renderWithRouter(<ParticipantItem participant={fakeUnderageParticipant} />);
 
     expect(screen.getByLabelText('underage')).toBeInTheDocument();
@@ -73,6 +58,7 @@ describe('ParticipantItem', () => {
   });
 
   test('it displays an icon for an adult participant', () => {
+    const fakeAdultParticipant = buildParticipant({ is_underage: false });
     renderWithRouter(<ParticipantItem participant={fakeAdultParticipant} />);
 
     expect(screen.getByLabelText('adult')).toBeInTheDocument();
