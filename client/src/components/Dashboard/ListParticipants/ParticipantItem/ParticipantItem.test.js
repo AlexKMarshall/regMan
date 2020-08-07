@@ -11,6 +11,15 @@ const fakeParticipant = {
   instrument: { name: 'accordian' },
 };
 
+const fakeUnderageParticipant = {
+  first_name: 'A',
+  last_name: 'Child',
+  email: 'child@disney.com',
+  id: 234,
+  instrument: { name: 'sousaphone' },
+  is_underage: true,
+};
+
 describe('ParticipantItem', () => {
   test('it renders a participant', () => {
     render(
@@ -39,5 +48,16 @@ describe('ParticipantItem', () => {
     expect(
       screen.getByText(fakeParticipant.instrument.name)
     ).toBeInTheDocument();
+  });
+
+  test('it displays an icon for an underage participant', () => {
+    render(
+      <MemoryRouter>
+        <ParticipantItem participant={fakeUnderageParticipant} />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByLabelText('underage')).toBeInTheDocument();
+    expect(screen.queryByLabelText('not-underage')).not.toBeInTheDocument();
   });
 });
