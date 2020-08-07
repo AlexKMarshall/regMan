@@ -59,9 +59,6 @@ const ParticipantList = ({ participants, promptPopup }) => {
   }
 
   function searchedItems() {
-    if (searchTerm == null || searchTerm == undefined) {
-      return participants;
-    }
     return participants.filter((participant) => {
       const searchValue = ''.concat(
         participant.first_name,
