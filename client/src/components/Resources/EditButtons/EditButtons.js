@@ -25,6 +25,7 @@ const EditButtons = ({ buttonFunctionality, isEditting }) => {
               {button.name}
             </button>
           );
+        else return null;
       });
 
   return (
