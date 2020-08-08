@@ -5,15 +5,6 @@ import ApiClient from '@app/services/ApiClient';
 import { useAuth0 } from '@auth0/auth0-react';
 import './GroupsDisplay.css';
 
-/**
- * Don't be scared! There are a lot of state properties. All of them are used for statistics.
- * They are set in the generateData function.
- * The chart function creates objects that chart.js can insterpret to render the graphs.
- * 2 useEffect function set the data for the graphs at the begining and whenever there are changes.
- *
- * handleChange, submitMaxValues & cancelChanges are used to control the form that modifies the max_attendants property of the instruments.
- */
-
 function resetFormState(instruments) {
   return instruments.reduce((formState, instrument) => {
     formState.set(instrument.id, instrument);
@@ -236,26 +227,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
           </div>
         </div>
       </div>
-      <div className="chart-grid">
-        <div className="chart-card">
-          <div
-            className="chart-max-instr-distribution"
-            style={{ height: '300px' }}
-          >
-            <Doughnut
-              data={instrMaxDistributionData}
-              options={{
-                maintainAspectRatio: false,
-                responsive: true,
-                title: {
-                  text: 'Distribution of spots per instrument',
-                  display: true,
-                },
-              }}
-            />
-          </div>
-        </div>
-      </div>
+      <MaxDistributionChart instruments={instruments} />
       <div className="chart-grid">
         <div className="chart-card">
           <div
@@ -367,5 +339,50 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
     </div>
   );
 };
+
+function MaxDistributionChart({ instruments }) {
+  const instrMaxDistributionData = useMemo(() => {
+    return {
+      labels: instruments.map(({ name }) => name),
+      datasets: [
+        {
+          backgroundColor: [
+            '#f28939',
+            '#39998e',
+            '#347dca',
+            '#ff4557',
+            '#57455a',
+          ],
+          borderWidth: 1,
+          data: instruments.map(({ max_attendants }) => max_attendants),
+          label: 'distribution of max attendants per instrument',
+        },
+      ],
+    };
+  }, [instruments]);
+
+  return (
+    <div className="chart-grid">
+      <div className="chart-card">
+        <div
+          className="chart-max-instr-distribution"
+          style={{ height: '300px' }}
+        >
+          <Doughnut
+            data={instrMaxDistributionData}
+            options={{
+              maintainAspectRatio: false,
+              responsive: true,
+              title: {
+                text: 'Distribution of spots per instrument',
+                display: true,
+              },
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default GroupsDisplay;
