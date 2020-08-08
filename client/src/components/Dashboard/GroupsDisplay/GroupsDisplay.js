@@ -22,7 +22,6 @@ function resetFormState(instruments) {
 }
 
 const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
-  const [old_instrClone, old_setInstrClone] = useState([]);
   const [availableSpacesForm, setAvailableSpacesForm] = useState(() =>
     resetFormState(instruments)
   );
@@ -189,36 +188,6 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
     };
   }, [ageFrequency]);
 
-  const generateData = () => {
-    const instrMaxArray = [];
-    const agesArray = [];
-    const instrumentDistribution = {
-      Fiddle: [],
-      Cello: [],
-      Guitar: [],
-      Flute: [],
-      'Fiddle Beginner': [],
-    };
-    participants.forEach((participant) => {
-      instrumentDistribution[participant.instrument.name].push(participant);
-      agesArray.push(
-        moment(process.env.REACT_APP_COURSE_START).diff(
-          participant.date_of_birth,
-          'years'
-        )
-      );
-    });
-    instruments.map((instr) => {
-      instrMaxArray.push(instr.max_attendants);
-      return true;
-    });
-  };
-
-  useEffect(() => {
-    generateData();
-    old_setInstrClone([...instruments]);
-  }, [participants, instruments]);
-
   const handleChange = ({ target }, id) => {
     setAvailableSpacesForm((oldFormState) => {
       const oldInstrument = oldFormState.get(id);
@@ -274,11 +243,10 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
               </div>
               <div className="total-participants">
                 Total Spots:{' '}
-                {old_instrClone.length &&
-                  old_instrClone.reduce(
-                    (acc, el) => acc + el.max_attendants,
-                    0
-                  )}
+                {[...availableSpacesForm.values()].reduce(
+                  (acc, el) => acc + el.max_attendants,
+                  0
+                )}
               </div>
               <div className="groups-setup-btn">
                 <button onClick={submitMaxValues}>Update Group Limits</button>
