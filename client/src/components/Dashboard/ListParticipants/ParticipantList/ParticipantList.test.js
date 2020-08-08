@@ -1,17 +1,12 @@
 import React from 'react';
-import { buildParticipant, render, screen } from '@test/test-utils';
+import {
+  buildParticipant,
+  buildParticipants,
+  render,
+  screen,
+} from '@test/test-utils';
 import userEvent from '@testing-library/user-event';
 import ParticipantList from './ParticipantList';
-
-function buildParticipants({ maxNumber = 10, number } = {}) {
-  const numberOfParticipants = number ?? Math.ceil(Math.random() * maxNumber);
-
-  let participants = [];
-  for (let i = 0; i < numberOfParticipants; i++) {
-    participants.push(buildParticipant());
-  }
-  return participants;
-}
 
 describe('ParticipantList', () => {
   test('it should render a list of participants', () => {
