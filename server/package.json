@@ -33,5 +33,17 @@
     "jest": "^26.2.2",
     "morgan": "^1.10.0",
     "sequelize-cli": "^6.2.0"
+  },
+  "jest": {
+    "coverageDirectory": "<rootDir>/coverage",
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!.eslintrc.js",
+      "!**/coverage/**",
+      "!**/migrations/**",
+      "!**/seeders/**",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ]
   }
 }
