@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, fireEvent, screen } from '@testing-library/react';
-import moment from 'moment';
+import { render, screen } from '@testing-library/react';
 import HealthDetails from './HealthDetails';
 
 describe('PaymentItem', () => {
@@ -9,7 +8,6 @@ describe('PaymentItem', () => {
     allergies: 'pollen',
   };
   const handleChange = jest.fn();
-  const setDisplayEdit = jest.fn();
 
   it('should render an input field with allergies', () => {
     render(
@@ -17,7 +15,6 @@ describe('PaymentItem', () => {
         details={details}
         isEditting={isEditting}
         handleChange={handleChange}
-        setDisplayEdit={setDisplayEdit}
       />
     );
 
@@ -32,7 +29,6 @@ describe('PaymentItem', () => {
         details={details}
         isEditting={isEditting}
         handleChange={handleChange}
-        setDisplayEdit={setDisplayEdit}
       />
     );
 
