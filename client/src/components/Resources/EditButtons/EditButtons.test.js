@@ -1,16 +1,8 @@
 import React from 'react';
-import { render, fireEvent, screen, cleanup } from '@testing-library/react';
-
-import EditButtons from './EditButtons';
-
-import fs from 'fs';
-import path from 'path';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-const cssFile = fs.readFileSync(
-  path.resolve(__dirname, './EditButtons.css'),
-  'utf8'
-);
+import EditButtons from './EditButtons';
 
 describe('EditButtons', () => {
   const clickFunctions = {};
@@ -30,7 +22,6 @@ describe('EditButtons', () => {
     expect(
       screen.queryByRole('button', { name: 'Edit contact' })
     ).not.toBeInTheDocument();
-    cleanup();
   });
 
   it('should only display the edit button', () => {
@@ -48,7 +39,6 @@ describe('EditButtons', () => {
     expect(
       screen.getByRole('button', { name: 'Edit contact' })
     ).toBeInTheDocument();
-    cleanup();
   });
 
   const buttons = [
