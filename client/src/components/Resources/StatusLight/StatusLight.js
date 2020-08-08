@@ -37,8 +37,8 @@ const StatusLight = ({ status }) => {
   }, [status]);
 
   return (
-    <div className="status-light-container">
-      <div className={`status-light ${lightColor}`}></div>
+    <div className="status-light-container" role="status-light-container">
+      <div className={`status-light ${lightColor}`} role="status-light"></div>
     </div>
   );
 };
