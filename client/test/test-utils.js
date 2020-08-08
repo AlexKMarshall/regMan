@@ -22,5 +22,19 @@ export function buildParticipant(options) {
   };
 }
 
+export function buildParticipants({
+  maxNumber = 10,
+  number,
+  participantBuilder = buildParticipant,
+} = {}) {
+  const numberOfParticipants = number ?? Math.ceil(Math.random() * maxNumber);
+
+  let participants = [];
+  for (let i = 0; i < numberOfParticipants; i++) {
+    participants.push(participantBuilder());
+  }
+  return participants;
+}
+
 export * from '@testing-library/react';
 export { render };

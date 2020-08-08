@@ -1,96 +1,32 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import moment from 'moment';
 import { Doughnut, Bar, Line } from 'react-chartjs-2';
 import ApiClient from '@app/services/ApiClient';
 import { useAuth0 } from '@auth0/auth0-react';
 import './GroupsDisplay.css';
 
-/**
- * Don't be scared! There are a lot of state properties. All of them are used for statistics.
- * They are set in the generateData function.
- * The chart function creates objects that chart.js can insterpret to render the graphs.
- * 2 useEffect function set the data for the graphs at the begining and whenever there are changes.
- *
- * handleChange, submitMaxValues & cancelChanges are used to control the form that modifies the max_attendants property of the instruments.
- */
+function resetFormState(instruments) {
+  return instruments.reduce((formState, instrument) => {
+    formState.set(instrument.id, instrument);
+    return formState;
+  }, new Map());
+}
+
 const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
-  const [underageData, setUnderageData] = useState({});
-  const [instrMaxDistributionData, setInstrMaxDistributionData] = useState({});
-  const [participantsDitrByInstr, setParticipantsDitrByInstr] = useState({});
-  const [availableSpotsData, setAvailableSpotsData] = useState({});
-  const [ageFreqData, setAgeFreqData] = useState({});
-  const [ageFrequency, setAgeFrequency] = useState({});
-  const [numParticipants, setNumParticipants] = useState(0);
-  const [numUnderage, setNumUnderage] = useState(0);
-  const [instrumentNames, setInstrumentNames] = useState([]);
-  const [instrMaxSpots, setInstrMaxSpots] = useState([]);
-  const [instrDistribution, setInstrDistribution] = useState({});
-  const [maxSpots, setMaxSpots] = useState(0);
-  const [instrClone, setInstrClone] = useState([]);
+  const [availableSpacesForm, setAvailableSpacesForm] = useState(() =>
+    resetFormState(instruments)
+  );
   const { getAccessTokenSilently } = useAuth0();
 
-  const generateData = () => {
-    const underageParticipants = [];
-    const instrNamesArray = [];
-    const instrMaxArray = [];
-    const agesArray = [];
-    const ageFreq = {};
-    const instrumentDistribution = {
-      Fiddle: [],
-      Cello: [],
-      Guitar: [],
-      Flute: [],
-      'Fiddle Beginner': [],
-    };
-    const totalSpots = instrMaxSpots.reduce((acc, el) => acc + el, 0);
-    participants.forEach((participant) => {
-      participant.is_underage && underageParticipants.push(participant);
-      instrumentDistribution[participant.instrument.name].push(participant);
-      agesArray.push(
-        moment(process.env.REACT_APP_COURSE_START).diff(
-          participant.date_of_birth,
-          'years'
-        )
-      );
-    });
-    instruments.map((instr) => {
-      instrNamesArray.push(instr.name);
-      instrMaxArray.push(instr.max_attendants);
-      return true;
-    });
-    if (agesArray) {
-      for (let el of agesArray) {
-        if (ageFreq.hasOwnProperty(el)) ageFreq[el] += 1;
-        else ageFreq[el] = 1;
-      }
-    }
-    setNumParticipants(participants.length);
-    setNumUnderage(underageParticipants.length);
-    setInstrumentNames(instrNamesArray);
-    setInstrMaxSpots(() => instrMaxArray);
-    setInstrDistribution(() => instrumentDistribution);
-    setMaxSpots(() => totalSpots);
-    setAgeFrequency(ageFreq);
-  };
+  useEffect(() => {
+    setAvailableSpacesForm(resetFormState(instruments));
+  }, [instruments]);
 
-  const chart = () => {
-    setUnderageData({
-      labels: ['Underage Participants', 'Adult Participants'],
+  const instrMaxDistributionData = useMemo(() => {
+    return {
+      labels: instruments.map(({ name }) => name),
       datasets: [
         {
-          label: 'percentage of underage participants',
-          data: [numUnderage, numParticipants - numUnderage],
-          backgroundColor: ['#39998e', '#57455a'],
-          borderWidth: 1,
-        },
-      ],
-    });
-    setInstrMaxDistributionData({
-      labels: instrumentNames,
-      datasets: [
-        {
-          label: 'distribution of max attendants per instrument',
-          data: instrMaxSpots,
           backgroundColor: [
             '#f28939',
             '#39998e',
@@ -99,116 +35,156 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
             '#57455a',
           ],
           borderWidth: 1,
+          data: instruments.map(({ max_attendants }) => max_attendants),
+          label: 'distribution of max attendants per instrument',
         },
       ],
-    });
-    instrDistribution['Fiddle'] &&
-      setParticipantsDitrByInstr({
-        labels: instrumentNames,
-        datasets: [
-          {
-            label: 'registrered participants',
-            data: [
-              instrDistribution['Fiddle'].length,
-              instrDistribution['Cello'].length,
-              instrDistribution['Guitar'].length,
-              instrDistribution['Flute'].length,
-              instrDistribution['Fiddle Beginner'].length,
-            ],
-            backgroundColor: [
-              '#f7bd92',
-              '#89cfc7',
-              '#7ea4cc',
-              '#ff808c',
-              '#a17fa7',
-            ],
-          },
-          {
-            label: 'maximum attendants',
-            data: instrMaxSpots,
-            backgroundColor: [
-              '#f28939',
-              '#39998e',
-              '#347dca',
-              '#ff4557',
-              '#571f61',
-            ],
-          },
-        ],
-      });
-    instrDistribution['Fiddle'] &&
-      setAvailableSpotsData({
-        labels: [...instrumentNames, 'Remaining Spots'],
-        datasets: [
-          {
-            label: 'remaining spots',
-            data: [
-              instrDistribution['Fiddle'].length,
-              instrDistribution['Cello'].length,
-              instrDistribution['Guitar'].length,
-              instrDistribution['Flute'].length,
-              instrDistribution['Fiddle Beginner'].length,
-              maxSpots - participants.length,
-            ],
-            backgroundColor: [
-              '#f28939',
-              '#39998e',
-              '#347dca',
-              '#ff4557',
-              '#57455a',
-              '#b1b1b1',
-            ],
-          },
-        ],
-      });
-    setAgeFreqData({
-      labels: Object.keys(ageFrequency),
+    };
+  }, [instruments]);
+
+  const underageData = useMemo(() => {
+    const numUnderage = participants.filter(({ is_underage }) => is_underage)
+      .length;
+
+    return {
+      labels: ['Underage Participants', 'Adult Participants'],
       datasets: [
         {
-          label: 'age distribution',
-          data: Object.values(ageFrequency),
-          backgroundColor: '#ff77006a',
-          borderColor: '#ff7900',
-          borderWidth: 2,
+          backgroundColor: ['#39998e', '#57455a'],
+          borderWidth: 1,
+          data: [numUnderage, participants.length - numUnderage],
+          label: 'percentage of underage participants',
         },
       ],
+    };
+  }, [participants.length]);
+
+  const countParticipantsByInstrument = useMemo(() => {
+    return instruments.map(({ name: instrumentName }) => ({
+      instrumentName,
+      participantsCount: participants.filter(
+        ({ instrument }) => instrument.name === instrumentName
+      ).length,
+    }));
+  }, [instruments, participants]);
+
+  const participantsDistrByInstrData = useMemo(() => {
+    return {
+      labels: instruments.map(({ name }) => name),
+      datasets: [
+        {
+          backgroundColor: [
+            '#f7bd92',
+            '#89cfc7',
+            '#7ea4cc',
+            '#ff808c',
+            '#a17fa7',
+          ],
+          borderWidth: 1,
+          data: countParticipantsByInstrument.map(
+            ({ participantsCount }) => participantsCount
+          ),
+          label: 'registered participants',
+        },
+        {
+          backgroundColor: [
+            '#f28939',
+            '#39998e',
+            '#347dca',
+            '#ff4557',
+            '#571f61',
+          ],
+          borderWidth: 1,
+          data: instruments.map(({ max_attendants }) => max_attendants),
+          label: 'maximum attendants',
+        },
+      ],
+    };
+  }, [instruments, countParticipantsByInstrument]);
+
+  const availableSpotsData = useMemo(() => {
+    const maxSpots = instruments.reduce(
+      (total, { max_attendants }) => total + max_attendants,
+      0
+    );
+
+    return {
+      labels: [...instruments.map(({ name }) => name), 'Remaining Spots'],
+      datasets: [
+        {
+          backgroundColor: [
+            '#f28939',
+            '#39998e',
+            '#347dca',
+            '#ff4557',
+            '#57455a',
+            '#b1b1b1',
+          ],
+          borderWidth: 1,
+          data: [
+            ...countParticipantsByInstrument.map(
+              ({ participantsCount }) => participantsCount
+            ),
+            maxSpots - participants.length,
+          ],
+          label: 'remaining spots',
+        },
+      ],
+    };
+  }, [instruments, countParticipantsByInstrument, participants.length]);
+
+  const ageFreqData = useMemo(() => {
+    const agesArray = participants
+      .map(({ date_of_birth }) =>
+        moment(process.env.REACT_APP_COURSE_START).diff(date_of_birth, 'years')
+      )
+      .sort((a, b) => (a < b ? -1 : 1));
+
+    const ageFrequency = agesArray.reduce((ageCounts, currentAge) => {
+      const newCount = (ageCounts.get(currentAge) || 0) + 1;
+      ageCounts.set(currentAge, newCount);
+      return ageCounts;
+    }, new Map());
+
+    return {
+      labels: [...ageFrequency.keys()],
+      datasets: [
+        {
+          backgroundColor: '#ff77006a',
+          borderWidth: 2,
+          borderColor: '#ff7900',
+          data: [...ageFrequency.values()],
+          label: 'age distribution',
+        },
+      ],
+    };
+  }, [participants]);
+
+  const handleChange = ({ target }, id) => {
+    setAvailableSpacesForm((oldFormState) => {
+      const oldInstrument = oldFormState.get(id);
+      const max_attendants = parseInt(target.value);
+      const newInstrument = { ...oldInstrument, max_attendants };
+      const newFormState = new Map(oldFormState);
+      newFormState.set(id, newInstrument);
+      return newFormState;
     });
-  };
-
-  useEffect(() => {
-    generateData();
-    setInstrClone([...instruments]);
-    setMaxSpots(instruments.reduce((acc, el) => acc + el.max_attendants, 0));
-  }, [participants, instruments]);
-
-  useEffect(() => {
-    chart();
-  }, [numUnderage, numParticipants, instrMaxSpots, maxSpots]);
-
-  const handleChange = ({ target }) => {
-    const newInstr = instrClone.map((instr) => {
-      if (instr.name !== target.name) return instr;
-      else {
-        return { ...instr, max_attendants: +target.value };
-      }
-    });
-    setInstrClone(newInstr);
   };
 
   const submitMaxValues = (e) => {
     e.preventDefault();
+    const formInstruments = [...availableSpacesForm.values()];
     getAccessTokenSilently()
-      .then((token) => ApiClient.putEditInstrument(instrClone, token))
-      .then((instr) => {
-        console.log('fetch return', instr[0].max_attendants);
-        setInstruments(instr);
-        setInstrClone(instr);
+      .then((token) => ApiClient.putEditInstrument(formInstruments, token))
+      .then((returnedInstruments) => {
+        setInstruments(returnedInstruments);
+        setAvailableSpacesForm(resetFormState(returnedInstruments));
       });
   };
 
   const cancelChanges = (e) => {
     e.preventDefault();
-    setInstrClone(instruments);
+    setAvailableSpacesForm(resetFormState(instruments));
   };
 
   // this is a lot of fun... react-chartjs-2 is a library that makes making charts easier.
@@ -221,25 +197,27 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
           <div className="groups-setup">
             <form>
               <div className="fields">
-                {instrClone.length && console.log(instrClone[0].max_attendants)}
-                {instrClone.length &&
-                  instrClone.map((instr) => (
-                    <div key={'instr' + instr.id} className="graph-field">
-                      <label htmlFor={instr.name}>{instr.name}</label>
+                {[...availableSpacesForm.entries()].map(
+                  ([id, { name, max_attendants }]) => (
+                    <div key={`instr-${id}`} className="graph-field">
+                      <label htmlFor={name}>{name}</label>
                       <input
                         type="number"
                         min="0"
-                        name={instr.name}
-                        value={instr.max_attendants}
-                        onChange={handleChange}
+                        name={name}
+                        value={max_attendants}
+                        onChange={(e) => handleChange(e, id)}
                       />
                     </div>
-                  ))}
+                  )
+                )}
               </div>
               <div className="total-participants">
                 Total Spots:{' '}
-                {instrClone.length &&
-                  instrClone.reduce((acc, el) => acc + el.max_attendants, 0)}
+                {[...availableSpacesForm.values()].reduce(
+                  (acc, el) => acc + el.max_attendants,
+                  0
+                )}
               </div>
               <div className="groups-setup-btn">
                 <button onClick={submitMaxValues}>Update Group Limits</button>
@@ -249,26 +227,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
           </div>
         </div>
       </div>
-      <div className="chart-grid">
-        <div className="chart-card">
-          <div
-            className="chart-max-instr-distribution"
-            style={{ height: '300px' }}
-          >
-            <Doughnut
-              data={instrMaxDistributionData}
-              options={{
-                maintainAspectRatio: false,
-                responsive: true,
-                title: {
-                  text: 'Distribution of spots per instrument',
-                  display: true,
-                },
-              }}
-            />
-          </div>
-        </div>
-      </div>
+      <MaxDistributionChart instruments={instruments} />
       <div className="chart-grid">
         <div className="chart-card">
           <div
@@ -276,7 +235,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
             style={{ height: '300px' }}
           >
             <Bar
-              data={participantsDitrByInstr}
+              data={participantsDistrByInstrData}
               options={{
                 maintainAspectRatio: false,
                 responsive: true,
@@ -380,5 +339,50 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
     </div>
   );
 };
+
+function MaxDistributionChart({ instruments }) {
+  const instrMaxDistributionData = useMemo(() => {
+    return {
+      labels: instruments.map(({ name }) => name),
+      datasets: [
+        {
+          backgroundColor: [
+            '#f28939',
+            '#39998e',
+            '#347dca',
+            '#ff4557',
+            '#57455a',
+          ],
+          borderWidth: 1,
+          data: instruments.map(({ max_attendants }) => max_attendants),
+          label: 'distribution of max attendants per instrument',
+        },
+      ],
+    };
+  }, [instruments]);
+
+  return (
+    <div className="chart-grid">
+      <div className="chart-card">
+        <div
+          className="chart-max-instr-distribution"
+          style={{ height: '300px' }}
+        >
+          <Doughnut
+            data={instrMaxDistributionData}
+            options={{
+              maintainAspectRatio: false,
+              responsive: true,
+              title: {
+                text: 'Distribution of spots per instrument',
+                display: true,
+              },
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default GroupsDisplay;
