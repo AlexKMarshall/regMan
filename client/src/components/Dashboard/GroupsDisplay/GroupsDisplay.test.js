@@ -14,15 +14,6 @@ function buildInstrument(overrides) {
   };
 }
 
-function buildInstrumentArray({ maxNumber = 10 }) {
-  const numOfInstruments = Math.ceil(Math.random() * maxNumber);
-  const instruments = [];
-  for (let i = 0; i < numOfInstruments; i++) {
-    instruments.push(buildInstrument());
-  }
-  return instruments;
-}
-
 describe('GroupsDisplay', () => {
   test('it should render the component', () => {
     Doughnut.mockReturnValue('Graph');
