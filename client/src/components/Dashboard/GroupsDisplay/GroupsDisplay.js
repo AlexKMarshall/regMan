@@ -51,11 +51,10 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
     };
   }, [instruments]);
 
-  const numUnderage = useMemo(() => {
-    return participants.filter(({ is_underage }) => is_underage).length;
-  }, [participants]);
-
   const underageData = useMemo(() => {
+    const numUnderage = participants.filter(({ is_underage }) => is_underage)
+      .length;
+
     return {
       labels: ['Underage Participants', 'Adult Participants'],
       datasets: [
@@ -67,7 +66,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
         },
       ],
     };
-  }, [numUnderage, participants.length]);
+  }, [participants.length]);
 
   const countParticipantsByInstrument = useMemo(() => {
     return instruments.map(({ name: instrumentName }) => ({
@@ -78,7 +77,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
     }));
   }, [instruments, participants]);
 
-  const participantsDitrByInstr = useMemo(() => {
+  const participantsDistrByInstrData = useMemo(() => {
     return {
       labels: instruments.map(({ name }) => name),
       datasets: [
@@ -112,16 +111,12 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
     };
   }, [instruments, countParticipantsByInstrument]);
 
-  const maxSpots = useMemo(
-    () =>
-      instruments.reduce(
-        (total, { max_attendants }) => total + max_attendants,
-        0
-      ),
-    [instruments]
-  );
-
   const availableSpotsData = useMemo(() => {
+    const maxSpots = instruments.reduce(
+      (total, { max_attendants }) => total + max_attendants,
+      0
+    );
+
     return {
       labels: [...instruments.map(({ name }) => name), 'Remaining Spots'],
       datasets: [
@@ -145,35 +140,21 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
         },
       ],
     };
-  }, [
-    instruments,
-    countParticipantsByInstrument,
-    maxSpots,
-    participants.length,
-  ]);
+  }, [instruments, countParticipantsByInstrument, participants.length]);
 
-  const agesArray = useMemo(
-    () =>
-      participants
-        .map(({ date_of_birth }) =>
-          moment(process.env.REACT_APP_COURSE_START).diff(
-            date_of_birth,
-            'years'
-          )
-        )
-        .sort((a, b) => (a < b ? -1 : 1)),
-    [participants]
-  );
+  const ageFreqData = useMemo(() => {
+    const agesArray = participants
+      .map(({ date_of_birth }) =>
+        moment(process.env.REACT_APP_COURSE_START).diff(date_of_birth, 'years')
+      )
+      .sort((a, b) => (a < b ? -1 : 1));
 
-  const ageFrequency = useMemo(() => {
-    return agesArray.reduce((ageCounts, currentAge) => {
+    const ageFrequency = agesArray.reduce((ageCounts, currentAge) => {
       const newCount = (ageCounts.get(currentAge) || 0) + 1;
       ageCounts.set(currentAge, newCount);
       return ageCounts;
     }, new Map());
-  }, [agesArray]);
 
-  const ageFreqData = useMemo(() => {
     return {
       labels: [...ageFrequency.keys()],
       datasets: [
@@ -186,7 +167,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
         },
       ],
     };
-  }, [ageFrequency]);
+  }, [participants]);
 
   const handleChange = ({ target }, id) => {
     setAvailableSpacesForm((oldFormState) => {
@@ -225,21 +206,20 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
           <div className="groups-setup">
             <form>
               <div className="fields">
-                {availableSpacesForm.size &&
-                  [...availableSpacesForm.entries()].map(
-                    ([id, { name, max_attendants }]) => (
-                      <div key={`instr-${id}`} className="graph-field">
-                        <label htmlFor={name}>{name}</label>
-                        <input
-                          type="number"
-                          min="0"
-                          name={name}
-                          value={max_attendants}
-                          onChange={(e) => handleChange(e, id)}
-                        />
-                      </div>
-                    )
-                  )}
+                {[...availableSpacesForm.entries()].map(
+                  ([id, { name, max_attendants }]) => (
+                    <div key={`instr-${id}`} className="graph-field">
+                      <label htmlFor={name}>{name}</label>
+                      <input
+                        type="number"
+                        min="0"
+                        name={name}
+                        value={max_attendants}
+                        onChange={(e) => handleChange(e, id)}
+                      />
+                    </div>
+                  )
+                )}
               </div>
               <div className="total-participants">
                 Total Spots:{' '}
@@ -283,7 +263,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
             style={{ height: '300px' }}
           >
             <Bar
-              data={participantsDitrByInstr}
+              data={participantsDistrByInstrData}
               options={{
                 maintainAspectRatio: false,
                 responsive: true,
