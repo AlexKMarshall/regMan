@@ -7,31 +7,23 @@ import './EditButtons.css';
 
 const EditButtons = ({ buttonFunctionality, isEditting }) => {
   const { editParticipant, cancelChanges, submitChanges } = buttonFunctionality;
+
+  const buttons = [
+    { name: 'Save changes', showOnEdit: true, onClick: submitChanges },
+    { name: 'Edit contact', showOnEdit: false, onClick: editParticipant },
+    { name: 'Cancel changes', showOnEdit: true, onClick: cancelChanges },
+  ].map((button) => {
+    if (button.showOnEdit === isEditting)
+      return (
+        <button key={button.name} onClick={button.onClick}>
+          {button.name}
+        </button>
+      );
+  });
+
   return (
     <div className="edit-buttons">
-      <div>
-        <button
-          type="button"
-          onClick={submitChanges}
-          className={isEditting ? '' : 'hidden-button'}
-        >
-          Save changes
-        </button>
-        <button
-          type="button"
-          onClick={editParticipant}
-          className={isEditting ? 'hidden-button' : ''}
-        >
-          Edit contact
-        </button>
-        <button
-          type="button"
-          onClick={cancelChanges}
-          className={isEditting ? '' : 'hidden-button'}
-        >
-          Cancel changes
-        </button>
-      </div>
+      <div>{buttons}</div>
     </div>
   );
 };

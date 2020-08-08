@@ -1,71 +1,86 @@
 import React from 'react';
-import { render, fireEvent, screen, cleanup } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import EditButtons from './EditButtons';
 
-import fs from 'fs';
-import path from 'path';
-
-const cssFile = fs.readFileSync(
-  path.resolve(__dirname, './EditButtons.css'),
-  'utf8'
-);
-
 describe('EditButtons', () => {
   const clickFunctions = {};
-  clickFunctions.editParticipant = jest.fn();
-  clickFunctions.cancelChanges = jest.fn();
-  clickFunctions.submitChanges = jest.fn();
 
   it('should only display save and cancel buttons', () => {
-    const { container, getByRole, queryByRole } = render(
-      <EditButtons buttonFunctionality={clickFunctions} isEditting={true} />
-    );
-    const style = document.createElement('style');
-    style.type = 'text/css';
-    style.innerHTML = cssFile;
-    container.append(style);
-
-    expect(getByRole('button', { name: 'Save changes' })).toBeInTheDocument();
-    expect(getByRole('button', { name: 'Cancel changes' })).toBeInTheDocument();
-
-    expect(
-      queryByRole('button', { name: 'Edit contact' })
-    ).not.toBeInTheDocument();
-    cleanup();
-  });
-
-  it('should only display the edit button', () => {
-    const { container, getByRole, queryByRole } = render(
-      <EditButtons buttonFunctionality={clickFunctions} isEditting={false} />
-    );
-
-    const style = document.createElement('style');
-    style.type = 'text/css';
-    style.innerHTML = cssFile;
-    container.append(style);
-
-    expect(
-      queryByRole('button', { name: 'Save changes' })
-    ).not.toBeInTheDocument();
-    expect(
-      queryByRole('button', { name: 'Cancel changes' })
-    ).not.toBeInTheDocument();
-
-    expect(getByRole('button', { name: 'Edit contact' })).toBeInTheDocument();
-    cleanup();
-  });
-
-  it('save button should call only the submitChanges Fn when clicked', () => {
     render(
       <EditButtons buttonFunctionality={clickFunctions} isEditting={true} />
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Save changes' }));
+    expect(
+      screen.getByRole('button', { name: 'Save changes' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Cancel changes' })
+    ).toBeInTheDocument();
 
-    expect(clickFunctions.submitChanges).toHaveBeenCalledTimes(1);
-    expect(clickFunctions.editParticipant).toHaveBeenCalledTimes(0);
-    expect(clickFunctions.cancelChanges).toHaveBeenCalledTimes(0);
-    cleanup();
+    expect(
+      screen.queryByRole('button', { name: 'Edit contact' })
+    ).not.toBeInTheDocument();
+  });
+
+  it('should only display the edit button', () => {
+    render(
+      <EditButtons buttonFunctionality={clickFunctions} isEditting={false} />
+    );
+
+    expect(
+      screen.queryByRole('button', { name: 'Save changes' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Cancel changes' })
+    ).not.toBeInTheDocument();
+
+    expect(
+      screen.getByRole('button', { name: 'Edit contact' })
+    ).toBeInTheDocument();
+  });
+
+  const buttons = [
+    {
+      name: 'Save changes',
+      isEditting: true,
+      fnTimes: { submit: 1, edit: 0, cancel: 0 },
+    },
+    {
+      name: 'Edit contact',
+      isEditting: false,
+      fnTimes: { submit: 0, edit: 1, cancel: 0 },
+    },
+    {
+      name: 'Cancel changes',
+      isEditting: true,
+      fnTimes: { submit: 0, edit: 0, cancel: 1 },
+    },
+  ];
+
+  buttons.forEach((button) => {
+    it(`click on ${button.name} should only call the respective Fn `, () => {
+      clickFunctions.editParticipant = jest.fn();
+      clickFunctions.cancelChanges = jest.fn();
+      clickFunctions.submitChanges = jest.fn();
+      render(
+        <EditButtons
+          buttonFunctionality={clickFunctions}
+          isEditting={button.isEditting}
+        />
+      );
+      userEvent.click(screen.getByRole('button', { name: button.name }));
+
+      expect(clickFunctions.submitChanges).toHaveBeenCalledTimes(
+        button.fnTimes.submit
+      );
+      expect(clickFunctions.editParticipant).toHaveBeenCalledTimes(
+        button.fnTimes.edit
+      );
+      expect(clickFunctions.cancelChanges).toHaveBeenCalledTimes(
+        button.fnTimes.cancel
+      );
+    });
   });
 });
