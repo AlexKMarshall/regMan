@@ -14,10 +14,6 @@ import './GroupsDisplay.css';
  * handleChange, submitMaxValues & cancelChanges are used to control the form that modifies the max_attendants property of the instruments.
  */
 const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
-  const [old_ageFreqData, old_setAgeFreqData] = useState({});
-  const [Old_ageFrequency, old_setAgeFrequency] = useState({});
-  const [old_numParticipants, old_setNumParticipants] = useState(0);
-  const [old_instrMaxSpots, old_setInstrMaxSpots] = useState([]);
   const [old_instrClone, old_setInstrClone] = useState([]);
   const { getAccessTokenSilently } = useAuth0();
 
@@ -142,12 +138,45 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
     participants.length,
   ]);
 
+  const agesArray = useMemo(
+    () =>
+      participants
+        .map(({ date_of_birth }) =>
+          moment(process.env.REACT_APP_COURSE_START).diff(
+            date_of_birth,
+            'years'
+          )
+        )
+        .sort((a, b) => (a < b ? -1 : 1)),
+    [participants]
+  );
+
+  const ageFrequency = useMemo(() => {
+    return agesArray.reduce((ageCounts, currentAge) => {
+      const newCount = (ageCounts.get(currentAge) || 0) + 1;
+      ageCounts.set(currentAge, newCount);
+      return ageCounts;
+    }, new Map());
+  }, [agesArray]);
+
+  const ageFreqData = useMemo(() => {
+    return {
+      labels: [...ageFrequency.keys()],
+      datasets: [
+        {
+          backgroundColor: '#ff77006a',
+          borderWidth: 2,
+          borderColor: '#ff7900',
+          data: [...ageFrequency.values()],
+          label: 'age distribution',
+        },
+      ],
+    };
+  }, [ageFrequency]);
+
   const generateData = () => {
-    const underageParticipants = [];
-    const instrNamesArray = [];
     const instrMaxArray = [];
     const agesArray = [];
-    const ageFreq = {};
     const instrumentDistribution = {
       Fiddle: [],
       Cello: [],
@@ -156,7 +185,6 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
       'Fiddle Beginner': [],
     };
     participants.forEach((participant) => {
-      participant.is_underage && underageParticipants.push(participant);
       instrumentDistribution[participant.instrument.name].push(participant);
       agesArray.push(
         moment(process.env.REACT_APP_COURSE_START).diff(
@@ -166,34 +194,8 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
       );
     });
     instruments.map((instr) => {
-      instrNamesArray.push(instr.name);
       instrMaxArray.push(instr.max_attendants);
       return true;
-    });
-    if (agesArray) {
-      for (let el of agesArray) {
-        if (ageFreq.hasOwnProperty(el)) ageFreq[el] += 1;
-        else ageFreq[el] = 1;
-      }
-    }
-    old_setNumParticipants(participants.length);
-    old_setInstrMaxSpots(() => instrMaxArray);
-
-    old_setAgeFrequency(ageFreq);
-  };
-
-  const chart = () => {
-    old_setAgeFreqData({
-      labels: Object.keys(Old_ageFrequency),
-      datasets: [
-        {
-          label: 'age distribution',
-          data: Object.values(Old_ageFrequency),
-          backgroundColor: '#ff77006a',
-          borderColor: '#ff7900',
-          borderWidth: 2,
-        },
-      ],
     });
   };
 
@@ -201,10 +203,6 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
     generateData();
     old_setInstrClone([...instruments]);
   }, [participants, instruments]);
-
-  useEffect(() => {
-    chart();
-  }, [old_numParticipants, old_instrMaxSpots]);
 
   const handleChange = ({ target }) => {
     const newInstr = old_instrClone.map((instr) => {
@@ -367,7 +365,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
             style={{ height: '350px', width: '350px' }}
           >
             <Line
-              data={old_ageFreqData}
+              data={ageFreqData}
               options={{
                 maintainAspectRatio: false,
                 responsive: true,
