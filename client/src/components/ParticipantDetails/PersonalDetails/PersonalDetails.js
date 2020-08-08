@@ -8,13 +8,7 @@ const PersonalDetails = ({
   instruments,
   isEditting,
   handleChange,
-  setDisplayEdit,
 }) => {
-  // shows the edit buttons when navigating to the tab.
-  useEffect(() => {
-    setDisplayEdit(true);
-  }, []);
-
   // the 'disabled' css property sets the background and cursor when fields are disabled.
   let disabled = !isEditting ? 'disabled' : '';
 

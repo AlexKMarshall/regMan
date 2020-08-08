@@ -1,17 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import './HealthDetails.css';
 
-const HealthDetails = ({
-  details,
-  isEditting,
-  handleChange,
-  setDisplayEdit,
-}) => {
-  // displays the edit buttons in the ParticipantDetails component
-  useEffect(() => {
-    setDisplayEdit(true);
-  }, []);
-
+const HealthDetails = ({ details, isEditting, handleChange }) => {
   let disabled = !isEditting ? 'disabled' : '';
   return (
     <section id="health-details">

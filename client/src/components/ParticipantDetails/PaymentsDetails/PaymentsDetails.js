@@ -8,16 +8,11 @@ import './PaymentsDetails.css';
  * Controls the payments' section of the code. It has a lot of code because it controls the
  * functionality for multiple popups.
  */
-const PaymentsDetails = ({ details, setDetails, setDisplayEdit }) => {
+const PaymentsDetails = ({ details, setDetails }) => {
   const [popupInfo, setPopupInfo] = useState({});
   const { getAccessTokenSilently } = useAuth0();
   // object with the sumary of the payments' status
   const [paymentDetails, setPaymentDetails] = useState({});
-
-  // hides the edit buttons from the ParticipantDetails component.
-  useEffect(() => {
-    setDisplayEdit(false);
-  }, []);
 
   useEffect(() => {
     if (details && details.payments) {
