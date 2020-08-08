@@ -31,8 +31,6 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
   // boolean that controls edition in the page.
   const [isEditting, setIsEditting] = useState(false);
   // The paymentsDetails component doesn't need to edit the contact.
-  // This boolean hides the edit buttons when the component is displayed by changing the css.
-  const [displayEdit, setDisplayEdit] = useState(true);
   // function that generates the token for authentication
   const { getAccessTokenSilently } = useAuth0();
   // the path will contain the id of the attendant we're looking into
@@ -158,7 +156,7 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
               />
             </div>
             <div className="edit-buttons">
-              <div className={displayEdit ? '' : 'hide-buttons'}>
+              <div>
                 <EditButtons
                   isEditting={isEditting}
                   buttonFunctionality={buttonFunctionality}
@@ -177,7 +175,6 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
                   instruments={instruments}
                   handleChange={handleChange}
                   buttonFunctionality={buttonFunctionality}
-                  setDisplayEdit={setDisplayEdit}
                 />
               )}
             />
@@ -190,7 +187,6 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
                   isEditting={isEditting}
                   handleChange={handleChange}
                   buttonFunctionality={buttonFunctionality}
-                  setDisplayEdit={setDisplayEdit}
                 />
               )}
             />
@@ -201,7 +197,6 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
                   {...props}
                   details={details}
                   setDetails={setDetails}
-                  setDisplayEdit={setDisplayEdit}
                 />
               )}
             />

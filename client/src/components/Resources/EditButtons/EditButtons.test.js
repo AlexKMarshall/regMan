@@ -1,15 +1,36 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MemoryRouter } from 'react-router-dom';
 
 import EditButtons from './EditButtons';
 
 describe('EditButtons', () => {
   const clickFunctions = {};
 
+  it('should not display at all when on payments route', () => {
+    render(
+      <MemoryRouter initialEntries={['/payment']}>
+        <EditButtons buttonFunctionality={clickFunctions} isEditting={true} />
+      </MemoryRouter>
+    );
+
+    expect(
+      screen.queryByRole('button', { name: 'Save changes' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Cancel changes' })
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Edit contact' })
+    ).not.toBeInTheDocument();
+  });
+
   it('should only display save and cancel buttons', () => {
     render(
-      <EditButtons buttonFunctionality={clickFunctions} isEditting={true} />
+      <MemoryRouter initialEntries={['/personal']}>
+        <EditButtons buttonFunctionality={clickFunctions} isEditting={true} />
+      </MemoryRouter>
     );
 
     expect(
@@ -26,7 +47,9 @@ describe('EditButtons', () => {
 
   it('should only display the edit button', () => {
     render(
-      <EditButtons buttonFunctionality={clickFunctions} isEditting={false} />
+      <MemoryRouter initialEntries={['/personal']}>
+        <EditButtons buttonFunctionality={clickFunctions} isEditting={false} />
+      </MemoryRouter>
     );
 
     expect(
@@ -65,10 +88,12 @@ describe('EditButtons', () => {
       clickFunctions.cancelChanges = jest.fn();
       clickFunctions.submitChanges = jest.fn();
       render(
-        <EditButtons
-          buttonFunctionality={clickFunctions}
-          isEditting={button.isEditting}
-        />
+        <MemoryRouter initialEntries={['/personal']}>
+          <EditButtons
+            buttonFunctionality={clickFunctions}
+            isEditting={button.isEditting}
+          />
+        </MemoryRouter>
       );
       userEvent.click(screen.getByRole('button', { name: button.name }));
 
