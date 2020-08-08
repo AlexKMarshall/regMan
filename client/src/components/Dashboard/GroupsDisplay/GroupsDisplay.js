@@ -219,14 +219,16 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
     old_setInstrClone([...instruments]);
   }, [participants, instruments]);
 
-  const handleChange = ({ target }) => {
-    const newInstr = old_instrClone.map((instr) => {
-      if (instr.name !== target.name) return instr;
-      else {
-        return { ...instr, max_attendants: +target.value };
-      }
+  const handleChange = ({ target }, id) => {
+    console.log('handling');
+    setAvailableSpacesForm((oldFormState) => {
+      const oldInstrument = oldFormState.get(id);
+      const max_attendants = parseInt(target.value);
+      const newInstrument = { ...oldInstrument, max_attendants };
+      const newFormState = new Map(oldFormState);
+      newFormState.set(id, newInstrument);
+      return newFormState;
     });
-    old_setInstrClone(newInstr);
   };
 
   const submitMaxValues = (e) => {
@@ -265,7 +267,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
                           min="0"
                           name={name}
                           value={max_attendants}
-                          onChange={handleChange}
+                          onChange={(e) => handleChange(e, id)}
                         />
                       </div>
                     )
