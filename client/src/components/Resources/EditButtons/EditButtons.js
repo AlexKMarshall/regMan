@@ -7,8 +7,9 @@ import { useLocation } from 'react-router-dom';
 // button interaction.
 
 const EditButtons = ({ buttonFunctionality, isEditting }) => {
+  const location = useLocation();
   const isPaymentRoute =
-    useLocation().pathname.search('payment') >= 0 ? true : false;
+    location.pathname.search('payment') >= 0 ? true : false;
   const { editParticipant, cancelChanges, submitChanges } = buttonFunctionality;
 
   const buttons = isPaymentRoute
