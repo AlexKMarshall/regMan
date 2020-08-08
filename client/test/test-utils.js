@@ -17,6 +17,7 @@ export function buildParticipant(options) {
       name: faker.commerce.product(),
     },
     is_underage: faker.random.boolean(),
+    registration_status: 'New',
     ...options,
   };
 }

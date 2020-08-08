@@ -2,7 +2,6 @@ import React from 'react';
 import { buildParticipant, render, screen } from '@test/test-utils';
 import userEvent from '@testing-library/user-event';
 import ParticipantList from './ParticipantList';
-import { getAllByRole } from '@testing-library/react';
 
 function buildParticipants({ maxNumber = 10, number } = {}) {
   const numberOfParticipants = number ?? Math.ceil(Math.random() * maxNumber);
@@ -67,5 +66,41 @@ describe('ParticipantList', () => {
     const results = screen.getAllByRole('cell');
     expect(results[0]).toHaveTextContent(firstParticipant.first_name);
     expect(results[1]).toHaveTextContent(secondParticipant.first_name);
+  });
+
+  test('should display "no matching records" if search result is empty', async () => {
+    const participants = buildParticipants();
+
+    render(<ParticipantList participants={participants} />);
+    const searchInput = screen.getByPlaceholderText(/search/i);
+    await userEvent.type(searchInput, 'something that will not be found');
+    expect(screen.getByText(/no matching records/i)).toBeInTheDocument();
+  });
+
+  test('it should be possible to filter out participants that have cancelled', async () => {
+    const activeParticipant = buildParticipant({ registration_status: 'New' });
+    const cancelledParticipant = buildParticipant({
+      registration_status: 'Cancelled',
+    });
+    const participants = [activeParticipant, cancelledParticipant];
+    const activeNameRegExp = new RegExp(activeParticipant.first_name, 'gi');
+    const cancelledNameRegExp = new RegExp(
+      cancelledParticipant.first_name,
+      'gi'
+    );
+
+    render(<ParticipantList participants={participants} />);
+
+    expect(screen.getAllByRole('row')).toHaveLength(2);
+    expect(screen.getByText(activeNameRegExp)).toBeInTheDocument();
+    expect(screen.getByText(cancelledNameRegExp)).toBeInTheDocument();
+
+    await userEvent.click(
+      screen.getByLabelText(/filter cancelled registrations/i)
+    );
+
+    expect(screen.getAllByRole('row')).toHaveLength(1);
+    expect(screen.getByText(activeNameRegExp)).toBeInTheDocument();
+    expect(screen.queryByText(cancelledNameRegExp)).not.toBeInTheDocument();
   });
 });
