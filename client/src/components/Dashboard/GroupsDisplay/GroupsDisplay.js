@@ -14,14 +14,10 @@ import './GroupsDisplay.css';
  * handleChange, submitMaxValues & cancelChanges are used to control the form that modifies the max_attendants property of the instruments.
  */
 const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
-  const [old_availableSpotsData, old_setAvailableSpotsData] = useState({});
   const [old_ageFreqData, old_setAgeFreqData] = useState({});
   const [Old_ageFrequency, old_setAgeFrequency] = useState({});
   const [old_numParticipants, old_setNumParticipants] = useState(0);
-  const [old_instrumentNames, old_setInstrumentNames] = useState([]);
   const [old_instrMaxSpots, old_setInstrMaxSpots] = useState([]);
-  const [old_instrDistribution, old_setInstrDistribution] = useState({});
-  const [old_maxSpots, old_setMaxSpots] = useState(0);
   const [old_instrClone, old_setInstrClone] = useState([]);
   const { getAccessTokenSilently } = useAuth0();
 
@@ -106,6 +102,46 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
     };
   }, [instruments, countParticipantsByInstrument]);
 
+  const maxSpots = useMemo(
+    () =>
+      instruments.reduce(
+        (total, { max_attendants }) => total + max_attendants,
+        0
+      ),
+    [instruments]
+  );
+
+  const availableSpotsData = useMemo(() => {
+    return {
+      labels: [...instruments.map(({ name }) => name), 'Remaining Spots'],
+      datasets: [
+        {
+          backgroundColor: [
+            '#f28939',
+            '#39998e',
+            '#347dca',
+            '#ff4557',
+            '#57455a',
+            '#b1b1b1',
+          ],
+          borderWidth: 1,
+          data: [
+            ...countParticipantsByInstrument.map(
+              ({ participantsCount }) => participantsCount
+            ),
+            maxSpots - participants.length,
+          ],
+          label: 'remaining spots',
+        },
+      ],
+    };
+  }, [
+    instruments,
+    countParticipantsByInstrument,
+    maxSpots,
+    participants.length,
+  ]);
+
   const generateData = () => {
     const underageParticipants = [];
     const instrNamesArray = [];
@@ -119,7 +155,6 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
       Flute: [],
       'Fiddle Beginner': [],
     };
-    const totalSpots = old_instrMaxSpots.reduce((acc, el) => acc + el, 0);
     participants.forEach((participant) => {
       participant.is_underage && underageParticipants.push(participant);
       instrumentDistribution[participant.instrument.name].push(participant);
@@ -142,39 +177,12 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
       }
     }
     old_setNumParticipants(participants.length);
-    old_setInstrumentNames(instrNamesArray);
     old_setInstrMaxSpots(() => instrMaxArray);
-    old_setInstrDistribution(() => instrumentDistribution);
-    old_setMaxSpots(() => totalSpots);
+
     old_setAgeFrequency(ageFreq);
   };
 
   const chart = () => {
-    old_instrDistribution['Fiddle'] &&
-      old_setAvailableSpotsData({
-        labels: [...old_instrumentNames, 'Remaining Spots'],
-        datasets: [
-          {
-            label: 'remaining spots',
-            data: [
-              old_instrDistribution['Fiddle'].length,
-              old_instrDistribution['Cello'].length,
-              old_instrDistribution['Guitar'].length,
-              old_instrDistribution['Flute'].length,
-              old_instrDistribution['Fiddle Beginner'].length,
-              old_maxSpots - participants.length,
-            ],
-            backgroundColor: [
-              '#f28939',
-              '#39998e',
-              '#347dca',
-              '#ff4557',
-              '#57455a',
-              '#b1b1b1',
-            ],
-          },
-        ],
-      });
     old_setAgeFreqData({
       labels: Object.keys(Old_ageFrequency),
       datasets: [
@@ -192,14 +200,11 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
   useEffect(() => {
     generateData();
     old_setInstrClone([...instruments]);
-    old_setMaxSpots(
-      instruments.reduce((acc, el) => acc + el.max_attendants, 0)
-    );
   }, [participants, instruments]);
 
   useEffect(() => {
     chart();
-  }, [old_numParticipants, old_instrMaxSpots, old_maxSpots]);
+  }, [old_numParticipants, old_instrMaxSpots]);
 
   const handleChange = ({ target }) => {
     const newInstr = old_instrClone.map((instr) => {
@@ -328,7 +333,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
         <div className="chart-card">
           <div className="chart-remaining-spots" style={{ height: '300px' }}>
             <Doughnut
-              data={old_availableSpotsData}
+              data={availableSpotsData}
               options={{
                 maintainAspectRatio: false,
                 responsive: true,
