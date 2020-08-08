@@ -14,18 +14,21 @@ import './GroupsDisplay.css';
  * handleChange, submitMaxValues & cancelChanges are used to control the form that modifies the max_attendants property of the instruments.
  */
 const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
-  const [underageData, setUnderageData] = useState({});
-  const [participantsDitrByInstr, setParticipantsDitrByInstr] = useState({});
-  const [availableSpotsData, setAvailableSpotsData] = useState({});
-  const [ageFreqData, setAgeFreqData] = useState({});
-  const [ageFrequency, setAgeFrequency] = useState({});
-  const [numParticipants, setNumParticipants] = useState(0);
-  const [numUnderage, setNumUnderage] = useState(0);
-  const [instrumentNames, setInstrumentNames] = useState([]);
-  const [instrMaxSpots, setInstrMaxSpots] = useState([]);
-  const [instrDistribution, setInstrDistribution] = useState({});
-  const [maxSpots, setMaxSpots] = useState(0);
-  const [instrClone, setInstrClone] = useState([]);
+  const [old_underageData, old_setUnderageData] = useState({});
+  const [
+    old_participantsDitrByInstr,
+    old_setParticipantsDitrByInstr,
+  ] = useState({});
+  const [old_availableSpotsData, old_setAvailableSpotsData] = useState({});
+  const [old_ageFreqData, old_setAgeFreqData] = useState({});
+  const [Old_ageFrequency, old_setAgeFrequency] = useState({});
+  const [old_numParticipants, old_setNumParticipants] = useState(0);
+  const [old_numUnderage, old_setNumUnderage] = useState(0);
+  const [old_instrumentNames, old_setInstrumentNames] = useState([]);
+  const [old_instrMaxSpots, old_setInstrMaxSpots] = useState([]);
+  const [old_instrDistribution, old_setInstrDistribution] = useState({});
+  const [old_maxSpots, old_setMaxSpots] = useState(0);
+  const [old_instrClone, old_setInstrClone] = useState([]);
   const { getAccessTokenSilently } = useAuth0();
 
   const instrMaxDistributionData = useMemo(() => {
@@ -61,7 +64,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
       Flute: [],
       'Fiddle Beginner': [],
     };
-    const totalSpots = instrMaxSpots.reduce((acc, el) => acc + el, 0);
+    const totalSpots = old_instrMaxSpots.reduce((acc, el) => acc + el, 0);
     participants.forEach((participant) => {
       participant.is_underage && underageParticipants.push(participant);
       instrumentDistribution[participant.instrument.name].push(participant);
@@ -83,39 +86,39 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
         else ageFreq[el] = 1;
       }
     }
-    setNumParticipants(participants.length);
-    setNumUnderage(underageParticipants.length);
-    setInstrumentNames(instrNamesArray);
-    setInstrMaxSpots(() => instrMaxArray);
-    setInstrDistribution(() => instrumentDistribution);
-    setMaxSpots(() => totalSpots);
-    setAgeFrequency(ageFreq);
+    old_setNumParticipants(participants.length);
+    old_setNumUnderage(underageParticipants.length);
+    old_setInstrumentNames(instrNamesArray);
+    old_setInstrMaxSpots(() => instrMaxArray);
+    old_setInstrDistribution(() => instrumentDistribution);
+    old_setMaxSpots(() => totalSpots);
+    old_setAgeFrequency(ageFreq);
   };
 
   const chart = () => {
-    setUnderageData({
+    old_setUnderageData({
       labels: ['Underage Participants', 'Adult Participants'],
       datasets: [
         {
           label: 'percentage of underage participants',
-          data: [numUnderage, numParticipants - numUnderage],
+          data: [old_numUnderage, old_numParticipants - old_numUnderage],
           backgroundColor: ['#39998e', '#57455a'],
           borderWidth: 1,
         },
       ],
     });
-    instrDistribution['Fiddle'] &&
-      setParticipantsDitrByInstr({
-        labels: instrumentNames,
+    old_instrDistribution['Fiddle'] &&
+      old_setParticipantsDitrByInstr({
+        labels: old_instrumentNames,
         datasets: [
           {
             label: 'registrered participants',
             data: [
-              instrDistribution['Fiddle'].length,
-              instrDistribution['Cello'].length,
-              instrDistribution['Guitar'].length,
-              instrDistribution['Flute'].length,
-              instrDistribution['Fiddle Beginner'].length,
+              old_instrDistribution['Fiddle'].length,
+              old_instrDistribution['Cello'].length,
+              old_instrDistribution['Guitar'].length,
+              old_instrDistribution['Flute'].length,
+              old_instrDistribution['Fiddle Beginner'].length,
             ],
             backgroundColor: [
               '#f7bd92',
@@ -127,7 +130,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
           },
           {
             label: 'maximum attendants',
-            data: instrMaxSpots,
+            data: old_instrMaxSpots,
             backgroundColor: [
               '#f28939',
               '#39998e',
@@ -138,19 +141,19 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
           },
         ],
       });
-    instrDistribution['Fiddle'] &&
-      setAvailableSpotsData({
-        labels: [...instrumentNames, 'Remaining Spots'],
+    old_instrDistribution['Fiddle'] &&
+      old_setAvailableSpotsData({
+        labels: [...old_instrumentNames, 'Remaining Spots'],
         datasets: [
           {
             label: 'remaining spots',
             data: [
-              instrDistribution['Fiddle'].length,
-              instrDistribution['Cello'].length,
-              instrDistribution['Guitar'].length,
-              instrDistribution['Flute'].length,
-              instrDistribution['Fiddle Beginner'].length,
-              maxSpots - participants.length,
+              old_instrDistribution['Fiddle'].length,
+              old_instrDistribution['Cello'].length,
+              old_instrDistribution['Guitar'].length,
+              old_instrDistribution['Flute'].length,
+              old_instrDistribution['Fiddle Beginner'].length,
+              old_maxSpots - participants.length,
             ],
             backgroundColor: [
               '#f28939',
@@ -163,12 +166,12 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
           },
         ],
       });
-    setAgeFreqData({
-      labels: Object.keys(ageFrequency),
+    old_setAgeFreqData({
+      labels: Object.keys(Old_ageFrequency),
       datasets: [
         {
           label: 'age distribution',
-          data: Object.values(ageFrequency),
+          data: Object.values(Old_ageFrequency),
           backgroundColor: '#ff77006a',
           borderColor: '#ff7900',
           borderWidth: 2,
@@ -179,38 +182,40 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
 
   useEffect(() => {
     generateData();
-    setInstrClone([...instruments]);
-    setMaxSpots(instruments.reduce((acc, el) => acc + el.max_attendants, 0));
+    old_setInstrClone([...instruments]);
+    old_setMaxSpots(
+      instruments.reduce((acc, el) => acc + el.max_attendants, 0)
+    );
   }, [participants, instruments]);
 
   useEffect(() => {
     chart();
-  }, [numUnderage, numParticipants, instrMaxSpots, maxSpots]);
+  }, [old_numUnderage, old_numParticipants, old_instrMaxSpots, old_maxSpots]);
 
   const handleChange = ({ target }) => {
-    const newInstr = instrClone.map((instr) => {
+    const newInstr = old_instrClone.map((instr) => {
       if (instr.name !== target.name) return instr;
       else {
         return { ...instr, max_attendants: +target.value };
       }
     });
-    setInstrClone(newInstr);
+    old_setInstrClone(newInstr);
   };
 
   const submitMaxValues = (e) => {
     e.preventDefault();
     getAccessTokenSilently()
-      .then((token) => ApiClient.putEditInstrument(instrClone, token))
+      .then((token) => ApiClient.putEditInstrument(old_instrClone, token))
       .then((instr) => {
         console.log('fetch return', instr[0].max_attendants);
         setInstruments(instr);
-        setInstrClone(instr);
+        old_setInstrClone(instr);
       });
   };
 
   const cancelChanges = (e) => {
     e.preventDefault();
-    setInstrClone(instruments);
+    old_setInstrClone(instruments);
   };
 
   // this is a lot of fun... react-chartjs-2 is a library that makes making charts easier.
@@ -223,9 +228,10 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
           <div className="groups-setup">
             <form>
               <div className="fields">
-                {instrClone.length && console.log(instrClone[0].max_attendants)}
-                {instrClone.length &&
-                  instrClone.map((instr) => (
+                {old_instrClone.length &&
+                  console.log(old_instrClone[0].max_attendants)}
+                {old_instrClone.length &&
+                  old_instrClone.map((instr) => (
                     <div key={'instr' + instr.id} className="graph-field">
                       <label htmlFor={instr.name}>{instr.name}</label>
                       <input
@@ -240,8 +246,11 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
               </div>
               <div className="total-participants">
                 Total Spots:{' '}
-                {instrClone.length &&
-                  instrClone.reduce((acc, el) => acc + el.max_attendants, 0)}
+                {old_instrClone.length &&
+                  old_instrClone.reduce(
+                    (acc, el) => acc + el.max_attendants,
+                    0
+                  )}
               </div>
               <div className="groups-setup-btn">
                 <button onClick={submitMaxValues}>Update Group Limits</button>
@@ -278,7 +287,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
             style={{ height: '300px' }}
           >
             <Bar
-              data={participantsDitrByInstr}
+              data={old_participantsDitrByInstr}
               options={{
                 maintainAspectRatio: false,
                 responsive: true,
@@ -310,7 +319,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
         <div className="chart-card">
           <div className="chart-remaining-spots" style={{ height: '300px' }}>
             <Doughnut
-              data={availableSpotsData}
+              data={old_availableSpotsData}
               options={{
                 maintainAspectRatio: false,
                 responsive: true,
@@ -324,7 +333,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
         <div className="chart-card">
           <div className="chart-underage" style={{ height: '300px' }}>
             <Doughnut
-              data={underageData}
+              data={old_underageData}
               options={{
                 maintainAspectRatio: false,
                 responsive: true,
@@ -344,7 +353,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
             style={{ height: '350px', width: '350px' }}
           >
             <Line
-              data={ageFreqData}
+              data={old_ageFreqData}
               options={{
                 maintainAspectRatio: false,
                 responsive: true,
