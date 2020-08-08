@@ -14,7 +14,7 @@ import './GroupsDisplay.css';
  * handleChange, submitMaxValues & cancelChanges are used to control the form that modifies the max_attendants property of the instruments.
  */
 
-function initialFormState(instruments) {
+function resetFormState(instruments) {
   return instruments.reduce((formState, instrument) => {
     formState.set(instrument.id, instrument);
     return formState;
@@ -24,12 +24,12 @@ function initialFormState(instruments) {
 const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
   const [old_instrClone, old_setInstrClone] = useState([]);
   const [availableSpacesForm, setAvailableSpacesForm] = useState(() =>
-    initialFormState(instruments)
+    resetFormState(instruments)
   );
   const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
-    setAvailableSpacesForm(initialFormState(instruments));
+    setAvailableSpacesForm(resetFormState(instruments));
   }, [instruments]);
 
   const instrMaxDistributionData = useMemo(() => {
@@ -244,7 +244,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
 
   const cancelChanges = (e) => {
     e.preventDefault();
-    old_setInstrClone(instruments);
+    setAvailableSpacesForm(resetFormState(instruments));
   };
 
   // this is a lot of fun... react-chartjs-2 is a library that makes making charts easier.
