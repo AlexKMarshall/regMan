@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import moment from 'moment';
 import { Doughnut, Bar, Line } from 'react-chartjs-2';
 import ApiClient from '@app/services/ApiClient';
@@ -15,7 +15,6 @@ import './GroupsDisplay.css';
  */
 const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
   const [underageData, setUnderageData] = useState({});
-  const [instrMaxDistributionData, setInstrMaxDistributionData] = useState({});
   const [participantsDitrByInstr, setParticipantsDitrByInstr] = useState({});
   const [availableSpotsData, setAvailableSpotsData] = useState({});
   const [ageFreqData, setAgeFreqData] = useState({});
@@ -28,6 +27,26 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
   const [maxSpots, setMaxSpots] = useState(0);
   const [instrClone, setInstrClone] = useState([]);
   const { getAccessTokenSilently } = useAuth0();
+
+  const instrMaxDistributionData = useMemo(() => {
+    return {
+      labels: instruments.map(({ name }) => name),
+      datasets: [
+        {
+          backgroundColor: [
+            '#f28939',
+            '#39998e',
+            '#347dca',
+            '#ff4557',
+            '#57455a',
+          ],
+          borderWidth: 1,
+          data: instruments.map(({ max_attendants }) => max_attendants),
+          label: 'distribution of max attendants per instrument',
+        },
+      ],
+    };
+  }, [instruments]);
 
   const generateData = () => {
     const underageParticipants = [];
@@ -81,23 +100,6 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
           label: 'percentage of underage participants',
           data: [numUnderage, numParticipants - numUnderage],
           backgroundColor: ['#39998e', '#57455a'],
-          borderWidth: 1,
-        },
-      ],
-    });
-    setInstrMaxDistributionData({
-      labels: instrumentNames,
-      datasets: [
-        {
-          label: 'distribution of max attendants per instrument',
-          data: instrMaxSpots,
-          backgroundColor: [
-            '#f28939',
-            '#39998e',
-            '#347dca',
-            '#ff4557',
-            '#57455a',
-          ],
           borderWidth: 1,
         },
       ],

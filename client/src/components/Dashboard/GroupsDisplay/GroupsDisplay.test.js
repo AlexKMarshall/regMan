@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, buildParticipants } from '@test/test-utils';
+import { render, buildParticipant } from '@test/test-utils';
 import GroupsDisplay from './GroupsDisplay';
 import faker from 'faker';
 
@@ -22,8 +22,17 @@ function buildInstrumentArray({ maxNumber = 10 }) {
 
 describe('GroupsDisplay', () => {
   test('it should render the component', () => {
-    const participants = buildParticipants();
-    expect(true).toBe(true);
-    // render(<GroupsDisplay participants={participants} />);
+    const instruments = [
+      buildInstrument({ name: 'Fiddle' }),
+      buildInstrument({ name: 'Cello' }),
+    ];
+    const participants = [
+      buildParticipant({ instrument: instruments[0] }),
+      buildParticipant({ instrument: instruments[0] }),
+    ];
+
+    // render(
+    //   <GroupsDisplay participants={participants} instruments={instruments} />
+    // );
   });
 });
