@@ -1,7 +1,3 @@
-.hidden-button {
-  display: none;
-}
-
 .edit-buttons {
   display: flex;
   flex-direction: row-reverse;
