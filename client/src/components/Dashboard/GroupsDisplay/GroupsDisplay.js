@@ -13,9 +13,24 @@ import './GroupsDisplay.css';
  *
  * handleChange, submitMaxValues & cancelChanges are used to control the form that modifies the max_attendants property of the instruments.
  */
+
+function initialFormState(instruments) {
+  return instruments.reduce((formState, instrument) => {
+    formState.set(instrument.id, instrument);
+    return formState;
+  }, new Map());
+}
+
 const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
   const [old_instrClone, old_setInstrClone] = useState([]);
+  const [availableSpacesForm, setAvailableSpacesForm] = useState(() =>
+    initialFormState(instruments)
+  );
   const { getAccessTokenSilently } = useAuth0();
+
+  useEffect(() => {
+    setAvailableSpacesForm(initialFormState(instruments));
+  }, [instruments]);
 
   const instrMaxDistributionData = useMemo(() => {
     return {
@@ -240,21 +255,21 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
           <div className="groups-setup">
             <form>
               <div className="fields">
-                {old_instrClone.length &&
-                  console.log(old_instrClone[0].max_attendants)}
-                {old_instrClone.length &&
-                  old_instrClone.map((instr) => (
-                    <div key={'instr' + instr.id} className="graph-field">
-                      <label htmlFor={instr.name}>{instr.name}</label>
-                      <input
-                        type="number"
-                        min="0"
-                        name={instr.name}
-                        value={instr.max_attendants}
-                        onChange={handleChange}
-                      />
-                    </div>
-                  ))}
+                {availableSpacesForm.size &&
+                  [...availableSpacesForm.entries()].map(
+                    ([id, { name, max_attendants }]) => (
+                      <div key={`instr-${id}`} className="graph-field">
+                        <label htmlFor={name}>{name}</label>
+                        <input
+                          type="number"
+                          min="0"
+                          name={name}
+                          value={max_attendants}
+                          onChange={handleChange}
+                        />
+                      </div>
+                    )
+                  )}
               </div>
               <div className="total-participants">
                 Total Spots:{' '}
