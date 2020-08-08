@@ -8,6 +8,7 @@ import Confirmation from './Form/Confirmation';
 import Dashboard from './Dashboard';
 import DeleteParticipantButton from './Resources/DeleteParticipantButton';
 import EditButtons from './Resources/EditButtons';
+import Button from './Resources/Button';
 import Error404 from './Errors/Error404';
 import Error500 from './Errors/Error500';
 import Form from './Form';
@@ -33,6 +34,7 @@ export {
   Dashboard,
   DeleteParticipantButton,
   EditButtons,
+  Button,
   Error404,
   Error500,
   Form,
