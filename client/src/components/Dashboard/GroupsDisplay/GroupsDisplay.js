@@ -220,7 +220,6 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
   }, [participants, instruments]);
 
   const handleChange = ({ target }, id) => {
-    console.log('handling');
     setAvailableSpacesForm((oldFormState) => {
       const oldInstrument = oldFormState.get(id);
       const max_attendants = parseInt(target.value);
@@ -233,12 +232,12 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
 
   const submitMaxValues = (e) => {
     e.preventDefault();
+    const formInstruments = [...availableSpacesForm.values()];
     getAccessTokenSilently()
-      .then((token) => ApiClient.putEditInstrument(old_instrClone, token))
-      .then((instr) => {
-        console.log('fetch return', instr[0].max_attendants);
-        setInstruments(instr);
-        old_setInstrClone(instr);
+      .then((token) => ApiClient.putEditInstrument(formInstruments, token))
+      .then((returnedInstruments) => {
+        setInstruments(returnedInstruments);
+        setAvailableSpacesForm(resetFormState(returnedInstruments));
       });
   };
 
