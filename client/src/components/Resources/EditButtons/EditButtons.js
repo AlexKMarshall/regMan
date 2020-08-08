@@ -1,5 +1,4 @@
 import React from 'react';
-import { Button } from '@app/components';
 import './EditButtons.css';
 
 // Display component. Displays different buttons depending on the isEditting value. The button functionality
@@ -16,7 +15,9 @@ const EditButtons = ({ buttonFunctionality, isEditting }) => {
   ].map((button) => {
     if (button.showOnEdit === isEditting)
       return (
-        <Button key={button.name} name={button.name} onClick={button.onClick} />
+        <button key={button.name} onClick={button.onClick}>
+          {button.name}
+        </button>
       );
   });
 
