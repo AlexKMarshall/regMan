@@ -14,16 +14,10 @@ import './GroupsDisplay.css';
  * handleChange, submitMaxValues & cancelChanges are used to control the form that modifies the max_attendants property of the instruments.
  */
 const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
-  const [old_underageData, old_setUnderageData] = useState({});
-  const [
-    old_participantsDitrByInstr,
-    old_setParticipantsDitrByInstr,
-  ] = useState({});
   const [old_availableSpotsData, old_setAvailableSpotsData] = useState({});
   const [old_ageFreqData, old_setAgeFreqData] = useState({});
   const [Old_ageFrequency, old_setAgeFrequency] = useState({});
   const [old_numParticipants, old_setNumParticipants] = useState(0);
-  const [old_numUnderage, old_setNumUnderage] = useState(0);
   const [old_instrumentNames, old_setInstrumentNames] = useState([]);
   const [old_instrMaxSpots, old_setInstrMaxSpots] = useState([]);
   const [old_instrDistribution, old_setInstrDistribution] = useState({});
@@ -50,6 +44,67 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
       ],
     };
   }, [instruments]);
+
+  const numUnderage = useMemo(() => {
+    return participants.filter(({ is_underage }) => is_underage).length;
+  }, [participants]);
+
+  const underageData = useMemo(() => {
+    return {
+      labels: ['Underage Participants', 'Adult Participants'],
+      datasets: [
+        {
+          backgroundColor: ['#39998e', '#57455a'],
+          borderWidth: 1,
+          data: [numUnderage, participants.length - numUnderage],
+          label: 'percentage of underage participants',
+        },
+      ],
+    };
+  }, [numUnderage, participants.length]);
+
+  const countParticipantsByInstrument = useMemo(() => {
+    return instruments.map(({ name: instrumentName }) => ({
+      instrumentName,
+      participantsCount: participants.filter(
+        ({ instrument }) => instrument.name === instrumentName
+      ).length,
+    }));
+  }, [instruments, participants]);
+
+  const participantsDitrByInstr = useMemo(() => {
+    return {
+      labels: instruments.map(({ name }) => name),
+      datasets: [
+        {
+          backgroundColor: [
+            '#f7bd92',
+            '#89cfc7',
+            '#7ea4cc',
+            '#ff808c',
+            '#a17fa7',
+          ],
+          borderWidth: 1,
+          data: countParticipantsByInstrument.map(
+            ({ participantsCount }) => participantsCount
+          ),
+          label: 'registered participants',
+        },
+        {
+          backgroundColor: [
+            '#f28939',
+            '#39998e',
+            '#347dca',
+            '#ff4557',
+            '#571f61',
+          ],
+          borderWidth: 1,
+          data: instruments.map(({ max_attendants }) => max_attendants),
+          label: 'maximum attendants',
+        },
+      ],
+    };
+  }, [instruments, countParticipantsByInstrument]);
 
   const generateData = () => {
     const underageParticipants = [];
@@ -87,7 +142,6 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
       }
     }
     old_setNumParticipants(participants.length);
-    old_setNumUnderage(underageParticipants.length);
     old_setInstrumentNames(instrNamesArray);
     old_setInstrMaxSpots(() => instrMaxArray);
     old_setInstrDistribution(() => instrumentDistribution);
@@ -96,51 +150,6 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
   };
 
   const chart = () => {
-    old_setUnderageData({
-      labels: ['Underage Participants', 'Adult Participants'],
-      datasets: [
-        {
-          label: 'percentage of underage participants',
-          data: [old_numUnderage, old_numParticipants - old_numUnderage],
-          backgroundColor: ['#39998e', '#57455a'],
-          borderWidth: 1,
-        },
-      ],
-    });
-    old_instrDistribution['Fiddle'] &&
-      old_setParticipantsDitrByInstr({
-        labels: old_instrumentNames,
-        datasets: [
-          {
-            label: 'registrered participants',
-            data: [
-              old_instrDistribution['Fiddle'].length,
-              old_instrDistribution['Cello'].length,
-              old_instrDistribution['Guitar'].length,
-              old_instrDistribution['Flute'].length,
-              old_instrDistribution['Fiddle Beginner'].length,
-            ],
-            backgroundColor: [
-              '#f7bd92',
-              '#89cfc7',
-              '#7ea4cc',
-              '#ff808c',
-              '#a17fa7',
-            ],
-          },
-          {
-            label: 'maximum attendants',
-            data: old_instrMaxSpots,
-            backgroundColor: [
-              '#f28939',
-              '#39998e',
-              '#347dca',
-              '#ff4557',
-              '#571f61',
-            ],
-          },
-        ],
-      });
     old_instrDistribution['Fiddle'] &&
       old_setAvailableSpotsData({
         labels: [...old_instrumentNames, 'Remaining Spots'],
@@ -190,7 +199,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
 
   useEffect(() => {
     chart();
-  }, [old_numUnderage, old_numParticipants, old_instrMaxSpots, old_maxSpots]);
+  }, [old_numParticipants, old_instrMaxSpots, old_maxSpots]);
 
   const handleChange = ({ target }) => {
     const newInstr = old_instrClone.map((instr) => {
@@ -287,7 +296,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
             style={{ height: '300px' }}
           >
             <Bar
-              data={old_participantsDitrByInstr}
+              data={participantsDitrByInstr}
               options={{
                 maintainAspectRatio: false,
                 responsive: true,
@@ -333,7 +342,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
         <div className="chart-card">
           <div className="chart-underage" style={{ height: '300px' }}>
             <Doughnut
-              data={old_underageData}
+              data={underageData}
               options={{
                 maintainAspectRatio: false,
                 responsive: true,
