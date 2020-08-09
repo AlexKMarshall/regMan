@@ -37,7 +37,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
     e.preventDefault();
     const formInstruments = [...availableSpacesForm.values()];
     getAccessTokenSilently()
-      .then((token) => ApiClient.putInstruments(formInstruments, token))
+      .then((token) => ApiClient.updateInstruments(formInstruments, token))
       .then((returnedInstruments) => {
         setInstruments(returnedInstruments);
         setAvailableSpacesForm(resetFormState(returnedInstruments));

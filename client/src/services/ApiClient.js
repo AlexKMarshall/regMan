@@ -98,7 +98,7 @@ function getInstruments() {
   return client('instruments');
 }
 
-function putInstruments(instruments, token) {
+function updateInstruments(instruments, token) {
   return client('instruments', { method: 'PUT', data: instruments, token });
 }
 
@@ -154,7 +154,7 @@ export default {
   postNewAttendant,
   postNewPayment,
   putDeleteAttendant,
-  putInstruments,
+  updateInstruments,
   putParticipantChanges,
   putUpdatePayment,
   sendPaymentStatus,
