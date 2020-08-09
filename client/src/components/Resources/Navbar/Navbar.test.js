@@ -33,7 +33,7 @@ describe('Navbar', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('it should all the authentication service when clicking Admin Access button', async () => {
+  test('it should call the authentication service when clicking Admin Access button', async () => {
     useAuth0.mockReturnValue({
       isAuthenticated: false,
       loginWithRedirect: jest.fn(),
