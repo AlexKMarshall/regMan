@@ -1,3 +1,5 @@
+import { unstable_renderSubtreeIntoContainer } from 'react-dom';
+
 /*************************
  **  Attendant's Calls  **
  *************************/
@@ -93,7 +95,7 @@ function sendPaymentStatus(attendant, token) {
  **************************/
 
 function getInstruments() {
-  return fetchFromDb('instruments');
+  return client('instruments');
 }
 
 function putEditInstrument(instrument, token) {
@@ -110,6 +112,35 @@ function putEditInstrument(instrument, token) {
 /*********************
  **  Fetch function  **
  **********************/
+
+const apiUrl = process.env.REACT_APP_API_URL;
+
+async function client(
+  endpoint,
+  { data, token, headers: customHeaders, ...customConfig } = {}
+) {
+  const config = {
+    method: data ? 'POST' : 'GET',
+    body: data ? JSON.stringify(data) : undefined,
+    headers: {
+      Authorization: token ? `Bearer ${token}` : undefined,
+      'Content-Type': data ? 'application/json' : undefined,
+      ...customHeaders,
+    },
+    ...customConfig,
+  };
+
+  return window
+    .fetch(`${apiUrl}/${endpoint}`, config)
+    .then(async (response) => {
+      const data = await response.json();
+      if (response.ok) {
+        return data;
+      } else {
+        return Promise.reject(data);
+      }
+    });
+}
 
 async function fetchFromDb(url, options) {
   try {
@@ -134,5 +165,5 @@ export default {
   putParticipantChanges,
   putUpdatePayment,
   sendPaymentStatus,
-  fetchFromDb,
+  client,
 };
