@@ -98,15 +98,8 @@ function getInstruments() {
   return client('instruments');
 }
 
-function putEditInstrument(instrument, token) {
-  return fetchFromDb('instruments', {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(instrument),
-  });
+function putInstruments(instruments, token) {
+  return client('instruments', { method: 'PUT', data: instruments, token });
 }
 
 /*********************
@@ -161,7 +154,7 @@ export default {
   postNewAttendant,
   postNewPayment,
   putDeleteAttendant,
-  putEditInstrument,
+  putInstruments,
   putParticipantChanges,
   putUpdatePayment,
   sendPaymentStatus,

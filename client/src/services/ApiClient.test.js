@@ -33,7 +33,7 @@ test('put Instruments requires auth token to be sent', async () => {
     })
   );
 
-  await ApiClient.putEditInstrument(instruments, fakeToken);
+  await ApiClient.putInstruments(instruments, fakeToken);
 
   expect(request.headers.get('Authorization')).toBe(`Bearer ${fakeToken}`);
 });
