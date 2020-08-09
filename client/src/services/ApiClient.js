@@ -134,4 +134,5 @@ export default {
   putParticipantChanges,
   putUpdatePayment,
   sendPaymentStatus,
+  fetchFromDb,
 };

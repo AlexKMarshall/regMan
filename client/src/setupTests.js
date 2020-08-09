@@ -8,6 +8,9 @@ import '@testing-library/jest-dom/extend-expect';
 // https://mswjs.io/docs/
 import { server } from './test/server/test-server';
 
+// Establish API mocking before all tests
+beforeAll(() => server.listen());
+
 // Reset any request handlers that we add during tests
 // so they don't affect other tests
 afterEach(() => server.resetHandlers());
