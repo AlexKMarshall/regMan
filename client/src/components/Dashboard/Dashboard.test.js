@@ -11,7 +11,7 @@ function buildToken() {
   return { token: 'a fake token' };
 }
 
-test('can render dashboard with no error', async () => {
+test('dashboard calls api for instruments and participants', async () => {
   const token = buildToken();
   useAuth0.mockReturnValue({
     getAccessTokenSilently: jest.fn(() => Promise.resolve(token)),
