@@ -22,7 +22,10 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
       // It's just a verification to make sure that a record is not deleted accidentally
       case 'Delete':
         return (
-          <div className="popup-text">
+          <div
+            className="popup-text"
+            data-testid={`popup-${type.replace(' ', '-').toLowerCase()}`}
+          >
             {`Are you sure that you want to delete ${info.first_name} ${
               info.last_name
             }'${
@@ -34,7 +37,10 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
       // It creates a new payment in the database
       case 'Add Payment':
         return (
-          <div className="form-section">
+          <div
+            className="form-section"
+            data-testid={`popup-${type.replace(' ', '-').toLowerCase()}`}
+          >
             <div className="description">
               <h3>Enter the payment details:</h3>
             </div>
@@ -43,6 +49,7 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
                 <label htmlFor="payment_date">Payment date:</label>
                 <input
                   type="date"
+                  id="payment_date"
                   name="payment_date"
                   defaultValue={moment().format('YYYY-MM-DD')}
                   onChange={handleChange}
@@ -67,6 +74,7 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
               <div className="field">
                 <label htmlFor="amount_paid">Amount paid:</label>
                 <input
+                  data-testid="amount_paid"
                   type="number"
                   step="0.01"
                   min="0"
@@ -92,7 +100,10 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
       // It updates the contents of an existing payment.
       case 'Save Payment':
         return (
-          <div className="form-section">
+          <div
+            className="form-section"
+            data-testid={`popup-${type.replace(' ', '-').toLowerCase()}`}
+          >
             <div className="description">
               <h3>Enter the payment details:</h3>
             </div>
@@ -125,6 +136,7 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
               <div className="field">
                 <label htmlFor="amount_paid">Amount paid:</label>
                 <input
+                  data-testid="amount_paid"
                   type="number"
                   step="0.01"
                   name="amount_paid"
@@ -147,7 +159,10 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
       // will reach an endpoint in the API to send an email to the attendant with all his payments' records information.
       case 'Send Status':
         return (
-          <div className="popup-text">
+          <div
+            className="popup-text"
+            data-testid={`popup-${type.replace(' ', '-').toLowerCase()}`}
+          >
             {`Do you want to send the updated payment status to ${info.first_name} (${info.email})?`}
           </div>
         );

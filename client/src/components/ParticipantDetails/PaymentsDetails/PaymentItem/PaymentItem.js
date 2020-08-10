@@ -8,6 +8,7 @@ const PaymentItem = ({ payment, promptPopup }) => {
       {/*  A duplicate of the payment must be created in order to be able to cancel the changes in the popup*/}
       <div
         className="payment-detail payment-grid"
+        data-testid={'payment-row' + payment.id}
         onClick={() => {
           const changedPayment = {
             ...payment,
@@ -23,6 +24,7 @@ const PaymentItem = ({ payment, promptPopup }) => {
           {payment.type_of_payment}
         </div>
         <div
+          data-testid={'payment-amount' + payment.id}
           className={`grid-item grid-amount${
             payment.type_of_payment === 'Refund' ? ' text-red' : ''
           }`}
