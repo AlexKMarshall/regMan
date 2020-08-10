@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useQuery } from 'react-query';
 import ApiClient from '@app/services/ApiClient';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import './Dashboard.css';
@@ -16,30 +17,30 @@ import {
 const Dashboard = () => {
   // array containing all the participants.
   const [participants, setParticipants] = useState([]);
-  const [instruments, setInstruments] = useState([]);
+  const [old_instruments, old_setInstruments] = useState([]);
   // controls the display of popups and the information they contain
   const [popupInfo, setPopupInfo] = useState({});
   // redirects to error500 if the API fails to connect.
-  const [error, setError] = useState(false);
+  const [old_error, old_setError] = useState(false);
   const [loadingInstruments, setLoadingInstruments] = useState(true);
   const [loadingParticipants, setLoadingParticipants] = useState(true);
   // gets an authorisatin token from Auth0
   const { getAccessTokenSilently } = useAuth0();
+
+  const { isLoading, newerror, data: instruments } = useQuery(
+    'instruments',
+    ApiClient.getInstruments
+  );
 
   // gets an access token and fetches participants from the server. if the call fails, it'll display a 500 error
   useEffect(() => {
     getAccessTokenSilently()
       .then((token) => ApiClient.getAllInscriptions(token))
       .then((participants) => {
-        if (participants.error) setError(true);
+        if (participants.error) old_setError(true);
         else setParticipants(participants);
         setLoadingParticipants(false);
       });
-    ApiClient.getInstruments().then((instruments) => {
-      if (instruments.error) setError(true);
-      else setInstruments(instruments);
-      setLoadingInstruments(false);
-    });
   }, []);
 
   // this function sets popupInfo, it is used to determine when to show a popup. It also combines
@@ -84,8 +85,8 @@ const Dashboard = () => {
   ) : (
     ''
   );
-  if (loadingInstruments || loadingParticipants) return 'Loading...';
-  if (error) return <Redirect to={'/error500'} />;
+  if (isLoading || loadingParticipants) return 'Loading...';
+  if (old_error) return <Redirect to={'/error500'} />;
 
   return (
     <div>
@@ -111,18 +112,20 @@ const Dashboard = () => {
           <Route
             path="/dashboard/groups"
             exact
-            render={(props) => (
-              <GroupsDisplay
-                {...props}
-                participants={participants.filter(
-                  (participant) =>
-                    participant.registration_status !== 'Cancelled' &&
-                    participant.registration_status !== 'Waitlist'
-                )}
-                instruments={instruments}
-                setInstruments={setInstruments}
-              />
-            )}
+            render={(props) =>
+              instruments?.length ? (
+                <GroupsDisplay
+                  {...props}
+                  participants={participants.filter(
+                    (participant) =>
+                      participant.registration_status !== 'Cancelled' &&
+                      participant.registration_status !== 'Waitlist'
+                  )}
+                  instruments={instruments}
+                  setInstruments={old_setInstruments}
+                />
+              ) : null
+            }
           />
           <Route
             path="/dashboard/details/:id/:section"
@@ -131,7 +134,7 @@ const Dashboard = () => {
               <ParticipantDetails
                 {...props}
                 setParticipants={setParticipants}
-                instruments={instruments}
+                instruments={old_instruments}
               />
             )}
           />
