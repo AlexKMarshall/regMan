@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import { useQuery, useMutation, queryCache } from 'react-query';
 import ApiClient from '@app/services/ApiClient';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './Dashboard.css';
 import {
   Popup,
@@ -11,31 +12,53 @@ import {
   Navbar,
   Error500,
 } from '@app/components';
+import Loading from '../Resources/Loading';
 
 // Acts as the main page for logged in users. It has its own router.
 const Dashboard = () => {
   // array containing all the participants.
   const [participants, setParticipants] = useState([]);
-  const [instruments, setInstruments] = useState([]);
   // controls the display of popups and the information they contain
   const [popupInfo, setPopupInfo] = useState({});
-  // redirects to error500 if the API fails to connect.
-  const [error, setError] = useState(false);
+  const [old_error, old_setError] = useState(false);
+  const [loadingParticipants, setLoadingParticipants] = useState(true);
   // gets an authorisatin token from Auth0
   const { getAccessTokenSilently } = useAuth0();
+
+  const { isLoading, error, data: instruments } = useQuery(
+    'instruments',
+    ApiClient.getInstruments
+  );
+
+  const [mutateInstruments] = useMutation(
+    async ({ instruments }) => {
+      const authToken = await getAccessTokenSilently();
+      return ApiClient.updateInstruments(instruments, authToken);
+    },
+    {
+      onSuccess: (data) => {
+        queryCache.setQueryData('instruments', data);
+      },
+    }
+  );
+
+  async function onUpdateInstruments({ instruments }) {
+    try {
+      await mutateInstruments({ instruments });
+    } catch (error) {
+      console.log(`error saving instruments ${instruments}`);
+    }
+  }
 
   // gets an access token and fetches participants from the server. if the call fails, it'll display a 500 error
   useEffect(() => {
     getAccessTokenSilently()
       .then((token) => ApiClient.getAllInscriptions(token))
       .then((participants) => {
-        if (participants.error) setError(true);
+        if (participants.error) old_setError(true);
         else setParticipants(participants);
+        setLoadingParticipants(false);
       });
-    ApiClient.getInstruments().then((instruments) => {
-      if (instruments.error) setError(true);
-      else setInstruments(instruments);
-    });
   }, []);
 
   // this function sets popupInfo, it is used to determine when to show a popup. It also combines
@@ -80,8 +103,8 @@ const Dashboard = () => {
   ) : (
     ''
   );
-
-  if (error) return <Redirect to={'/error500'} />;
+  if (isLoading || loadingParticipants) return <Loading />;
+  if (error || old_error) return `Error ${error} ${old_error}`;
 
   return (
     <div>
@@ -116,7 +139,7 @@ const Dashboard = () => {
                     participant.registration_status !== 'Waitlist'
                 )}
                 instruments={instruments}
-                setInstruments={setInstruments}
+                onUpdateInstruments={onUpdateInstruments}
               />
             )}
           />

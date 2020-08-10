@@ -93,23 +93,45 @@ function sendPaymentStatus(attendant, token) {
  **************************/
 
 function getInstruments() {
-  return fetchFromDb('instruments');
+  return client('instruments');
 }
 
-function putEditInstrument(instrument, token) {
-  return fetchFromDb('instruments', {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(instrument),
-  });
+function updateInstruments(instruments, token) {
+  return client('instruments', { method: 'PUT', data: instruments, token });
 }
 
 /*********************
  **  Fetch function  **
  **********************/
+
+const apiUrl = process.env.REACT_APP_API_URL;
+
+async function client(
+  endpoint,
+  { data, token, headers: customHeaders, ...customConfig } = {}
+) {
+  const config = {
+    method: data ? 'POST' : 'GET',
+    body: data ? JSON.stringify(data) : undefined,
+    headers: {
+      Authorization: token ? `Bearer ${token}` : undefined,
+      'Content-Type': data ? 'application/json' : undefined,
+      ...customHeaders,
+    },
+    ...customConfig,
+  };
+
+  return window
+    .fetch(`${apiUrl}/${endpoint}`, config)
+    .then(async (response) => {
+      const data = await response.json();
+      if (response.ok) {
+        return data;
+      } else {
+        return Promise.reject(data);
+      }
+    });
+}
 
 async function fetchFromDb(url, options) {
   try {
@@ -130,8 +152,9 @@ export default {
   postNewAttendant,
   postNewPayment,
   putDeleteAttendant,
-  putEditInstrument,
+  updateInstruments,
   putParticipantChanges,
   putUpdatePayment,
   sendPaymentStatus,
+  client,
 };
