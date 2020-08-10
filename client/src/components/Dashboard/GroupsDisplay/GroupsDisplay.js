@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import moment from 'moment';
 import { Doughnut, Bar, Line } from 'react-chartjs-2';
-import ApiClient from '@app/services/ApiClient';
-import { useAuth0 } from '@auth0/auth0-react';
+
 import './GroupsDisplay.css';
 
 function resetFormState(instruments) {
@@ -12,11 +11,10 @@ function resetFormState(instruments) {
   }, new Map());
 }
 
-const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
+const GroupsDisplay = ({ participants, instruments, onUpdateInstruments }) => {
   const [availableSpacesForm, setAvailableSpacesForm] = useState(() =>
     resetFormState(instruments)
   );
-  const { getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     setAvailableSpacesForm(resetFormState(instruments));
@@ -25,7 +23,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
   const handleChange = ({ target }, id) => {
     setAvailableSpacesForm((oldFormState) => {
       const oldInstrument = oldFormState.get(id);
-      const max_attendants = parseInt(target.value);
+      const max_attendants = parseInt(target.value) || 0;
       const newInstrument = { ...oldInstrument, max_attendants };
       const newFormState = new Map(oldFormState);
       newFormState.set(id, newInstrument);
@@ -33,15 +31,10 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
     });
   };
 
-  const submitMaxValues = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    const formInstruments = [...availableSpacesForm.values()];
-    getAccessTokenSilently()
-      .then((token) => ApiClient.updateInstruments(formInstruments, token))
-      .then((returnedInstruments) => {
-        setInstruments(returnedInstruments);
-        setAvailableSpacesForm(resetFormState(returnedInstruments));
-      });
+    const instruments = [...availableSpacesForm.values()];
+    onUpdateInstruments({ instruments });
   };
 
   const cancelChanges = (e) => {
@@ -82,7 +75,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
                 )}
               </div>
               <div className="groups-setup-btn">
-                <button onClick={submitMaxValues}>Update Group Limits</button>
+                <button onClick={onSubmit}>Update Group Limits</button>
                 <button onClick={cancelChanges}>Cancel Changes</button>
               </div>
             </form>
