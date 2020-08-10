@@ -9,15 +9,15 @@ import Loading from '../Resources/Loading';
 
 // default value for the form
 const newRegistration = {
-  first_name: '',
-  last_name: '',
+  name: '',
+  lastname: '',
   email: '',
-  date_of_birth: '',
+  birthdate: '',
   street: '',
   city: '',
   country: '',
   allergies: '',
-  accepts_tos: false,
+  acceptsTos: false,
 };
 
 // Pretty long form for registration.
@@ -40,10 +40,10 @@ const Form = () => {
     }
   }, [instruments]);
 
-  function submitHandler(e) {
+  function submitHandler (e) {
     e.preventDefault();
     const courseStart = moment(process.env.REACT_APP_COURSE_START);
-    const dateBirth = moment(registration.date_of_birth);
+    const dateBirth = moment(registration.birthdate);
     // checks if the attendant will be 18 when the camp starts. If not, sets a flag for underage.
     // this is used in the backend to apply a discount to the attendant.
     courseStart.diff(dateBirth, 'years') < 18 &&
@@ -52,16 +52,16 @@ const Form = () => {
     setRedirect(true);
   }
 
-  // handles change for all the fields. accepts_tos is a checkbox, so it needs a different target
-  function handleChange({ target }) {
-    const value = target.name === 'accepts_tos' ? target.checked : target.value;
+  // handles change for all the fields. acceptsTos is a checkbox, so it needs a different target
+  function handleChange ({ target }) {
+    const value = target.name === 'acceptsTos' ? target.checked : target.value;
     setRegistration((oldRegistration) => ({
       ...oldRegistration,
       [target.name]: value,
     }));
   }
 
-  function clearForm() {
+  function clearForm () {
     setRegistration(newRegistration);
   }
 
@@ -90,32 +90,35 @@ const Form = () => {
                 </div>
                 <div className="fields">
                   <div className="field">
-                    <label htmlFor="first_name">Name: </label>
+                    <label htmlFor="name">Name:</label>
                     <input
                       type="text"
-                      name="first_name"
+                      name="name"
+                      aria-label='name'
                       className="form-input"
-                      value={registration.first_name}
+                      value={registration.name}
                       onChange={handleChange}
                       required
                     />
                   </div>
                   <div className="field">
-                    <label htmlFor="last_name">Surname: </label>
+                    <label htmlFor="lastname">Surname:</label>
                     <input
                       type="text"
-                      name="last_name"
+                      name="lastname"
+                      aria-label='lastname'
                       className="form-input"
-                      value={registration.last_name}
+                      value={registration.lastname}
                       onChange={handleChange}
                       required
                     />
                   </div>
                   <div className="field">
-                    <label htmlFor="email">Email: </label>
+                    <label htmlFor="email">Email:</label>
                     <input
                       type="text"
                       name="email"
+                      aria-label='email'
                       className="form-input"
                       value={registration.email}
                       onChange={handleChange}
@@ -123,14 +126,15 @@ const Form = () => {
                     />
                   </div>
                   <div className="field">
-                    <label htmlFor="date_of_birth">Date of birth: </label>
+                    <label htmlFor="birthdate">Date of birth:</label>
                     <input
                       type="date"
                       min="1900-01-01"
                       max="2020-12-31"
-                      name="date_of_birth"
+                      name="birthdate"
+                      aria-label='birthdate'
                       className="form-input"
-                      value={registration.date_of_birth}
+                      value={registration.birthdate}
                       onChange={handleChange}
                       required
                     />
@@ -143,10 +147,11 @@ const Form = () => {
                 </div>
                 <div className="fields">
                   <div className="field">
-                    <label htmlFor="street">Street: </label>
+                    <label htmlFor="street">Street:</label>
                     <input
                       type="text"
                       name="street"
+                      aria-label='street'
                       className="form-input"
                       value={registration.street}
                       onChange={handleChange}
@@ -154,10 +159,11 @@ const Form = () => {
                     />
                   </div>
                   <div className="field">
-                    <label htmlFor="city">City: </label>
+                    <label htmlFor="city">City:</label>
                     <input
                       type="text"
                       name="city"
+                      aria-label='city'
                       className="form-input"
                       value={registration.city}
                       onChange={handleChange}
@@ -165,10 +171,11 @@ const Form = () => {
                     />
                   </div>
                   <div className="field">
-                    <label htmlFor="country">Country: </label>
+                    <label htmlFor="country">Country:</label>
                     <input
                       type="text"
                       name="country"
+                      aria-label='country'
                       className="form-input"
                       value={registration.country}
                       onChange={handleChange}
@@ -184,14 +191,18 @@ const Form = () => {
                 </div>
                 <div className="fields">
                   <div className="field">
-                    <label htmlFor="instrumentId">Instrument: </label>
+                    <label htmlFor="instrumentId">Instrument:</label>
                     <select
                       name="instrumentId"
+                      aria-label='instrumentId'
+                      data-testid="select"
                       value={registration.instrumentId}
                       onChange={handleChange}
+                      required
                     >
                       {instruments.map((instrument) => (
                         <option
+                          data-testid="select-option"
                           key={'instrument' + instrument.id}
                           value={instrument.id}
                         >
@@ -212,10 +223,11 @@ const Form = () => {
                 </div>
                 <div className="fields">
                   <div className="field">
-                    <label htmlFor="allergies">Allergies: </label>
+                    <label htmlFor="allergies">Allergies:</label>
                     <input
                       type="text"
                       name="allergies"
+                      aria-label='allergies'
                       className="form-input"
                       value={registration.allergies}
                       onChange={handleChange}
@@ -235,22 +247,23 @@ const Form = () => {
                   <div className="field accept-tos">
                     <input
                       type="checkbox"
-                      name="accepts_tos"
+                      name="acceptsTos"
+                      aria-label='acceptTos'
                       className="form-checkbox"
-                      checked={registration.accepts_tos}
+                      checked={registration.acceptsTos}
                       onChange={handleChange}
                       required
                     />
-                    <label htmlFor="accepts_tos">
+                    <label htmlFor="acceptsTos">
                       {' '}
                       I accept the terms of service.
-                    </label>
+                   </label>
                   </div>
                 </div>
               </div>
               <div className="form-btns">
-                <button type="submit">Send my registration</button>
-                <button className="clear-form" onClick={clearForm}>
+                <button type="submit" aria-label='submit'>Send my registration</button>
+                <button className="clear-form" onClick={clearForm} aria-label='clearForm'>
                   Clear Form
                 </button>
               </div>
