@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useQuery } from 'react-query';
+import { useQuery, useMutation, queryCache } from 'react-query';
 import ApiClient from '@app/services/ApiClient';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './Dashboard.css';
 import {
   Popup,
@@ -12,25 +12,43 @@ import {
   Navbar,
   Error500,
 } from '@app/components';
+import Loading from '../Resources/Loading';
 
 // Acts as the main page for logged in users. It has its own router.
 const Dashboard = () => {
   // array containing all the participants.
   const [participants, setParticipants] = useState([]);
-  const [old_instruments, old_setInstruments] = useState([]);
   // controls the display of popups and the information they contain
   const [popupInfo, setPopupInfo] = useState({});
-  // redirects to error500 if the API fails to connect.
   const [old_error, old_setError] = useState(false);
-  const [loadingInstruments, setLoadingInstruments] = useState(true);
   const [loadingParticipants, setLoadingParticipants] = useState(true);
   // gets an authorisatin token from Auth0
   const { getAccessTokenSilently } = useAuth0();
 
-  const { isLoading, newerror, data: instruments } = useQuery(
+  const { isLoading, error, data: instruments } = useQuery(
     'instruments',
     ApiClient.getInstruments
   );
+
+  const [mutateInstruments] = useMutation(
+    async ({ instruments }) => {
+      const authToken = await getAccessTokenSilently();
+      return ApiClient.updateInstruments(instruments, authToken);
+    },
+    {
+      onSuccess: (data) => {
+        queryCache.setQueryData('instruments', data);
+      },
+    }
+  );
+
+  async function onUpdateInstruments({ instruments }) {
+    try {
+      await mutateInstruments({ instruments });
+    } catch (error) {
+      console.log(`error saving instruments ${instruments}`);
+    }
+  }
 
   // gets an access token and fetches participants from the server. if the call fails, it'll display a 500 error
   useEffect(() => {
@@ -85,8 +103,8 @@ const Dashboard = () => {
   ) : (
     ''
   );
-  if (isLoading || loadingParticipants) return 'Loading...';
-  if (old_error) return <Redirect to={'/error500'} />;
+  if (isLoading || loadingParticipants) return <Loading />;
+  if (error || old_error) return `Error ${error} ${old_error}`;
 
   return (
     <div>
@@ -112,20 +130,18 @@ const Dashboard = () => {
           <Route
             path="/dashboard/groups"
             exact
-            render={(props) =>
-              instruments?.length ? (
-                <GroupsDisplay
-                  {...props}
-                  participants={participants.filter(
-                    (participant) =>
-                      participant.registration_status !== 'Cancelled' &&
-                      participant.registration_status !== 'Waitlist'
-                  )}
-                  instruments={instruments}
-                  setInstruments={old_setInstruments}
-                />
-              ) : null
-            }
+            render={(props) => (
+              <GroupsDisplay
+                {...props}
+                participants={participants.filter(
+                  (participant) =>
+                    participant.registration_status !== 'Cancelled' &&
+                    participant.registration_status !== 'Waitlist'
+                )}
+                instruments={instruments}
+                onUpdateInstruments={onUpdateInstruments}
+              />
+            )}
           />
           <Route
             path="/dashboard/details/:id/:section"
@@ -134,7 +150,7 @@ const Dashboard = () => {
               <ParticipantDetails
                 {...props}
                 setParticipants={setParticipants}
-                instruments={old_instruments}
+                instruments={instruments}
               />
             )}
           />

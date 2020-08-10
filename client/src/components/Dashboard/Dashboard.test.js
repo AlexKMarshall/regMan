@@ -21,8 +21,8 @@ test('dashboard calls api for instruments and participants', async () => {
   ApiClient.getAllInscriptions.mockResolvedValue([]);
 
   render(<Dashboard />);
-  expect(screen.getByText(/loading/i)).toBeInTheDocument();
-  await waitForElementToBeRemoved(() => screen.queryByText(/loading/i));
+  expect(screen.getByLabelText(/loading/i)).toBeInTheDocument();
+  await waitForElementToBeRemoved(() => screen.queryByLabelText(/loading/i));
 
   expect(ApiClient.getInstruments).toHaveBeenCalledTimes(1);
   expect(useAuth0().getAccessTokenSilently).toHaveBeenCalledTimes(1);
