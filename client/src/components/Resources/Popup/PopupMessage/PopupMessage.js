@@ -73,6 +73,7 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
               <div className="field">
                 <label htmlFor="amount_paid">Amount paid:</label>
                 <input
+                  data-testid="amount_paid"
                   type="number"
                   step="0.01"
                   min="0"
@@ -134,6 +135,7 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
               <div className="field">
                 <label htmlFor="amount_paid">Amount paid:</label>
                 <input
+                  data-testid="amount_paid"
                   type="number"
                   step="0.01"
                   name="amount_paid"

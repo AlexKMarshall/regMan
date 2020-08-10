@@ -24,6 +24,7 @@ const PaymentItem = ({ payment, promptPopup }) => {
           {payment.type_of_payment}
         </div>
         <div
+          data-testid={'payment-amount' + payment.id}
           className={`grid-item grid-amount${
             payment.type_of_payment === 'Refund' ? ' text-red' : ''
           }`}

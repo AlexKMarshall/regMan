@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  waitFor,
-  waitForElement,
-} from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import PaymentsDetails from './PaymentsDetails';
 import { Popup } from '@app/components';
 import ApiClient from '@app/services/ApiClient';
@@ -110,17 +105,37 @@ describe('PaymentsDetails', () => {
       render(<PaymentsDetails details={details} setDetails={setDetails} />);
 
       userEvent.click(screen.getByTestId('payment-row' + payment.id));
-      console.log(payment.amount_paid);
       await act(async () => {
-        await userEvent.type(
-          await screen.getByRole('spinbutton'),
-          payment.amount_paid * 2
-        );
+        const amountValue = screen.getByTestId('amount_paid');
+        await userEvent.type(amountValue, 'test10');
         await userEvent.click(
           await screen.getByRole('button', { name: 'Save Payment' })
         );
       });
+      screen.debug();
+      // console.log(ApiClient.putUpdatePayment.mock.results[index]);
+      expect(
+        screen.getByTestId('payment-amount' + payment.id)
+      ).toBeInTheDocument();
       expect(ApiClient.putUpdatePayment).toBeCalledTimes(index + 1);
     });
+  });
+
+  it(`should open Popup to add Payment upon click on button`, async () => {
+    render(<PaymentsDetails details={details} setDetails={setDetails} />);
+
+    userEvent.click(screen.getByRole('button', { name: 'Add new payment' }));
+
+    expect(await screen.findByTestId('popup-add-payment')).toBeInTheDocument();
+  });
+
+  it(`should cancel Popup to add Payment upon click on button`, async () => {
+    render(<PaymentsDetails details={details} setDetails={setDetails} />);
+
+    userEvent.click(screen.getByRole('button', { name: 'Add new payment' }));
+    userEvent.click(await screen.findByRole('button', { name: 'Cancel' }));
+    expect(
+      await screen.queryByTestId('popup-add-payment')
+    ).not.toBeInTheDocument();
   });
 });
