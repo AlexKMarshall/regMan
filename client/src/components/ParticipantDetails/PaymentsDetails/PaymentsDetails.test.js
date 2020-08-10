@@ -1,11 +1,21 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import PaymentsDetails from './PaymentsDetails';
+import { Popup } from '@app/components';
+import ApiClient from '@app/services/ApiClient';
 import { useAuth0 } from '@auth0/auth0-react';
+import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
+import moment from 'moment';
 
 jest.mock('@auth0/auth0-react');
+jest.mock('@app/services/ApiClient');
 
 describe('PaymentsDetails', () => {
+  ApiClient.putUpdatePayment = jest.fn((info, token) => Promise.resolve(info));
+  ApiClient.postNewPayment = jest.fn((info, token) => Promise.resolve(info));
+  ApiClient.sendPaymentStatus = jest.fn((info, token) => Promise.resolve(info));
+
   useAuth0.mockReturnValue({
     getAccessTokenSilently: jest.fn(() =>
       Promise.resolve({ token: 'a fake token' })
@@ -18,17 +28,20 @@ describe('PaymentsDetails', () => {
         id: 1,
         type_of_payment: 'Refund',
         amount_paid: 5000,
+        payment_date: new Date(),
       },
       {
         id: 2,
         type_of_payment: 'Refund',
         amount_paid: 60000,
+        payment_date: new Date(),
       },
     ],
   };
+  const detailsNoPayments = { payments: [] };
   const setDetails = jest.fn();
 
-  it('should buttons to send status and add new payment', () => {
+  it('should render buttons to send status and add new payment', () => {
     render(<PaymentsDetails details={details} setDetails={setDetails} />);
 
     expect(
@@ -37,5 +50,158 @@ describe('PaymentsDetails', () => {
     expect(
       screen.getByRole('button', { name: 'Add new payment' })
     ).toBeInTheDocument();
+  });
+
+  it('should display a message, if no payments are retrieved', () => {
+    render(
+      <PaymentsDetails details={detailsNoPayments} setDetails={setDetails} />
+    );
+
+    expect(
+      screen.getByRole('heading', { name: /no payments/ })
+    ).toBeInTheDocument();
+  });
+  it('should display the payments, that are retrieved', () => {
+    render(<PaymentsDetails details={details} setDetails={setDetails} />);
+    details.payments.map((payment) =>
+      expect(screen.getByTestId('payment-row' + payment.id)).toBeInTheDocument()
+    );
+  });
+
+  // Popup Buttons appear?
+  const popUpButtons = [
+    { name: 'Send payment status', testId: 'popup-send-status' },
+    { name: 'Add new payment', testId: 'popup-add-payment' },
+  ];
+  popUpButtons.map((popup) => {
+    it(`should open Popup to ${popup.name.toLowerCase()} upon click on right button`, async () => {
+      render(<PaymentsDetails details={details} setDetails={setDetails} />);
+
+      userEvent.click(screen.getByRole('button', { name: popup.name }));
+      expect(await screen.findByTestId(popup.testId)).toBeInTheDocument();
+    });
+  });
+  details.payments.map((payment) => {
+    it(`should open Popup to edit Payment ${payment.id} upon click on payment ${payment.id} in table`, async () => {
+      render(<PaymentsDetails details={details} setDetails={setDetails} />);
+
+      userEvent.click(screen.getByTestId('payment-row' + payment.id));
+
+      expect(
+        await screen.findByTestId('popup-save-payment')
+      ).toBeInTheDocument();
+    });
+  });
+
+  // Payment Details Functionality
+  details.payments.map((payment) => {
+    it(`should cancel Popup to edit Payment ${payment.id} upon click on Cancel Button`, async () => {
+      render(<PaymentsDetails details={details} setDetails={setDetails} />);
+
+      userEvent.click(screen.getByTestId('payment-row' + payment.id));
+      userEvent.click(await screen.findByRole('button', { name: 'Cancel' }));
+      expect(
+        await screen.queryByTestId('popup-save-payment')
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  details.payments.map((payment, index) => {
+    it(`should submit changed Data of Payment ${payment.id} to API`, async () => {
+      const { paymentDetails } = render(
+        <PaymentsDetails details={details} setDetails={setDetails} />
+      );
+
+      userEvent.click(screen.getByTestId('payment-row' + payment.id));
+      await act(async () => {
+        const amountValue = screen.getByTestId('amount_paid');
+        await userEvent.type(amountValue, 'test10');
+        await userEvent.click(
+          await screen.getByRole('button', { name: 'Save Payment' })
+        );
+      });
+      expect(
+        screen.getByTestId('payment-amount' + payment.id)
+      ).toBeInTheDocument();
+      expect(ApiClient.putUpdatePayment).toBeCalledTimes(index + 1);
+    });
+  });
+
+  // Add new Payment
+  it(`should open Popup to add Payment upon click on button`, async () => {
+    render(<PaymentsDetails details={details} setDetails={setDetails} />);
+
+    userEvent.click(screen.getByRole('button', { name: 'Add new payment' }));
+
+    expect(await screen.findByTestId('popup-add-payment')).toBeInTheDocument();
+  });
+
+  it(`should submit new Payment to API`, async () => {
+    render(<PaymentsDetails details={details} setDetails={setDetails} />);
+
+    await act(async () => {
+      userEvent.click(screen.getByRole('button', { name: 'Add new payment' }));
+      await screen.findByTestId('popup-add-payment');
+      userEvent.type(
+        screen.getByLabelText('Payment date:'),
+        moment().format('DD/MM/YYYY')
+      );
+      userEvent.selectOptions(screen.getByRole('combobox'), ['Payment']);
+      userEvent.type(screen.getByRole('spinbutton'), 100);
+      userEvent.click(
+        await screen.findByRole('button', { name: 'Add Payment' })
+      );
+    });
+    expect(
+      await screen.queryByTestId('popup-add-payment')
+    ).not.toBeInTheDocument();
+    expect(ApiClient.postNewPayment).toBeCalledTimes(1);
+  });
+
+  it(`should cancel Popup to add Payment upon click on button`, async () => {
+    render(<PaymentsDetails details={details} setDetails={setDetails} />);
+
+    userEvent.click(screen.getByRole('button', { name: 'Add new payment' }));
+    userEvent.click(await screen.findByRole('button', { name: 'Cancel' }));
+    expect(
+      await screen.queryByTestId('popup-add-payment')
+    ).not.toBeInTheDocument();
+  });
+
+  // Send Status Button
+  it(`should open Popup Dialog to send current payment status`, async () => {
+    render(<PaymentsDetails details={details} setDetails={setDetails} />);
+
+    userEvent.click(
+      screen.getByRole('button', { name: 'Send payment status' })
+    );
+    expect(await screen.findByTestId('popup-send-status')).toBeInTheDocument();
+  });
+
+  it(`should submit current Payment status to API`, async () => {
+    render(<PaymentsDetails details={details} setDetails={setDetails} />);
+
+    await act(async () => {
+      userEvent.click(
+        screen.getByRole('button', { name: 'Send payment status' })
+      );
+      userEvent.click(
+        await screen.findByRole('button', { name: 'Send Status' })
+      );
+    });
+    expect(ApiClient.sendPaymentStatus).toBeCalledTimes(1);
+  });
+
+  it(`should cancel Popup Dialog upon click on Cancel`, async () => {
+    render(<PaymentsDetails details={details} setDetails={setDetails} />);
+
+    userEvent.click(
+      screen.getByRole('button', { name: 'Send payment status' })
+    );
+    userEvent.click(await screen.findByRole('button', { name: 'Cancel' }));
+
+    expect(
+      await screen.queryByTestId('popup-send-status')
+    ).not.toBeInTheDocument();
   });
 });
