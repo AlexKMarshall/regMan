@@ -6,6 +6,7 @@ import ApiClient from '@app/services/ApiClient';
 import { useAuth0 } from '@auth0/auth0-react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
+import moment from 'moment';
 
 jest.mock('@auth0/auth0-react');
 jest.mock('@app/services/ApiClient');
@@ -119,7 +120,6 @@ describe('PaymentsDetails', () => {
           await screen.getByRole('button', { name: 'Save Payment' })
         );
       });
-      console.log(paymentDetails);
       expect(
         screen.getByTestId('payment-amount' + payment.id)
       ).toBeInTheDocument();
@@ -141,10 +141,20 @@ describe('PaymentsDetails', () => {
 
     await act(async () => {
       userEvent.click(screen.getByRole('button', { name: 'Add new payment' }));
+      await screen.findByTestId('popup-add-payment');
+      userEvent.type(
+        screen.getByLabelText('Payment date:'),
+        moment().format('DD/MM/YYYY')
+      );
+      userEvent.selectOptions(screen.getByRole('combobox'), ['Payment']);
+      userEvent.type(screen.getByRole('spinbutton'), 100);
       userEvent.click(
         await screen.findByRole('button', { name: 'Add Payment' })
       );
     });
+    expect(
+      await screen.queryByTestId('popup-add-payment')
+    ).not.toBeInTheDocument();
     expect(ApiClient.postNewPayment).toBeCalledTimes(1);
   });
 

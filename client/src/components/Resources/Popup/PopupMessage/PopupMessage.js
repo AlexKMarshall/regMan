@@ -49,6 +49,7 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
                 <label htmlFor="payment_date">Payment date:</label>
                 <input
                   type="date"
+                  id="payment_date"
                   name="payment_date"
                   defaultValue={moment().format('YYYY-MM-DD')}
                   onChange={handleChange}
