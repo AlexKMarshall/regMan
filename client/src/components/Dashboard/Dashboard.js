@@ -21,6 +21,8 @@ const Dashboard = () => {
   const [popupInfo, setPopupInfo] = useState({});
   // redirects to error500 if the API fails to connect.
   const [error, setError] = useState(false);
+  const [loadingInstruments, setLoadingInstruments] = useState(true);
+  const [loadingParticipants, setLoadingParticipants] = useState(true);
   // gets an authorisatin token from Auth0
   const { getAccessTokenSilently } = useAuth0();
 
@@ -31,10 +33,12 @@ const Dashboard = () => {
       .then((participants) => {
         if (participants.error) setError(true);
         else setParticipants(participants);
+        setLoadingParticipants(false);
       });
     ApiClient.getInstruments().then((instruments) => {
       if (instruments.error) setError(true);
       else setInstruments(instruments);
+      setLoadingInstruments(false);
     });
   }, []);
 
@@ -80,7 +84,7 @@ const Dashboard = () => {
   ) : (
     ''
   );
-
+  if (loadingInstruments || loadingParticipants) return 'Loading...';
   if (error) return <Redirect to={'/error500'} />;
 
   return (
