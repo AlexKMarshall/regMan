@@ -7,6 +7,15 @@ function render(ui, ...rest) {
   return rtlRender(<MemoryRouter>{ui}</MemoryRouter>, ...rest);
 }
 
+export function buildInstrument(overrides) {
+  return {
+    id: faker.random.uuid(),
+    name: faker.commerce.productName(),
+    max_attendants: Math.ceil(Math.random() * 10),
+    ...overrides,
+  };
+}
+
 export function buildParticipant(options) {
   return {
     first_name: faker.name.firstName(),
