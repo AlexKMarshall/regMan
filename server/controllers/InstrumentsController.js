@@ -27,9 +27,11 @@ exports.putInstruments = async (req, res) => {
     const updatedInstruments = await instrument.findAll({
       order: [['id', 'asc']],
     });
+    console.log('in put try');
     res.status(200);
     res.json(updatedInstruments);
   } catch (error) {
+    console.log('in put catch');
     console.log(error);
     res.sendStatus(500);
   }

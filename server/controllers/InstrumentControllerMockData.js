@@ -55,14 +55,20 @@ const mockInstrumentEntry = {
   name: 'Guitar',
 };
 
+const mockErrorEntryId = [
+  {
+    id: 22,
+    name: 'Oboe',
+    max_attendants: 2,
+  },
+];
+
 const mockErrorEntryMA = {
-  max_attendants: undefined,
   name: 'Cello',
 };
 
 const mockErrorEntryN = {
   max_attendants: 3,
-  name: undefined,
 };
 
 function buildReq(mockBody) {
@@ -85,6 +91,7 @@ module.exports = {
   mockDeleteInstrument,
   mockUpdateInstrument,
   mockUpdatedInstruments,
+  mockErrorEntryId,
   mockErrorEntryMA,
   mockErrorEntryN,
   buildReq,

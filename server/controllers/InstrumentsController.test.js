@@ -11,6 +11,7 @@ const {
   mockUpdatedInstruments,
   mockDeleteInstrument,
   mockUpdateInstrument,
+  mockErrorEntryId,
   mockErrorEntryMA,
   mockErrorEntryN,
   buildReq,
@@ -19,6 +20,10 @@ const {
 jest.mock('../models', () => ({ instrument: () => {} }));
 
 const res = buildRes();
+
+// beforeEach(() => {
+//   jest.clearAllMocks();
+// });
 
 describe('getInstruments', () => {
   //TODO: add error check
@@ -46,38 +51,69 @@ describe('getInstruments', () => {
   });
 });
 
+// describe('postInstruments fails', () => {
+//   it('should call res.sendStatus once when missing max_attendants', async () => {
+//     const reqError = buildReq(mockErrorEntryMA);
+//     await postInstrument(reqError, res);
+//     expect(res.sendStatus).toHaveBeenCalledTimes(1);
+//   });
+
+//   it('should throw 500 error when missing max_attendants', async () => {
+//     const reqError = buildReq(mockErrorEntryMA);
+//     await postInstrument(reqError, res);
+//     expect(res.sendStatus).toHaveBeenCalledWith(500);
+//   });
+
+//   it('should throw 500 error when missing name', async () => {
+//     const reqError = buildReq(mockErrorEntryN);
+//     await postInstrument(reqError, res);
+//     expect(res.sendStatus).toHaveBeenCalledWith(500);
+//   });
+// })
+
 describe('postInstruments', () => {
   const req = buildReq(mockInstrumentEntry);
-  instrument.create = jest.fn();
-  instrument.create.mockResolvedValue(mockInstrumentEntry);
-
   it('instrument.create should be called once', async () => {
+    instrument.create = jest.fn();
+    instrument.create.mockResolvedValue(mockInstrumentEntry);
     await postInstrument(req, res);
     expect(instrument.create).toHaveBeenCalledTimes(1);
   });
 
   it('should call res.status with 201 on successful post', async () => {
+    instrument.create = jest.fn();
+    instrument.create.mockResolvedValue(mockInstrumentEntry);
     await postInstrument(req, res);
     expect(res.status).toHaveBeenCalledWith(201);
   });
 
   it('should call res.json with DB', async () => {
+    instrument.create = jest.fn();
+    instrument.create.mockResolvedValue(mockInstrumentEntry);
     await postInstrument(req, res);
     expect(res.json).toHaveBeenCalledWith(mockInstrumentEntry);
   });
-
-  // not passing this test. Not sure how to adjust the function to make it pass
-  // TODO: check with postman if these fields are required
-  // it('should throw 500 error when missing max_attendants', async () => {
-  //   const reqError = buildReq(mockErrorEntryN);
-  //   await postInstrument(reqError, res);
-  //   console.log('in error check')
-  //   expect(res.sendStatus).toHaveBeenCalledWith(500);
-  // });
 });
 
+// describe('putInstruments fails', () => {
+
+//   it('should call res.sendStatus once when id doesnt exist', async () => {
+//     const reqError = buildReq(mockErrorEntryId);
+//     await putInstruments(reqError, res);
+//     console.log('reqError',reqError.body);
+//     console.log('sendStatus', res.sendStatus);
+//     expect(res.sendStatus).toHaveBeenCalledTimes(1);
+//   })
+
+//   it('should call sendStatus with 500 when id doesnt exist', async () => {
+//     const reqError = buildReq(mockErrorEntryId);
+//     await putInstruments(reqError, res);
+//     expect(res.sendStatus).toHaveBeenCalledWith(500);
+//   })
+
+// });
+
 describe('putInstruments', () => {
-  //TODO: add checks for errors
   const req = buildReq(mockUpdateInstrument);
   instrument.update = jest.fn();
   instrument.update.mockResolvedValue(mockUpdateInstrument);
