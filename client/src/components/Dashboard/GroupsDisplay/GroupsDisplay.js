@@ -12,14 +12,7 @@ function resetFormState(instruments) {
   }, new Map());
 }
 
-const GroupsDisplay = ({
-  participants,
-  instruments,
-  setInstruments,
-  onUpdateInstruments,
-}) => {
-  console.log('render with instruments: ', instruments);
-
+const GroupsDisplay = ({ participants, instruments, onUpdateInstruments }) => {
   const [availableSpacesForm, setAvailableSpacesForm] = useState(() =>
     resetFormState(instruments)
   );
@@ -38,17 +31,6 @@ const GroupsDisplay = ({
       newFormState.set(id, newInstrument);
       return newFormState;
     });
-  };
-
-  const submitMaxValues = (e) => {
-    e.preventDefault();
-    const formInstruments = [...availableSpacesForm.values()];
-    getAccessTokenSilently()
-      .then((token) => ApiClient.updateInstruments(formInstruments, token))
-      .then((returnedInstruments) => {
-        setInstruments(returnedInstruments);
-        setAvailableSpacesForm(resetFormState(returnedInstruments));
-      });
   };
 
   const onFormSubmit = (e) => {

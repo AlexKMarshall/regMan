@@ -30,7 +30,7 @@ const Dashboard = () => {
   const [mutateInstruments] = useMutation(
     async ({ instruments }) => {
       const authToken = await getAccessTokenSilently();
-      ApiClient.updateInstruments(instruments, authToken);
+      return ApiClient.updateInstruments(instruments, authToken);
     },
     {
       onSuccess: (data) => {
@@ -60,10 +60,6 @@ const Dashboard = () => {
         if (participants.error) old_setError(true);
         else setParticipants(participants);
       });
-    ApiClient.getInstruments().then((instruments) => {
-      if (instruments.error) old_setError(true);
-      else old_setInstruments(instruments);
-    });
   }, []);
 
   // this function sets popupInfo, it is used to determine when to show a popup. It also combines
@@ -148,7 +144,6 @@ const Dashboard = () => {
                       participant.registration_status !== 'Waitlist'
                   )}
                   instruments={instruments}
-                  setInstruments={old_setInstruments}
                   onUpdateInstruments={onUpdateInstruments}
                 />
               ) : null
