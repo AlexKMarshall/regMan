@@ -1,5 +1,3 @@
-import { unstable_renderSubtreeIntoContainer } from 'react-dom';
-
 /*************************
  **  Attendant's Calls  **
  *************************/

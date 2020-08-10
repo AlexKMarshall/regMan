@@ -3,6 +3,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import ApiClient from '@app/services/ApiClient';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import './Dashboard.css';
+import { useQuery, useMutation, queryCache } from 'react-query';
 import {
   Popup,
   ParticipantList,
@@ -11,30 +12,57 @@ import {
   Navbar,
   Error500,
 } from '@app/components';
+import Loading from '../Resources/Loading';
 
 // Acts as the main page for logged in users. It has its own router.
 const Dashboard = () => {
   // array containing all the participants.
   const [participants, setParticipants] = useState([]);
-  const [instruments, setInstruments] = useState([]);
+  const [old_instruments, old_setInstruments] = useState([]);
+
+  const { isLoading, error, data: instruments } = useQuery(
+    'instruments',
+    ApiClient.getInstruments
+  );
+
+  const { getAccessTokenSilently } = useAuth0();
+
+  const [mutateInstruments] = useMutation(
+    async ({ instruments }) => {
+      const authToken = await getAccessTokenSilently();
+      ApiClient.updateInstruments(instruments, authToken);
+    },
+    {
+      onSuccess: (data) => {
+        queryCache.setQueryData('instruments', data);
+      },
+    }
+  );
+
+  async function onUpdateInstruments({ instruments }) {
+    try {
+      await mutateInstruments({ instruments });
+    } catch (error) {
+      console.log(`error saving instruments ${instruments}`);
+    }
+  }
+
   // controls the display of popups and the information they contain
   const [popupInfo, setPopupInfo] = useState({});
   // redirects to error500 if the API fails to connect.
-  const [error, setError] = useState(false);
-  // gets an authorisatin token from Auth0
-  const { getAccessTokenSilently } = useAuth0();
+  const [old_error, old_setError] = useState(false);
 
   // gets an access token and fetches participants from the server. if the call fails, it'll display a 500 error
   useEffect(() => {
     getAccessTokenSilently()
       .then((token) => ApiClient.getAllInscriptions(token))
       .then((participants) => {
-        if (participants.error) setError(true);
+        if (participants.error) old_setError(true);
         else setParticipants(participants);
       });
     ApiClient.getInstruments().then((instruments) => {
-      if (instruments.error) setError(true);
-      else setInstruments(instruments);
+      if (instruments.error) old_setError(true);
+      else old_setInstruments(instruments);
     });
   }, []);
 
@@ -81,7 +109,10 @@ const Dashboard = () => {
     ''
   );
 
-  if (error) return <Redirect to={'/error500'} />;
+  if (old_error) return <Redirect to={'/error500'} />;
+
+  if (isLoading) return <Loading />;
+  if (error) return `Error: ${error}`;
 
   return (
     <div>
@@ -107,18 +138,21 @@ const Dashboard = () => {
           <Route
             path="/dashboard/groups"
             exact
-            render={(props) => (
-              <GroupsDisplay
-                {...props}
-                participants={participants.filter(
-                  (participant) =>
-                    participant.registration_status !== 'Cancelled' &&
-                    participant.registration_status !== 'Waitlist'
-                )}
-                instruments={instruments}
-                setInstruments={setInstruments}
-              />
-            )}
+            render={(props) =>
+              instruments?.length ? (
+                <GroupsDisplay
+                  {...props}
+                  participants={participants.filter(
+                    (participant) =>
+                      participant.registration_status !== 'Cancelled' &&
+                      participant.registration_status !== 'Waitlist'
+                  )}
+                  instruments={instruments}
+                  setInstruments={old_setInstruments}
+                  onUpdateInstruments={onUpdateInstruments}
+                />
+              ) : null
+            }
           />
           <Route
             path="/dashboard/details/:id/:section"

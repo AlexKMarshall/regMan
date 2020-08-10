@@ -12,7 +12,14 @@ function resetFormState(instruments) {
   }, new Map());
 }
 
-const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
+const GroupsDisplay = ({
+  participants,
+  instruments,
+  setInstruments,
+  onUpdateInstruments,
+}) => {
+  console.log('render with instruments: ', instruments);
+
   const [availableSpacesForm, setAvailableSpacesForm] = useState(() =>
     resetFormState(instruments)
   );
@@ -42,6 +49,12 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
         setInstruments(returnedInstruments);
         setAvailableSpacesForm(resetFormState(returnedInstruments));
       });
+  };
+
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    const instruments = [...availableSpacesForm.values()];
+    onUpdateInstruments({ instruments });
   };
 
   const cancelChanges = (e) => {
@@ -82,7 +95,7 @@ const GroupsDisplay = ({ participants, instruments, setInstruments }) => {
                 )}
               </div>
               <div className="groups-setup-btn">
-                <button onClick={submitMaxValues}>Update Group Limits</button>
+                <button onClick={onFormSubmit}>Update Group Limits</button>
                 <button onClick={cancelChanges}>Cancel Changes</button>
               </div>
             </form>
