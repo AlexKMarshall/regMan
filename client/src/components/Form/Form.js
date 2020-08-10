@@ -40,7 +40,7 @@ const Form = () => {
     }
   }, [instruments]);
 
-  function submitHandler (e) {
+  function submitHandler(e) {
     e.preventDefault();
     const courseStart = moment(process.env.REACT_APP_COURSE_START);
     const dateBirth = moment(registration.birthdate);
@@ -53,7 +53,7 @@ const Form = () => {
   }
 
   // handles change for all the fields. acceptsTos is a checkbox, so it needs a different target
-  function handleChange ({ target }) {
+  function handleChange({ target }) {
     const value = target.name === 'acceptsTos' ? target.checked : target.value;
     setRegistration((oldRegistration) => ({
       ...oldRegistration,
@@ -61,7 +61,7 @@ const Form = () => {
     }));
   }
 
-  function clearForm () {
+  function clearForm() {
     setRegistration(newRegistration);
   }
 
@@ -94,7 +94,7 @@ const Form = () => {
                     <input
                       type="text"
                       name="name"
-                      aria-label='name'
+                      id="name"
                       className="form-input"
                       value={registration.name}
                       onChange={handleChange}
@@ -106,7 +106,7 @@ const Form = () => {
                     <input
                       type="text"
                       name="lastname"
-                      aria-label='lastname'
+                      id="lastname"
                       className="form-input"
                       value={registration.lastname}
                       onChange={handleChange}
@@ -118,7 +118,7 @@ const Form = () => {
                     <input
                       type="text"
                       name="email"
-                      aria-label='email'
+                      id="email"
                       className="form-input"
                       value={registration.email}
                       onChange={handleChange}
@@ -132,7 +132,7 @@ const Form = () => {
                       min="1900-01-01"
                       max="2020-12-31"
                       name="birthdate"
-                      aria-label='birthdate'
+                      id="birthdate"
                       className="form-input"
                       value={registration.birthdate}
                       onChange={handleChange}
@@ -151,7 +151,7 @@ const Form = () => {
                     <input
                       type="text"
                       name="street"
-                      aria-label='street'
+                      id="street"
                       className="form-input"
                       value={registration.street}
                       onChange={handleChange}
@@ -163,7 +163,7 @@ const Form = () => {
                     <input
                       type="text"
                       name="city"
-                      aria-label='city'
+                      id="city"
                       className="form-input"
                       value={registration.city}
                       onChange={handleChange}
@@ -175,7 +175,7 @@ const Form = () => {
                     <input
                       type="text"
                       name="country"
-                      aria-label='country'
+                      id="country"
                       className="form-input"
                       value={registration.country}
                       onChange={handleChange}
@@ -194,7 +194,7 @@ const Form = () => {
                     <label htmlFor="instrumentId">Instrument:</label>
                     <select
                       name="instrumentId"
-                      aria-label='instrumentId'
+                      id="instrumentId"
                       data-testid="select"
                       value={registration.instrumentId}
                       onChange={handleChange}
@@ -227,7 +227,7 @@ const Form = () => {
                     <input
                       type="text"
                       name="allergies"
-                      aria-label='allergies'
+                      id="allergies"
                       className="form-input"
                       value={registration.allergies}
                       onChange={handleChange}
@@ -248,7 +248,7 @@ const Form = () => {
                     <input
                       type="checkbox"
                       name="acceptsTos"
-                      aria-label='acceptTos'
+                      id="acceptsTos"
                       className="form-checkbox"
                       checked={registration.acceptsTos}
                       onChange={handleChange}
@@ -257,13 +257,13 @@ const Form = () => {
                     <label htmlFor="acceptsTos">
                       {' '}
                       I accept the terms of service.
-                   </label>
+                    </label>
                   </div>
                 </div>
               </div>
               <div className="form-btns">
-                <button type="submit" aria-label='submit'>Send my registration</button>
-                <button className="clear-form" onClick={clearForm} aria-label='clearForm'>
+                <button type="submit">Send my registration</button>
+                <button className="clear-form" onClick={clearForm}>
                   Clear Form
                 </button>
               </div>

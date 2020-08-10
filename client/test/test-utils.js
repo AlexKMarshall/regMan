@@ -25,6 +25,10 @@ export function buildParticipant(options) {
     instrument: {
       name: faker.commerce.product(),
     },
+    street: faker.address.streetAddress(),
+    city: faker.address.city(),
+    country: faker.address.country(),
+    allergies: faker.lorem.words(),
     is_underage: faker.random.boolean(),
     registration_status: 'New',
     ...options,
