@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import ApiClient from '@app/services/ApiClient';
 import moment from 'moment';
 import { Navbar } from '@app/components';
 import './Form.css';
+import Loading from '../Resources/Loading';
 
 // default value for the form
 const newRegistration = {
@@ -23,25 +25,19 @@ const Form = () => {
   const [registration, setRegistration] = useState(newRegistration);
   // when set to true, will render the confirmation page.
   const [redirectToConfirmation, setRedirect] = useState(false);
-  const [instruments, setInstruments] = useState([]);
-  const [error, setError] = useState(false);
+
+  const { isLoading, error, data: instruments } = useQuery(
+    'instruments',
+    ApiClient.getInstruments
+  );
 
   useEffect(() => {
-    ApiClient.getInstruments().then((instruments) => {
-      if (instruments.error) setError(true);
-      else setInstruments(instruments);
-    });
-  }, []);
-
-  useEffect(() => {
-    const fiddle = instruments.filter(
-      (instrument) => instrument.name === 'Fiddle'
-    )[0];
-    fiddle &&
+    if (instruments) {
       setRegistration((registration) => ({
         ...registration,
-        instrumentId: fiddle.id,
+        instrument: instruments[0].id,
       }));
+    }
   }, [instruments]);
 
   function submitHandler(e) {
@@ -69,8 +65,9 @@ const Form = () => {
     setRegistration(newRegistration);
   }
 
-  // handles errirs with the API calls or redirects the user to the confirmation page.
-  if (error) return <Redirect to={'/error500'} />;
+  if (isLoading) return <Loading />;
+  if (error) return `Error ${error}`;
+
   if (redirectToConfirmation) return <Redirect to="/confirmation" />;
 
   return (
