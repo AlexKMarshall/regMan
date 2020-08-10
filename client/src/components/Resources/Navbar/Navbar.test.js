@@ -65,4 +65,25 @@ describe('Navbar', () => {
       screen.queryByRole('button', { name: 'Admin Access' })
     ).not.toBeInTheDocument();
   });
+
+  test('it should logout when admin clicks the logout button', async () => {
+    useAuth0.mockReturnValue({
+      isAuthenticated: true,
+      logout: jest.fn(),
+    });
+    render(
+      <MemoryRouter>
+        <Navbar />
+      </MemoryRouter>
+    );
+
+    const { logout } = useAuth0();
+
+    const logoutButton = screen.getByRole('button', {
+      name: 'Log Out',
+    });
+
+    await userEvent.click(logoutButton);
+    expect(logout).toHaveBeenCalledTimes(1);
+  });
 });
