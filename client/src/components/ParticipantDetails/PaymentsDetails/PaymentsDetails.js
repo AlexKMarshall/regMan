@@ -8,17 +8,36 @@ import './PaymentsDetails.css';
  * Controls the payments' section of the code. It has a lot of code because it controls the
  * functionality for multiple popups.
  */
-const PaymentsDetails = ({ details, setDetails }) => {
+const PaymentsDetails = ({ details }) => {
+  const [payments, setPayments] = useState([]);
   const [popupInfo, setPopupInfo] = useState({});
   const { getAccessTokenSilently } = useAuth0();
   // object with the sumary of the payments' status
   const [paymentDetails, setPaymentDetails] = useState({});
 
   useEffect(() => {
-    if (details && details.payments) {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+    if (details.id) {
+      getAccessTokenSilently()
+        .then((token) =>
+          ApiClient.getAttendantPayments(details.id, token, { signal: signal })
+        )
+        .then((payments) => {
+          setPayments([...payments]);
+        });
+    }
+    return function cleanup() {
+      abortController.abort();
+    };
+  }, [details, getAccessTokenSilently]);
+
+  useEffect(() => {
+    let isMounted = true;
+    if (details && payments) {
       const course_price = 60000;
       // reduces all the payments to find the total amount paid until the moment.
-      const amount_paid = details.payments.reduce((acc, el) => {
+      const amount_paid = payments.reduce((acc, el) => {
         const value =
           el.type_of_payment === 'Refund' ? -el.amount_paid : +el.amount_paid;
         return acc + value;
@@ -28,6 +47,7 @@ const PaymentsDetails = ({ details, setDetails }) => {
       // Automatically changes the payment_status depending on the amount due/paid. This will, in turn, change the light indicator.
       amount_paid >= 6000 && (payment_status = 'downpayment');
       amount_due === 0 && (payment_status = 'payment complete');
+      if (!isMounted) return null;
       setPaymentDetails({
         course_price,
         amount_paid,
@@ -35,7 +55,8 @@ const PaymentsDetails = ({ details, setDetails }) => {
         payment_status,
       });
     }
-  }, [details]);
+    return () => (isMounted = false);
+  }, [details, payments]);
 
   // this function sets popupInfo, it is used to determine when to show a popup. It also combines
   // the different parameters passed to a popup to make them more manageable
@@ -51,32 +72,30 @@ const PaymentsDetails = ({ details, setDetails }) => {
   // gets a token for the API calls and handles the different kind of results por popups.
   async function handlePopupAction(popupInfo) {
     const { info, type } = popupInfo;
-    const token = await getAccessTokenSilently();
+    const authToken = await getAccessTokenSilently();
     switch (type) {
       // sets a new payment
       case 'Add Payment':
         info.amount_paid *= 100;
-        ApiClient.postNewPayment(info, token)
-          .then((newPayment) => {
-            setDetails((details) => ({
-              ...details,
-              payments: [...details.payments, newPayment],
-            }));
-            return '';
-          })
+        ApiClient.postNewPayment(info, authToken)
+          .then((newPayment) =>
+            setPayments((payments) => [...payments, newPayment])
+          )
           .then(setPopupInfo({}));
         break;
       // stores the changes made to a payment
       case 'Save Payment':
         info.amount_paid *= 100;
-        ApiClient.putUpdatePayment(info, token)
+        // console.log(info)
+        ApiClient.putUpdatePayment(info, authToken)
           .then((updatedPayment) => {
-            setDetails((oldDetails) => {
-              const newPayments = oldDetails.payments.filter(
+            setPayments((oldPayments) => {
+              const newPayments = oldPayments.filter(
                 (payment) => payment.id !== updatedPayment.id
               );
               newPayments.push(updatedPayment);
-              return { ...oldDetails, payments: newPayments };
+              // console.log(newPayments)
+              return [...newPayments];
             });
             return '';
           })
@@ -85,7 +104,7 @@ const PaymentsDetails = ({ details, setDetails }) => {
       // calls sendPaymentStatus, which will trigger a function in the backend to send an email
       // to the attendant with his payment status.
       case 'Send Status':
-        ApiClient.sendPaymentStatus(info, token).then(setPopupInfo({}));
+        ApiClient.sendPaymentStatus(info, authToken).then(setPopupInfo({}));
         break;
       default:
         break;
@@ -184,8 +203,8 @@ const PaymentsDetails = ({ details, setDetails }) => {
       <div className="payments-list">
         {
           // tripple check so that the app doesn't crash when looking for .length of undefined
-          details && details.payments && details.payments.length ? (
-            details.payments.map((payment) => (
+          payments && payments.length ? (
+            payments.map((payment) => (
               <PaymentItem
                 key={'payment' + payment.id}
                 payment={payment}
