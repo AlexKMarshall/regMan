@@ -1,4 +1,5 @@
 import { rest } from 'msw';
+import { buildPayments } from '../../../test/test-utils';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -12,7 +13,12 @@ export const handlers = [
       ctx.json({ instruments: [{ name: 'guitar', max_attendants: 8 }] })
     );
   }),
+
   // payments
+  rest.get(`${apiUrl}/payments/:id`, (req, res, ctx) => {
+    const payments = req.params.id === '1' ? [] : buildPayments({ number: 3 });
+    return res(ctx.status(200), ctx.json([...payments]));
+  }),
   rest.put(`${apiUrl}/payments/update/:id`, (req, res, ctx) => {
     // console.log(req.body)
     return res(ctx.status(204), ctx.json(req.body));

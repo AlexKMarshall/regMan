@@ -24,7 +24,8 @@ const PaymentsDetails = ({ details }) => {
           ApiClient.getAttendantPayments(details.id, token, { signal: signal })
         )
         .then((payments) => {
-          setPayments([...payments]);
+          if (payments.length) setPayments([...payments]);
+          else return null;
         });
     }
     return function cleanup() {
