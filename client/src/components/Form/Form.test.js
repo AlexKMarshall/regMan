@@ -8,7 +8,7 @@ import {
 import user from '@testing-library/user-event';
 import { buildInstrument, buildParticipant } from '@test/test-utils';
 import { server, rest } from './../../test/server/test-server';
-import RegistrationPage from './Form-new';
+import RegistrationPage from './Form';
 import { Redirect as MockRedirect } from 'react-router';
 import moment from 'moment';
 
