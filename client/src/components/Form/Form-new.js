@@ -6,7 +6,19 @@ import moment from 'moment';
 import { Navbar } from '@app/components';
 import './Form.css';
 import Loading from '../Resources/Loading';
-import { useFormik, Formik, Form, Field, useField } from 'formik';
+import { Formik, Form, useField } from 'formik';
+
+const newRegistration = {
+  name: '',
+  lastname: '',
+  email: '',
+  birthdate: '',
+  street: '',
+  city: '',
+  country: '',
+  allergies: '',
+  acceptsTos: false,
+};
 
 function RegistrationPage() {
   const [redirect, setRedirect] = useState(false);
@@ -23,7 +35,24 @@ function RegistrationPage() {
   if (redirect) return <Redirect to="/confirmation" />;
 
   return (
-    <RegistrationForm instruments={instruments} onFormSubmit={onFormSubmit} />
+    <>
+      <Navbar />
+      <div className="main-page">
+        <div className="form-container">
+          <div className="black-bg"></div>
+          <div className="front-picture"></div>
+          <div className="form">
+            <h1>Welcome!</h1>
+            <p>We're pleased to have you in our summercamp!</p>
+            <p>Please, fill in the form to begin the registration</p>
+            <RegistrationForm
+              instruments={instruments}
+              onFormSubmit={onFormSubmit}
+            />
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 
@@ -224,19 +253,6 @@ function CheckboxInput({ children, ...props }) {
     </>
   );
 }
-
-// default value for the form
-const newRegistration = {
-  name: '',
-  lastname: '',
-  email: '',
-  birthdate: '',
-  street: '',
-  city: '',
-  country: '',
-  allergies: '',
-  acceptsTos: false,
-};
 
 // Pretty long form for registration.
 const OldForm = () => {
