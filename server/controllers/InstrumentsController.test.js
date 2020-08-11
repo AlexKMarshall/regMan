@@ -21,9 +21,23 @@ jest.mock('../models', () => ({ instrument: () => {} }));
 
 const res = buildRes();
 
-// afterEach(() => {
-//   jest.clearAllMocks();
-// });
+afterEach(() => {
+  jest.clearAllMocks();
+});
+
+describe('putInstruments fails', () => {
+  it('should call res.sendStatus once when id doesnt exist', async () => {
+    const reqError = buildReq(mockErrorEntryId);
+    await putInstruments(reqError, res);
+    expect(res.sendStatus).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call sendStatus with 500 when id doesnt exist', async () => {
+    const reqError = buildReq(mockErrorEntryId);
+    await putInstruments(reqError, res);
+    expect(res.sendStatus).toHaveBeenCalledWith(500);
+  });
+});
 
 describe('getInstruments', () => {
   //TODO: add error check
@@ -94,22 +108,6 @@ describe('postInstruments', () => {
     expect(res.json).toHaveBeenCalledWith(mockInstrumentEntry);
   });
 });
-
-// describe('putInstruments fails', () => {
-
-//   it('should call res.sendStatus once when id doesnt exist', async () => {
-//     const reqError = buildReq(mockErrorEntryId);
-//     await putInstruments(reqError, res);
-//     expect(res.sendStatus).toHaveBeenCalledTimes(1);
-//   })
-
-//   it('should call sendStatus with 500 when id doesnt exist', async () => {
-//     const reqError = buildReq(mockErrorEntryId);
-//     await putInstruments(reqError, res);
-//     expect(res.sendStatus).toHaveBeenCalledWith(500);
-//   })
-
-// });
 
 describe('putInstruments', () => {
   const req = buildReq(mockUpdateInstrument);
