@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
 
+    // TODO fix this. D.O.B should be stored in the db
     // Boolean value, used to apply discount upon registration.
     // The age is calculated with the date when the camp begins minus the date of birth.
     // calculated in the front-end and sent as a boolean.
