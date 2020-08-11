@@ -9,7 +9,7 @@ router.get('/instruments', instrumentsController.getInstruments);
 
 // Disabled private routes. Useful to access the endpoints without the access token during development.
 
-// router.post('/instruments', instrumentsController.postInstrument);
+router.post('/instruments', instrumentsController.postInstrument);
 // router.put('/instruments/:id', instrumentsController.putInstrument)
 // router.delete('/instruments/:id', instrumentsController.deleteInstrument)
 

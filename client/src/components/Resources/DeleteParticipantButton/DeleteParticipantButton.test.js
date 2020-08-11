@@ -19,4 +19,15 @@ describe('DeletePartipantButton', () => {
     await userEvent.click(deleteButton);
     expect(promptPopup).toHaveBeenCalledTimes(1);
   });
+
+  it('should call promptPopup with info, "delete"', async () => {
+    const promptPopup = jest.fn();
+    const info = {};
+    render(<DeleteParticipantButton info={info} promptPopup={promptPopup} />);
+
+    const deleteButton = screen.getByRole('button');
+
+    await userEvent.click(deleteButton);
+    expect(promptPopup).toHaveBeenCalledWith(info, 'Delete');
+  });
 });
