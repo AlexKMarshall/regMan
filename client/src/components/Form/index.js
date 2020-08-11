@@ -1,2 +1,2 @@
-import Form from './Form-old';
-export default Form;
+import RegistrationPage from './Form';
+export default RegistrationPage;
