@@ -12,6 +12,7 @@ import {
   PrivateRoute,
 } from '@app/components';
 import '@app/App.css';
+import RegistrationPage from './components/Form/Form-new';
 
 function App() {
   const { isLoading } = useAuth0();
@@ -25,6 +26,7 @@ function App() {
       <Router>
         <Switch>
           <Route path="/" exact component={Form} />
+          <Route path="/registration" exact component={RegistrationPage} />
           <Route path="/confirmation" exact component={Confirmation} />
           <PrivateRoute path="/dashboard" component={Dashboard} />
           <Route path="/error500" exact component={Error500} />

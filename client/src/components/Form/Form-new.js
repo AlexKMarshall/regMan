@@ -6,54 +6,113 @@ import moment from 'moment';
 import { Navbar } from '@app/components';
 import './Form.css';
 import Loading from '../Resources/Loading';
-import { useFormik, Formik, Field } from 'formik';
+import { useFormik, Formik, Form, Field, useField } from 'formik';
 
-function RegistrationForm() {
+function RegistrationPage() {
   const [redirect, setRedirect] = useState(false);
+  const { isLoading, data: instruments } = useQuery(
+    'instruments',
+    ApiClient.getInstruments
+  );
 
+  function onFormSubmit(values) {
+    ApiClient.postNewAttendant(values).then(() => setRedirect(true));
+  }
+
+  if (isLoading) return <Loading />;
   if (redirect) return <Redirect to="/confirmation" />;
 
   return (
+    <RegistrationForm instruments={instruments} onFormSubmit={onFormSubmit} />
+  );
+}
+
+function RegistrationForm({ instruments, onFormSubmit }) {
+  return (
     <Formik
       initialValues={{
-        name: '',
+        firstName: '',
         lastName: '',
         email: '',
+        dateOfBirth: '',
+        street: '',
+        city: '',
+        country: '',
+        instrument: '',
+        allergies: '',
+        acceptedTerms: false,
       }}
       onSubmit={(values) => {
-        ApiClient.postNewAttendant(values).then(() => setRedirect(true));
+        onFormSubmit(values);
       }}
     >
-      {(formik) => (
-        <form onSubmit={formik.handleSubmit}>
-          <label htmlFor="name">Name:</label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            onChange={formik.handleChange}
-            value={formik.values.name}
-          />
-          <label htmlFor="lastName">Surname:</label>
-          <input
-            id="lastName"
-            name="lastName"
-            type="text"
-            onChange={formik.handleChange}
-            value={formik.values.lastName}
-          />
-          <label htmlFor="email">Email:</label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-          />
-          <button type="submit">Send my registration</button>
-        </form>
-      )}
+      <Form>
+        <TextInput id="firstName" name="firstName" type="text" label="Name:" />
+        <TextInput id="lastName" name="lastName" type="text" label="Surname:" />
+        <TextInput id="email" name="email" type="email" label="Email:" />
+        <TextInput
+          id="dateOfBirth"
+          name="dateOfBirth"
+          type="date"
+          label="Date of birth:"
+        />
+        <TextInput id="street" name="street" type="text" label="Street:" />
+        <TextInput id="city" name="city" type="text" label="City:" />
+        <TextInput id="country" name="country" type="text" label="Country:" />
+        <SelectInput id="instrument" name="instrument" label="Instrument:">
+          {instruments.map(({ id, name }) => (
+            <option key={name} value={name}>
+              {name}
+            </option>
+          ))}
+        </SelectInput>
+        <TextInput
+          id="allergies"
+          name="allergies"
+          type="text"
+          label="Allergies:"
+        />
+        <CheckboxInput id="acceptedTerms" name="acceptedTerms">
+          I accept the terms of service.
+        </CheckboxInput>
+        <button type="submit">Send my registration</button>
+      </Form>
     </Formik>
+  );
+}
+
+function TextInput({ label, ...props }) {
+  const [field] = useField(props);
+
+  return (
+    <>
+      <label htmlFor={props.id || props.name}>{label}</label>
+      <input {...field} {...props} />
+    </>
+  );
+}
+
+function SelectInput({ label, ...props }) {
+  const [field] = useField(props);
+
+  return (
+    <>
+      <label htmlFor={props.id || props.name}>{label}</label>
+      <select {...field} {...props} />
+    </>
+  );
+}
+
+function CheckboxInput({ children, ...props }) {
+  const [field] = useField({ ...props, type: 'checkbox' });
+
+  return (
+    <>
+      <label>
+        <input type="checkbox" {...field} {...props} />
+        {children}
+      </label>
+    </>
   );
 }
 
@@ -71,7 +130,7 @@ const newRegistration = {
 };
 
 // Pretty long form for registration.
-const oldForm = () => {
+const OldForm = () => {
   const [registration, setRegistration] = useState(newRegistration);
   // when set to true, will render the confirmation page.
   const [redirectToConfirmation, setRedirect] = useState(false);
@@ -326,4 +385,4 @@ const oldForm = () => {
   );
 };
 
-export default RegistrationForm;
+export default RegistrationPage;
