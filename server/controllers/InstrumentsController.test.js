@@ -21,7 +21,7 @@ jest.mock('../models', () => ({ instrument: () => {} }));
 
 const res = buildRes();
 
-// beforeEach(() => {
+// afterEach(() => {
 //   jest.clearAllMocks();
 // });
 
@@ -51,25 +51,25 @@ describe('getInstruments', () => {
   });
 });
 
-// describe('postInstruments fails', () => {
-//   it('should call res.sendStatus once when missing max_attendants', async () => {
-//     const reqError = buildReq(mockErrorEntryMA);
-//     await postInstrument(reqError, res);
-//     expect(res.sendStatus).toHaveBeenCalledTimes(1);
-//   });
+describe('postInstruments fails', () => {
+  it('should call res.sendStatus once when missing max_attendants', async () => {
+    const reqError = buildReq(mockErrorEntryMA);
+    await postInstrument(reqError, res);
+    expect(res.sendStatus).toHaveBeenCalledTimes(1);
+  });
 
-//   it('should throw 500 error when missing max_attendants', async () => {
-//     const reqError = buildReq(mockErrorEntryMA);
-//     await postInstrument(reqError, res);
-//     expect(res.sendStatus).toHaveBeenCalledWith(500);
-//   });
+  it('should throw 500 error when missing max_attendants', async () => {
+    const reqError = buildReq(mockErrorEntryMA);
+    await postInstrument(reqError, res);
+    expect(res.sendStatus).toHaveBeenCalledWith(500);
+  });
 
-//   it('should throw 500 error when missing name', async () => {
-//     const reqError = buildReq(mockErrorEntryN);
-//     await postInstrument(reqError, res);
-//     expect(res.sendStatus).toHaveBeenCalledWith(500);
-//   });
-// })
+  it('should throw 500 error when missing name', async () => {
+    const reqError = buildReq(mockErrorEntryN);
+    await postInstrument(reqError, res);
+    expect(res.sendStatus).toHaveBeenCalledWith(500);
+  });
+});
 
 describe('postInstruments', () => {
   const req = buildReq(mockInstrumentEntry);
@@ -100,8 +100,6 @@ describe('postInstruments', () => {
 //   it('should call res.sendStatus once when id doesnt exist', async () => {
 //     const reqError = buildReq(mockErrorEntryId);
 //     await putInstruments(reqError, res);
-//     console.log('reqError',reqError.body);
-//     console.log('sendStatus', res.sendStatus);
 //     expect(res.sendStatus).toHaveBeenCalledTimes(1);
 //   })
 
