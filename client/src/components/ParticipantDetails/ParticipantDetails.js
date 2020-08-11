@@ -48,7 +48,7 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
         setDetails({ ...details });
         setOldDetails({ ...details });
       });
-  }, []);
+  }, [getAccessTokenSilently, id, courseStarts]);
 
   // This object contains the functionality of the editButtons.
   const buttonFunctionality = {
@@ -197,6 +197,7 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
                   {...props}
                   details={details}
                   setDetails={setDetails}
+                  id={id}
                 />
               )}
             />

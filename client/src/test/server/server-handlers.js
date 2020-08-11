@@ -1,4 +1,5 @@
 import { rest } from 'msw';
+import { buildPayments } from '../../../test/test-utils';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -14,5 +15,27 @@ export const handlers = [
   }),
   rest.post(`${apiUrl}/inscriptions`, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ message: 'ok' }));
+  }),
+
+  // payments
+  rest.get(`${apiUrl}/payments/:id`, (req, res, ctx) => {
+    const payments = req.params.id === '1' ? [] : buildPayments({ number: 3 });
+    return res(ctx.status(200), ctx.json([...payments]));
+  }),
+  rest.put(`${apiUrl}/payments/update/:id`, (req, res, ctx) => {
+    // console.log(req.body)
+    return res(ctx.status(204), ctx.json(req.body));
+  }),
+  rest.post(`${apiUrl}/payments`, (req, res, ctx) => {
+    // console.log(req.body)
+    return res(
+      ctx.status(201),
+      ctx.json({
+        id: 3,
+        type_of_payment: req.body.type_of_payment,
+        amount_paid: req.body.amounts_paid,
+        payment_date: req.body.payment_date,
+      })
+    );
   }),
 ];
