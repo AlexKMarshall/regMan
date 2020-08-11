@@ -1,23 +1,33 @@
 import React from 'react';
+
+import userEvent from '@testing-library/user-event';
 import {
   render,
   screen,
   waitForElementToBeRemoved,
   fireEvent,
-} from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { buildInstrument, buildParticipant } from '@test/test-utils';
+  buildInstrument,
+  buildParticipant,
+} from '@test/test-utils';
 import { server, rest } from './../../test/server/test-server';
-import Form from './Form';
+import Form from './Form-new';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
 const fakeInstruments = [buildInstrument(), buildInstrument()];
 
 test('user can register', async () => {
+  let registrationRequest;
+
   server.use(
     rest.get(`${apiUrl}/instruments`, (req, res, ctx) => {
       return res(ctx.status(200), ctx.json(fakeInstruments));
+    }),
+    rest.post(`${apiUrl}/inscriptions`, (req, res, ctx) => {
+      console.log('post request');
+      console.log(req);
+      registrationRequest = req;
+      return res(ctx.status(200), ctx.json({ message: 'ok' }));
     })
   );
   const newParticipant = buildParticipant({
@@ -44,4 +54,10 @@ test('user can register', async () => {
   userEvent.type(screen.getByLabelText(/allergies/i), newParticipant.allergies);
   // userEvent.click(screen.getByLabelText(/terms of service/i));
   // screen.debug();
+
+  userEvent.click(screen.getByText(/send my registration/i));
+
+  // await waitForElementToBeRemoved(() =>
+  //   screen.queryByText(/send my registration/i)
+  // );
 });
