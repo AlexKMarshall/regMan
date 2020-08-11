@@ -71,13 +71,7 @@ exports.postNewAttendant = async (req, res) => {
 exports.getDetails = async (req, res) => {
   try {
     const attendantDetails = await attendant.findOne({
-      include: [
-        instrument,
-        {
-          model: payment,
-          as: 'payments',
-        },
-      ],
+      include: [instrument],
       where: { id: req.params.id },
     });
     res.status(200);
