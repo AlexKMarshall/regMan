@@ -6,6 +6,56 @@ import moment from 'moment';
 import { Navbar } from '@app/components';
 import './Form.css';
 import Loading from '../Resources/Loading';
+import { useFormik, Formik, Field } from 'formik';
+
+function RegistrationForm() {
+  const [redirect, setRedirect] = useState(false);
+
+  if (redirect) return <Redirect to="/confirmation" />;
+
+  return (
+    <Formik
+      initialValues={{
+        name: '',
+        lastName: '',
+        email: '',
+      }}
+      onSubmit={(values) => {
+        ApiClient.postNewAttendant(values).then(() => setRedirect(true));
+      }}
+    >
+      {(formik) => (
+        <form onSubmit={formik.handleSubmit}>
+          <label htmlFor="name">Name:</label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            onChange={formik.handleChange}
+            value={formik.values.name}
+          />
+          <label htmlFor="lastName">Surname:</label>
+          <input
+            id="lastName"
+            name="lastName"
+            type="text"
+            onChange={formik.handleChange}
+            value={formik.values.lastName}
+          />
+          <label htmlFor="email">Email:</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            onChange={formik.handleChange}
+            value={formik.values.email}
+          />
+          <button type="submit">Send my registration</button>
+        </form>
+      )}
+    </Formik>
+  );
+}
 
 // default value for the form
 const newRegistration = {
@@ -21,7 +71,7 @@ const newRegistration = {
 };
 
 // Pretty long form for registration.
-const Form = () => {
+const oldForm = () => {
   const [registration, setRegistration] = useState(newRegistration);
   // when set to true, will render the confirmation page.
   const [redirectToConfirmation, setRedirect] = useState(false);
@@ -276,4 +326,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default RegistrationForm;
