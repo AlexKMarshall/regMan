@@ -102,7 +102,7 @@ function RegistrationForm({ instruments, onSubmit }) {
         firstName: Yup.string().required('Required'),
         lastName: Yup.string().required('Required'),
         email: Yup.string().email('Invalid email address').required('Required'),
-        dateOfBirth: Yup.date().required(),
+        dateOfBirth: Yup.date().required('Required'),
         street: Yup.string().required('Required'),
         city: Yup.string().required('Required'),
         country: Yup.string().required('Required'),
@@ -255,7 +255,7 @@ function RegistrationForm({ instruments, onSubmit }) {
             </div>
           </div>
           <div className="form-btns">
-            // TODO - need to style disabled state of button, it looks the same
+            {/* TODO - need to style disabled state of button, it looks the same */}
             now
             <button type="submit" disabled={!isValid || isSubmitting}>
               Send my registration
@@ -275,25 +275,28 @@ function TextInput({ label, ...props }) {
       <label htmlFor={props.id || props.name}>{label}</label>
       <input {...field} {...props} />
       {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
+        <div className="field-error">{meta.error}</div>
       ) : null}
     </>
   );
 }
 
 function SelectInput({ label, ...props }) {
-  const [field] = useField(props);
+  const [field, meta] = useField(props);
 
   return (
     <>
       <label htmlFor={props.id || props.name}>{label}</label>
       <select {...field} {...props} />
+      {meta.touched && meta.error ? (
+        <div className="field-error">{meta.error}</div>
+      ) : null}
     </>
   );
 }
 
 function CheckboxInput({ children, ...props }) {
-  const [field] = useField({ ...props, type: 'checkbox' });
+  const [field, meta] = useField({ ...props, type: 'checkbox' });
 
   return (
     <>
@@ -301,6 +304,9 @@ function CheckboxInput({ children, ...props }) {
         <input type="checkbox" {...field} {...props} />
         {children}
       </label>
+      {meta.touched && meta.error ? (
+        <div className="field-error">{meta.error}</div>
+      ) : null}
     </>
   );
 }
