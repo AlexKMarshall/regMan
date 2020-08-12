@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useQuery, useMutation, queryCache } from 'react-query';
 import ApiClient from '@app/services/ApiClient';
@@ -16,16 +16,12 @@ import Loading from '../Resources/Loading';
 
 // Acts as the main page for logged in users. It has its own router.
 const Dashboard = () => {
-  // array containing all the participants.
-  const [participants, setParticipants] = useState([]);
   // controls the display of popups and the information they contain
   const [popupInfo, setPopupInfo] = useState({});
-  const [old_error, old_setError] = useState(false);
-  const [loadingParticipants, setLoadingParticipants] = useState(true);
   // gets an authorisatin token from Auth0
   const { getAccessTokenSilently } = useAuth0();
 
-  const { isLoading, error, data: instruments } = useQuery(
+  const { data: instruments, ...instrumentsQuery } = useQuery(
     'instruments',
     ApiClient.getInstruments
   );
@@ -50,16 +46,53 @@ const Dashboard = () => {
     }
   }
 
-  // gets an access token and fetches participants from the server. if the call fails, it'll display a 500 error
-  useEffect(() => {
-    getAccessTokenSilently()
-      .then((token) => ApiClient.getAllInscriptions(token))
-      .then((participants) => {
-        if (participants.error) old_setError(true);
-        else setParticipants(participants);
-        setLoadingParticipants(false);
-      });
-  }, []);
+  const { data: participants, ...participantsQuery } = useQuery(
+    'participants',
+    async () => {
+      const authToken = await getAccessTokenSilently();
+      return ApiClient.getAllInscriptions(authToken);
+    }
+  );
+
+  const [updateParticipant] = useMutation(
+    async ({ participant }) => {
+      const authToken = await getAccessTokenSilently();
+      return ApiClient.putParticipantChanges(participant, authToken);
+    },
+    {
+      onSuccess: (updatedParticipant) => {
+        queryCache.invalidateQueries('participants');
+      },
+    }
+  );
+
+  async function onUpdateParticipant({ participant }) {
+    try {
+      await updateParticipant({ participant });
+    } catch (error) {
+      console.log(`error saving participant ${participant}`);
+    }
+  }
+
+  const [deleteParticipant] = useMutation(
+    async ({ participantId }) => {
+      const authToken = await getAccessTokenSilently();
+      return ApiClient.putDeleteAttendant(participantId, authToken);
+    },
+    {
+      onSuccess: () => {
+        queryCache.invalidateQueries('participants');
+      },
+    }
+  );
+
+  async function onDeleteParticipant({ participantId }) {
+    try {
+      await deleteParticipant({ participantId });
+    } catch (error) {
+      console.log(`error deleting participant id ${participantId}`);
+    }
+  }
 
   // this function sets popupInfo, it is used to determine when to show a popup. It also combines
   // the different parameters passed to a popup to make them more manageable
@@ -78,15 +111,11 @@ const Dashboard = () => {
   // TODO: with redux, handle all popups from the same component to avoid repeated code.
   async function handlePopupAction(popupInfo) {
     const { info, type } = popupInfo;
-    const token = await getAccessTokenSilently();
     switch (type) {
       case 'Delete':
-        ApiClient.putDeleteAttendant(info.id, token).then(() => {
-          setParticipants((participants) =>
-            participants.filter((participant) => participant.id !== info.id)
-          );
-          setPopupInfo({});
-        });
+        const participantId = info.id;
+        await onDeleteParticipant({ participantId });
+        setPopupInfo({});
         break;
       default:
         break;
@@ -103,8 +132,11 @@ const Dashboard = () => {
   ) : (
     ''
   );
-  if (isLoading || loadingParticipants) return <Loading />;
-  if (error || old_error) return `Error ${error} ${old_error}`;
+
+  if (instrumentsQuery.isLoading || participantsQuery.isLoading)
+    return <Loading />;
+  if (instrumentsQuery.error || participantsQuery.error)
+    return `Error ${instrumentsQuery.error} ${participantsQuery.error}`;
 
   return (
     <div>
@@ -149,8 +181,8 @@ const Dashboard = () => {
             render={(props) => (
               <ParticipantDetails
                 {...props}
-                setParticipants={setParticipants}
                 instruments={instruments}
+                onUpdateParticipant={onUpdateParticipant}
               />
             )}
           />
