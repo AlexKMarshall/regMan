@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import moment from 'moment';
 import './PersonalDetails.css';
 
@@ -9,15 +9,10 @@ const PersonalDetails = ({
   isEditting,
   handleChange,
 }) => {
-  const [isLoading, setIsLoading] = useState(true);
   // the 'disabled' css property sets the background and cursor when fields are disabled.
   let disabled = !isEditting ? 'disabled' : '';
 
-  useEffect(() => {
-    if (details.first_name) setIsLoading(false);
-  }, [details.first_name]);
-
-  const content = (
+  return (
     <section id="personal-details">
       <div className="form-section">
         <div className="description">
@@ -167,7 +162,6 @@ const PersonalDetails = ({
       </div>
     </section>
   );
-  return isLoading ? <div> data is loading </div> : content;
 };
 
 export default PersonalDetails;
