@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useQuery, useMutation, queryCache } from 'react-query';
+import { useMutation, queryCache } from 'react-query';
 import ApiClient from '@app/services/ApiClient';
-import { useInstruments } from '@app/services/customHooks';
+import { useInstruments, useParticipants } from '@app/services/customHooks';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './Dashboard.css';
 import {
@@ -36,25 +36,11 @@ const Dashboard = () => {
     }
   }
 
-  const { data: participants, ...participantsQuery } = useQuery(
-    'participants',
-    async () => {
-      const authToken = await getAccessTokenSilently();
-      return ApiClient.getAllInscriptions(authToken);
-    }
-  );
-
-  const [updateParticipant] = useMutation(
-    async ({ participant }) => {
-      const authToken = await getAccessTokenSilently();
-      return ApiClient.putParticipantChanges(participant, authToken);
-    },
-    {
-      onSuccess: (updatedParticipant) => {
-        queryCache.invalidateQueries('participants');
-      },
-    }
-  );
+  const {
+    participants,
+    updateParticipant,
+    ...participantsQuery
+  } = useParticipants();
 
   async function onUpdateParticipant({ participant }) {
     try {

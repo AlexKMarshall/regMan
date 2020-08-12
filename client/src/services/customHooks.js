@@ -5,10 +5,7 @@ import { client } from './ApiClient';
 export function useInstruments() {
   const { getAccessTokenSilently } = useAuth0();
 
-  const { isLoading, error, data, ...instrumentsQuery } = useQuery(
-    'instruments',
-    client
-  );
+  const { data, ...instrumentsQuery } = useQuery('instruments', client);
 
   const instruments = data || [];
 
@@ -25,10 +22,41 @@ export function useInstruments() {
   );
 
   return {
-    isLoading,
-    error,
     instruments,
     updateInstruments,
     ...instrumentsQuery,
+  };
+}
+
+export function useParticipants() {
+  const { getAccessTokenSilently } = useAuth0();
+
+  const { data, ...participantsQuery } = useQuery('participants', async () => {
+    const token = await getAccessTokenSilently();
+    return client('inscriptions', { token });
+  });
+
+  const participants = data || [];
+
+  const [updateParticipant] = useMutation(
+    async ({ participant }) => {
+      const token = await getAccessTokenSilently();
+      return client(`inscriptions/update/${participant.id}`, {
+        method: 'PUT',
+        token,
+        data: participant,
+      });
+    },
+    {
+      onSuccess: (updatedParticipant) => {
+        queryCache.invalidateQueries('participants');
+      },
+    }
+  );
+
+  return {
+    participants,
+    updateParticipant,
+    ...participantsQuery,
   };
 }
