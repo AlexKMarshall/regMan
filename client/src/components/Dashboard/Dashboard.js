@@ -17,11 +17,9 @@ import Loading from '../Resources/Loading';
 // Acts as the main page for logged in users. It has its own router.
 const Dashboard = () => {
   // array containing all the participants.
-  const [participants, setParticipants] = useState([]);
+  const [old_participants, old_setParticipants] = useState([]);
   // controls the display of popups and the information they contain
   const [popupInfo, setPopupInfo] = useState({});
-  const [old_error, old_setError] = useState(false);
-  const [loadingParticipants, setLoadingParticipants] = useState(true);
   // gets an authorisatin token from Auth0
   const { getAccessTokenSilently } = useAuth0();
 
@@ -29,6 +27,11 @@ const Dashboard = () => {
     'instruments',
     ApiClient.getInstruments
   );
+
+  const participantsQuery = useQuery('participants', async () => {
+    const authToken = await getAccessTokenSilently();
+    return ApiClient.getAllInscriptions(authToken);
+  });
 
   const [mutateInstruments] = useMutation(
     async ({ instruments }) => {
@@ -49,17 +52,6 @@ const Dashboard = () => {
       console.log(`error saving instruments ${instruments}`);
     }
   }
-
-  // gets an access token and fetches participants from the server. if the call fails, it'll display a 500 error
-  useEffect(() => {
-    getAccessTokenSilently()
-      .then((token) => ApiClient.getAllInscriptions(token))
-      .then((participants) => {
-        if (participants.error) old_setError(true);
-        else setParticipants(participants);
-        setLoadingParticipants(false);
-      });
-  }, []);
 
   // this function sets popupInfo, it is used to determine when to show a popup. It also combines
   // the different parameters passed to a popup to make them more manageable
@@ -82,7 +74,7 @@ const Dashboard = () => {
     switch (type) {
       case 'Delete':
         ApiClient.putDeleteAttendant(info.id, token).then(() => {
-          setParticipants((participants) =>
+          old_setParticipants((participants) =>
             participants.filter((participant) => participant.id !== info.id)
           );
           setPopupInfo({});
@@ -103,8 +95,9 @@ const Dashboard = () => {
   ) : (
     ''
   );
-  if (isLoading || loadingParticipants) return <Loading />;
-  if (error || old_error) return `Error ${error} ${old_error}`;
+  if (isLoading || participantsQuery.isLoading) return <Loading />;
+  if (error || participantsQuery.error)
+    return `Error ${error} ${participantsQuery.error}`;
 
   return (
     <div>
@@ -121,7 +114,7 @@ const Dashboard = () => {
             render={(props) => (
               <ParticipantList
                 {...props}
-                participants={participants}
+                participants={participantsQuery.data}
                 promptPopup={promptPopup}
               />
             )}
@@ -133,7 +126,7 @@ const Dashboard = () => {
             render={(props) => (
               <GroupsDisplay
                 {...props}
-                participants={participants.filter(
+                participants={participantsQuery.data.filter(
                   (participant) =>
                     participant.registration_status !== 'Cancelled' &&
                     participant.registration_status !== 'Waitlist'
@@ -149,7 +142,7 @@ const Dashboard = () => {
             render={(props) => (
               <ParticipantDetails
                 {...props}
-                setParticipants={setParticipants}
+                setParticipants={old_setParticipants}
                 instruments={instruments}
               />
             )}
