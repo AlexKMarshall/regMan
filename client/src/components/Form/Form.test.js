@@ -1,22 +1,14 @@
 import React from 'react';
 import {
-  render,
   screen,
   wait,
   waitForElementToBeRemoved,
 } from '@testing-library/react';
 import user from '@testing-library/user-event';
-import { buildInstrument, buildParticipant } from '@test/test-utils';
+import { render, buildInstrument, buildParticipant } from '@test/test-utils';
 import { server, rest } from './../../test/server/test-server';
 import RegistrationPage from './Form';
-import { Redirect as MockRedirect } from 'react-router';
 import moment from 'moment';
-
-jest.mock('react-router', () => {
-  return {
-    Redirect: jest.fn(() => null),
-  };
-});
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -36,7 +28,7 @@ beforeAll(() => {
   );
 });
 
-test.skip('user can register', async () => {
+test('user can register', async () => {
   const newParticipant = buildParticipant({
     instrument: buildInstrument({ name: fakeInstruments[0].name }),
   });
@@ -72,7 +64,7 @@ test.skip('user can register', async () => {
   await wait(() =>
     user.selectOptions(
       screen.getByLabelText(/instrument/i),
-      newParticipant.instrument.name
+      newParticipant.instrument.id
     )
   );
   await wait(() =>
@@ -80,9 +72,15 @@ test.skip('user can register', async () => {
   );
   await wait(() => user.click(screen.getByLabelText(/terms of service/i)));
 
-  user.click(screen.getByText(/send my registration/i));
+  await wait(() => user.click(screen.getByText(/send my registration/i)));
 
-  await wait(() => expect(MockRedirect).toHaveBeenCalledTimes(1));
-  expect(MockRedirect).toHaveBeenCalledWith({ to: '/confirmation' }, {});
-  // expect(registrationRequest.body).toEqual({ something: true });
+  // TODO this should be checked with an actual object, but it's hard to do
+  // until the variables are all named consistently (e.g. no snake-case)
+  expect(registrationRequest.body).toEqual(expect.any(Object));
+
+  // TODO should also test that the form redirects to the confirmation page,
+  // But for some reason, mocking redirect doesn't seem to be working
+  await waitForElementToBeRemoved(() =>
+    screen.getAllByRole('heading', /welcome/i)
+  );
 });
