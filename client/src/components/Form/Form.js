@@ -7,6 +7,7 @@ import { Navbar } from '@app/components';
 import './Form.css';
 import Loading from '../Resources/Loading';
 import { Formik, Form, useField } from 'formik';
+import * as Yup from 'yup';
 
 function RegistrationPage() {
   const [redirect, setRedirect] = useState(false);
@@ -73,7 +74,7 @@ function RegistrationPage() {
             <p>Please, fill in the form to begin the registration</p>
             <RegistrationForm
               instruments={instruments}
-              onFormSubmit={onFormSubmit}
+              onSubmit={onFormSubmit}
             />
           </div>
         </div>
@@ -82,7 +83,7 @@ function RegistrationPage() {
   );
 }
 
-function RegistrationForm({ instruments, onFormSubmit }) {
+function RegistrationForm({ instruments, onSubmit }) {
   return (
     <Formik
       initialValues={{
@@ -97,11 +98,25 @@ function RegistrationForm({ instruments, onFormSubmit }) {
         allergies: '',
         acceptedTerms: false,
       }}
+      validationSchema={Yup.object({
+        firstName: Yup.string().required('Required'),
+        lastName: Yup.string().required('Required'),
+        email: Yup.string().email('Invalid email address').required('Required'),
+        dateOfBirth: Yup.date().required(),
+        street: Yup.string().required('Required'),
+        city: Yup.string().required('Required'),
+        country: Yup.string().required('Required'),
+        instrument: Yup.string(),
+        allergies: Yup.string(),
+        acceptedTerms: Yup.boolean()
+          .required('Required')
+          .oneOf([true], 'You must accept the terms and conditions.'),
+      })}
       onSubmit={async (values) => {
-        await onFormSubmit(values);
+        await onSubmit(values);
       }}
     >
-      {({ isSubmitting }) => (
+      {({ isValid, isSubmitting }) => (
         <Form>
           <div className="form-section">
             <div className="description">
@@ -240,7 +255,9 @@ function RegistrationForm({ instruments, onFormSubmit }) {
             </div>
           </div>
           <div className="form-btns">
-            <button type="submit" disabled={isSubmitting}>
+            // TODO - need to style disabled state of button, it looks the same
+            now
+            <button type="submit" disabled={!isValid || isSubmitting}>
               Send my registration
             </button>
           </div>
@@ -251,12 +268,15 @@ function RegistrationForm({ instruments, onFormSubmit }) {
 }
 
 function TextInput({ label, ...props }) {
-  const [field] = useField(props);
+  const [field, meta] = useField(props);
 
   return (
     <>
       <label htmlFor={props.id || props.name}>{label}</label>
       <input {...field} {...props} />
+      {meta.touched && meta.error ? (
+        <div className="error">{meta.error}</div>
+      ) : null}
     </>
   );
 }
