@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 
-import EditButtons from './EditButtons';
+import EditButtons from './EditButtons.tsx';
 
 describe('EditButtons', () => {
   const clickFunctions = {};

@@ -28,7 +28,7 @@ beforeAll(() => {
   );
 });
 
-test('user can register', async () => {
+test.skip('user can register', async () => {
   const newParticipant = buildParticipant({
     instrument: buildInstrument({ name: fakeInstruments[0].name }),
   });
