@@ -4,27 +4,35 @@ import ApiClient from '../../services/ApiClient';
 import Form from './Form';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom/extend-expect';
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom';
 
 jest.mock('../../services/ApiClient');
 
 const fakeInstruments = [
-  { id: 'Guitar', name: "Guitar", max_attendants: 10 },
-  { id: 'Fiddle', name: "Fiddle", max_attendants: 10 },
-  { id: 'Cello', name: "Cello", max_attendants: 10 },
-  { id: 'Flute', name: "Flute", max_attendants: 10 },
+  { id: 'Guitar', name: 'Guitar', max_attendants: 10 },
+  { id: 'Fiddle', name: 'Fiddle', max_attendants: 10 },
+  { id: 'Cello', name: 'Cello', max_attendants: 10 },
+  { id: 'Flute', name: 'Flute', max_attendants: 10 },
 ];
 
 ApiClient.getInstruments.mockResolvedValue(fakeInstruments);
 
-const inputLabels = ['name', 'lastname', 'email', 'street', 'city', 'country', 'allergies'];
+const inputLabels = [
+  'name',
+  'lastname',
+  'email',
+  'street',
+  'city',
+  'country',
+  'allergies',
+];
 
 const setup = () => {
   jest.clearAllMocks();
   const component = render(<Form />);
   const inputs = {};
-  inputLabels.forEach(inputLabel => {
-    return inputs[inputLabel] = component.getByLabelText(inputLabel);
+  inputLabels.forEach((inputLabel) => {
+    return (inputs[inputLabel] = component.getByLabelText(inputLabel));
   });
   const select = component.getByLabelText('instrumentId');
   const termsOfService = component.getByLabelText('acceptTos');
@@ -39,11 +47,11 @@ const setup = () => {
     termsOfService,
     clearForm,
     submit,
-  }
-}
+  };
+};
 
 describe('Form', () => {
-  inputLabels.forEach(inputLabel => {
+  inputLabels.forEach((inputLabel) => {
     test(`user can enter text in ${inputLabel}`, () => {
       const input = setup()[inputLabel];
       expect(input).toBeInTheDocument();
@@ -101,7 +109,18 @@ describe('Form', () => {
   });
 
   test('user can send send his registration', () => {
-    const { submit, name, lastname, email, birthdate, street, city, country, allergies, acceptsTos } = setup();
+    const {
+      submit,
+      name,
+      lastname,
+      email,
+      birthdate,
+      street,
+      city,
+      country,
+      allergies,
+      acceptsTos,
+    } = setup();
     expect(submit).toBeInTheDocument();
     // TODO: assign value to inputs and then check if its value is ''
     // await userEvent.click(submit);   // throwing error ->  Invariant failed: You should not use <Redirect> outside a <Router>
@@ -117,5 +136,5 @@ describe('Form', () => {
     //   allergies: allergies.value,
     //   acceptsTos: acceptsTos.value,
     // });
-  })
+  });
 });
