@@ -16,8 +16,6 @@ import Loading from '../Resources/Loading';
 
 // Acts as the main page for logged in users. It has its own router.
 const Dashboard = () => {
-  // array containing all the participants.
-  const [old_participants, old_setParticipants] = useState([]);
   // controls the display of popups and the information they contain
   const [popupInfo, setPopupInfo] = useState({});
   // gets an authorisatin token from Auth0
@@ -58,20 +56,12 @@ const Dashboard = () => {
 
   const [updateParticipant] = useMutation(
     async ({ participant }) => {
-      console.log('updating participant', participant);
       const authToken = await getAccessTokenSilently();
       return ApiClient.putParticipantChanges(participant, authToken);
     },
     {
       onSuccess: (updatedParticipant) => {
-        console.log('updated participant', updatedParticipant);
-        // queryCache.setQueryData('participants', (oldParticipants) =>
-        //   oldParticipants.map((participant) =>
-        //     participant.id === updatedParticipant.id
-        //       ? updatedParticipant
-        //       : participant
-        //   )
-        // );
+        queryCache.invalidateQueries('participants');
       },
     }
   );
@@ -81,6 +71,26 @@ const Dashboard = () => {
       await updateParticipant({ participant });
     } catch (error) {
       console.log(`error saving participant ${participant}`);
+    }
+  }
+
+  const [deleteParticipant] = useMutation(
+    async ({ participantId }) => {
+      const authToken = await getAccessTokenSilently();
+      return ApiClient.putDeleteAttendant(participantId, authToken);
+    },
+    {
+      onSuccess: () => {
+        queryCache.invalidateQueries('participants');
+      },
+    }
+  );
+
+  async function onDeleteParticipant({ participantId }) {
+    try {
+      await deleteParticipant({ participantId });
+    } catch (error) {
+      console.log(`error deleting participant id ${participantId}`);
     }
   }
 
@@ -101,15 +111,11 @@ const Dashboard = () => {
   // TODO: with redux, handle all popups from the same component to avoid repeated code.
   async function handlePopupAction(popupInfo) {
     const { info, type } = popupInfo;
-    const token = await getAccessTokenSilently();
     switch (type) {
       case 'Delete':
-        ApiClient.putDeleteAttendant(info.id, token).then(() => {
-          old_setParticipants((participants) =>
-            participants.filter((participant) => participant.id !== info.id)
-          );
-          setPopupInfo({});
-        });
+        const participantId = info.id;
+        await onDeleteParticipant({ participantId });
+        setPopupInfo({});
         break;
       default:
         break;
@@ -126,6 +132,7 @@ const Dashboard = () => {
   ) : (
     ''
   );
+
   if (instrumentsQuery.isLoading || participantsQuery.isLoading)
     return <Loading />;
   if (instrumentsQuery.error || participantsQuery.error)
