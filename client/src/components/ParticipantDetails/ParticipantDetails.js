@@ -53,11 +53,6 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
       });
   }, [getAccessTokenSilently, id, courseStarts]);
 
-  // check, if details are loaded
-  // useEffect(() => {
-  //   if (details.first_name) setIsLoadingDetails(false);
-  // }, [details.first_name]);
-
   // This object contains the functionality of the editButtons.
   const buttonFunctionality = {
     // allows edition.

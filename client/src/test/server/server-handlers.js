@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { buildPayments } from '../../../test/test-utils';
+import { buildPayments, buildParticipant } from '../../../test/test-utils';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -15,6 +15,14 @@ export const handlers = [
   }),
   rest.post(`${apiUrl}/inscriptions`, (req, res, ctx) => {
     return res(ctx.status(200), ctx.json({ message: 'ok' }));
+  }),
+
+  rest.get(`${apiUrl}/inscriptions/:id`, (req, res, ctx) => {
+    const participant = buildParticipant();
+    participant.id = req.params.id;
+    participant.first_name = 'Phil';
+    participant.last_name = 'Dunphy';
+    return res(ctx.status(200), ctx.json(participant));
   }),
 
   // payments
