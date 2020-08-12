@@ -10,7 +10,7 @@ import './Navbar.css';
 // status of the user. When logged in will display menu items and a logout button.
 // When logged out will only display the logo and a login button
 
-const Navbar = ({ match }) => {
+const Navbar = () => {
   const { isAuthenticated } = useAuth0();
 
   return (

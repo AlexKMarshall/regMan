@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
-import ApiClient from '@app/services/ApiClient';
+import ApiClient from './../../services/ApiClient'; //'..//services/ApiClient'
 import moment from 'moment';
-import { Navbar } from '@app/components';
+import Navbar from './../../components/Resources/Navbar';
 import './Form.css';
 
 interface Registration {
