@@ -1,6 +1,9 @@
 language: node_js
 node_js:
   - 'stable'
+env:
+  global:
+    - REACT_APP_API_URL=http://localhost:3005
 script:
   - npm test
 after_script: npx codecov@3

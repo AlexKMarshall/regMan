@@ -86,6 +86,12 @@ select {
   margin-bottom: 5px;
 }
 
+.field-error {
+  color: firebrick;
+  font-size: small;
+  margin-top: 0.5em;
+}
+
 .description {
   padding: 10px 0;
 }
