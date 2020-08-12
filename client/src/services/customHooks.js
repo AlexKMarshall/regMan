@@ -5,10 +5,12 @@ import { client } from './ApiClient';
 export function useInstruments() {
   const { getAccessTokenSilently } = useAuth0();
 
-  const { isLoading, error, data: instruments, ...instrumentsQuery } = useQuery(
+  const { isLoading, error, data, ...instrumentsQuery } = useQuery(
     'instruments',
     client
   );
+
+  const instruments = data || [];
 
   const [updateInstruments] = useMutation(
     async ({ instruments }) => {
