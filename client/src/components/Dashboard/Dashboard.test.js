@@ -17,14 +17,12 @@ test('dashboard calls api for instruments and participants', async () => {
     getAccessTokenSilently: jest.fn(() => Promise.resolve(token)),
   });
 
-  ApiClient.getInstruments.mockResolvedValue([]);
   ApiClient.getAllInscriptions.mockResolvedValue([]);
 
   render(<Dashboard />);
   expect(screen.getByLabelText(/loading/i)).toBeInTheDocument();
   await waitForElementToBeRemoved(() => screen.queryByLabelText(/loading/i));
 
-  expect(ApiClient.getInstruments).toHaveBeenCalledTimes(1);
   expect(useAuth0().getAccessTokenSilently).toHaveBeenCalledTimes(1);
   expect(ApiClient.getAllInscriptions).toHaveBeenCalledTimes(1);
   expect(ApiClient.getAllInscriptions).toHaveBeenCalledWith(token);

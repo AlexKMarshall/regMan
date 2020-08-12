@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useQuery, useMutation, queryCache } from 'react-query';
 import ApiClient from '@app/services/ApiClient';
+import { useInstruments } from '@app/services/customHooks';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './Dashboard.css';
 import {
@@ -21,26 +22,15 @@ const Dashboard = () => {
   // gets an authorisatin token from Auth0
   const { getAccessTokenSilently } = useAuth0();
 
-  const { data: instruments, ...instrumentsQuery } = useQuery(
-    'instruments',
-    ApiClient.getInstruments
-  );
-
-  const [mutateInstruments] = useMutation(
-    async ({ instruments }) => {
-      const authToken = await getAccessTokenSilently();
-      return ApiClient.updateInstruments(instruments, authToken);
-    },
-    {
-      onSuccess: (data) => {
-        queryCache.setQueryData('instruments', data);
-      },
-    }
-  );
+  const {
+    instruments,
+    updateInstruments,
+    ...instrumentsQuery
+  } = useInstruments();
 
   async function onUpdateInstruments({ instruments }) {
     try {
-      await mutateInstruments({ instruments });
+      await updateInstruments({ instruments });
     } catch (error) {
       console.log(`error saving instruments ${instruments}`);
     }

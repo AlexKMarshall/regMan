@@ -107,7 +107,7 @@ function updateInstruments(instruments, token) {
 
 const apiUrl = process.env.REACT_APP_API_URL;
 
-async function client(
+export async function client(
   endpoint,
   { data, token, headers: customHeaders, ...customConfig } = {}
 ) {
@@ -149,11 +149,9 @@ export default {
   getAllInscriptions,
   getDetails,
   getAttendantPayments,
-  getInstruments,
   postNewAttendant,
   postNewPayment,
   putDeleteAttendant,
-  updateInstruments,
   putParticipantChanges,
   putUpdatePayment,
   sendPaymentStatus,
