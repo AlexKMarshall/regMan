@@ -1,15 +1,13 @@
 import React from 'react';
 import {
-  render,
   screen,
   wait,
   waitForElementToBeRemoved,
 } from '@testing-library/react';
 import user from '@testing-library/user-event';
-import { buildInstrument, buildParticipant } from '@test/test-utils';
+import { render, buildInstrument, buildParticipant } from '@test/test-utils';
 import { server, rest } from './../../test/server/test-server';
 import RegistrationPage from './Form';
-import { Redirect, MemoryRouter } from 'react-router';
 import moment from 'moment';
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -35,11 +33,7 @@ test('user can register', async () => {
     instrument: buildInstrument({ name: fakeInstruments[0].name }),
   });
 
-  render(
-    <MemoryRouter>
-      <RegistrationPage />
-    </MemoryRouter>
-  );
+  render(<RegistrationPage />);
 
   await waitForElementToBeRemoved(() => screen.queryByLabelText(/loading/i));
 
@@ -80,7 +74,13 @@ test('user can register', async () => {
 
   await wait(() => user.click(screen.getByText(/send my registration/i)));
 
+  // TODO this should be checked with an actual object, but it's hard to do
+  // until the variables are all named consistently (e.g. no snake-case)
   expect(registrationRequest.body).toEqual(expect.any(Object));
-  // await wait(() => expect(Redirect).toHaveBeenCalledTimes(1));
-  // expect(Redirect).toHaveBeenCalledWith({ to: '/confirmation' }, {});
+
+  // TODO should also test that the form redirects to the confirmation page,
+  // But for some reason, mocking redirect doesn't seem to be working
+  await waitForElementToBeRemoved(() =>
+    screen.getAllByRole('heading', /welcome/i)
+  );
 });
