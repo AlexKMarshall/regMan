@@ -24,7 +24,15 @@ export const handlers = [
   }),
   rest.put(`${apiUrl}/payments/update/:id`, (req, res, ctx) => {
     // console.log(req.body)
-    return res(ctx.status(204), ctx.json(req.body));
+    return res(
+      ctx.status(200),
+      ctx.json({
+        id: req.body.id,
+        type_of_payment: req.body.type_of_payment,
+        amount_paid: req.body.amount_paid,
+        payment_date: req.body.payment_date,
+      })
+    );
   }),
   rest.post(`${apiUrl}/payments`, (req, res, ctx) => {
     // console.log(req.body)
@@ -33,7 +41,7 @@ export const handlers = [
       ctx.json({
         id: 3,
         type_of_payment: req.body.type_of_payment,
-        amount_paid: req.body.amounts_paid,
+        amount_paid: req.body.amount_paid,
         payment_date: req.body.payment_date,
       })
     );

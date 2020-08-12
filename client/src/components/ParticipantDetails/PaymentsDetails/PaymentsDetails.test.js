@@ -121,27 +121,33 @@ describe('PaymentsDetails', () => {
     });
   });
 
-  //faulty
   payments.map((payment, index) => {
-    it.skip(`should submit changed Data of Payment ${payment.id} to API`, async () => {
+    it(`should submit changed Data of Payment ${payment.id} to API`, async () => {
       await act(async () => {
         await render(<PaymentsDetails details={details} />);
         await screen.findByTestId('payment-row' + payment.id);
         await wait(() =>
           userEvent.click(screen.getByTestId('payment-row' + payment.id))
         );
-        const amountValue = await screen.findByTestId('amount_paid');
-        await wait(() => userEvent.type(amountValue, `${10 * (index + 1)}`));
+        // wait for the Popup to open and input new Payment value
+        await wait(async () =>
+          userEvent.type(await screen.findByTestId('amount_paid'), '99.99')
+        );
+        // submit form
         await wait(async () =>
           userEvent.click(
             await screen.getByRole('button', { name: 'Save Payment' })
           )
         );
-        await wait(() => screen.getByTestId('payment-amount' + payment.id));
+        // wait for the Popup to close again
+        await wait(
+          expect(
+            screen.queryByRole('button', { name: 'Save Payment' })
+          ).not.toBeInTheDocument()
+        );
+        await screen.findByTestId('payment-amount' + payment.id);
       });
-      expect(
-        screen.getByTestId('payment-amount' + payment.id)
-      ).toBeInTheDocument();
+      expect(await screen.findByText('99.99 €')).toBeInTheDocument();
     });
   });
 

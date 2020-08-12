@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import ApiClient from '@app/services/ApiClient';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
@@ -36,7 +36,10 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
   // the path will contain the id of the attendant we're looking into
   const id = match.params.id;
   // variable used to calculate the age of the participant.
-  const courseStarts = moment(process.env.REACT_APP_COURSE_START);
+  const courseStarts = useMemo(
+    () => moment(process.env.REACT_APP_COURSE_START),
+    []
+  );
 
   // getAccessTokenSilently gets the token used for authentication in the backend server
   useEffect(() => {
@@ -49,6 +52,11 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
         setOldDetails({ ...details });
       });
   }, [getAccessTokenSilently, id, courseStarts]);
+
+  // check, if details are loaded
+  // useEffect(() => {
+  //   if (details.first_name) setIsLoadingDetails(false);
+  // }, [details.first_name]);
 
   // This object contains the functionality of the editButtons.
   const buttonFunctionality = {
@@ -167,39 +175,51 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
           <div className="showcased-section">
             <Route
               path={`/dashboard/details/${match.params.id}/personal`}
-              render={(props) => (
-                <PersonalDetails
-                  {...props}
-                  details={details}
-                  isEditting={isEditting}
-                  instruments={instruments}
-                  handleChange={handleChange}
-                  buttonFunctionality={buttonFunctionality}
-                />
-              )}
+              render={(props) =>
+                details.first_name ? (
+                  <PersonalDetails
+                    {...props}
+                    details={details}
+                    isEditting={isEditting}
+                    instruments={instruments}
+                    handleChange={handleChange}
+                    buttonFunctionality={buttonFunctionality}
+                  />
+                ) : (
+                  <div> data is loading </div>
+                )
+              }
             />
             <Route
               path={`/dashboard/details/${match.params.id}/health`}
-              render={(props) => (
-                <HealthDetails
-                  {...props}
-                  details={details}
-                  isEditting={isEditting}
-                  handleChange={handleChange}
-                  buttonFunctionality={buttonFunctionality}
-                />
-              )}
+              render={(props) =>
+                details.first_name ? (
+                  <HealthDetails
+                    {...props}
+                    details={details}
+                    isEditting={isEditting}
+                    handleChange={handleChange}
+                    buttonFunctionality={buttonFunctionality}
+                  />
+                ) : (
+                  <div> data is loading </div>
+                )
+              }
             />
             <Route
               path={`/dashboard/details/${match.params.id}/payments`}
-              render={(props) => (
-                <PaymentsDetails
-                  {...props}
-                  details={details}
-                  setDetails={setDetails}
-                  id={id}
-                />
-              )}
+              render={(props) =>
+                details.first_name ? (
+                  <PaymentsDetails
+                    {...props}
+                    details={details}
+                    setDetails={setDetails}
+                    id={id}
+                  />
+                ) : (
+                  <div> data is loading </div>
+                )
+              }
             />
           </div>
         </Router>
