@@ -17,7 +17,6 @@ test('dashboard calls api for instruments and participants', async () => {
     getAccessTokenSilently: jest.fn(() => Promise.resolve(token)),
   });
 
-  ApiClient.getInstruments.mockResolvedValue([]);
   ApiClient.getAllInscriptions.mockResolvedValue([]);
 
   render(<Dashboard />);

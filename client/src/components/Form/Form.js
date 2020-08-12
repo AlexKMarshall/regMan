@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import { useQuery } from 'react-query';
+import { useInstruments } from '@app/services/customHooks';
 import ApiClient from '@app/services/ApiClient';
 import moment from 'moment';
 import { Navbar } from '@app/components';
@@ -11,10 +11,7 @@ import * as Yup from 'yup';
 
 function RegistrationPage() {
   const [redirect, setRedirect] = useState(false);
-  const { isLoading, data: instruments } = useQuery(
-    'instruments',
-    ApiClient.getInstruments
-  );
+  const { isLoading, instruments } = useInstruments();
 
   function transformRegistrationData(formData) {
     // TODO this logic for being under 18 really shouldn't live here
