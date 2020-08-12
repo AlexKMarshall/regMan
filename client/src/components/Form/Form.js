@@ -253,7 +253,6 @@ function RegistrationForm({ instruments, onSubmit }) {
           </div>
           <div className="form-btns">
             {/* TODO - need to style disabled state of button, it looks the same */}
-            now
             <button type="submit" disabled={!isValid || isSubmitting}>
               Send my registration
             </button>
