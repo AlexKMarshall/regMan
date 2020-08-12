@@ -15,6 +15,7 @@
     "chart.js": "^2.9.3",
     "dotenv": "^8.2.0",
     "faker": "^4.1.0",
+    "formik": "^2.1.5",
     "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-chartjs-2": "^2.9.0",

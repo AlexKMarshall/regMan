@@ -25,6 +25,11 @@ export function buildParticipant(options) {
     instrument: {
       name: faker.commerce.product(),
     },
+    date_of_birth: faker.date.past(15),
+    street: faker.address.streetAddress(),
+    city: faker.address.city(),
+    country: faker.address.country(),
+    allergies: faker.lorem.words(),
     is_underage: faker.random.boolean(),
     registration_status: 'New',
     ...options,
@@ -45,5 +50,36 @@ export function buildParticipants({
   return participants;
 }
 
+export function buildPayment(options) {
+  return {
+    id: options.index,
+    type_of_payment: 'Payment',
+    amount_paid: faker.random.number(options.amount_paid) * 100,
+    payment_date: faker.date.past(),
+  };
+}
+
+export function buildPayments({
+  maxNumber = 3,
+  number,
+  paymentBuilder = buildPayment,
+} = {}) {
+  const numberOfPayments = number ?? Math.ceil(Math.random() * maxNumber);
+
+  let payments = [];
+  for (let i = 0; i < numberOfPayments; i++) {
+    payments.push(
+      paymentBuilder({
+        index: i,
+        amount_paid: {
+          min: 50,
+          max: 200,
+          precision: 1,
+        },
+      })
+    );
+  }
+  return payments;
+}
 export * from '@testing-library/react';
 export { render };

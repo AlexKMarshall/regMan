@@ -49,9 +49,10 @@ function putParticipantChanges(details, token) {
  **  Payments' Calls  **
  ***********************/
 
-function getAttendantPayments(id, token) {
+function getAttendantPayments(id, token, signal) {
   return fetchFromDb(`payments/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
+    ...signal,
   });
 }
 
