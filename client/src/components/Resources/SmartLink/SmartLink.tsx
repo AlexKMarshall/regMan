@@ -20,6 +20,7 @@ const SmartLink = ({ isEditting, match, to, value }: Props) => {
   if (isEditting) {
     return (
       <div
+        data-testid="section-selectors"
         className="section-selectors"
         onClick={() =>
           alert('You have to save the changes before changing the section')
