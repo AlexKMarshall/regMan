@@ -78,6 +78,7 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
                   type="number"
                   step="0.01"
                   min="0"
+                  name="amount_paid"
                   placeholder={
                     info.type_of_payment === 'Discount (5%)' ? '30.00' : '0.00'
                   }
@@ -87,7 +88,6 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
                   className={
                     info.type_of_payment === 'Discount (5%)' ? 'disabled' : ''
                   }
-                  name="amount_paid"
                   onChange={handleChange}
                   required
                 />
@@ -139,8 +139,9 @@ const PopupMessage = ({ popupInfo, setPopupInfo }) => {
                   data-testid="amount_paid"
                   type="number"
                   step="0.01"
+                  min="0"
                   name="amount_paid"
-                  value={Number.parseFloat(info.amount_paid).toFixed(2)}
+                  defaultValue={Number.parseFloat(info.amount_paid).toFixed(2)}
                   disabled={
                     info.type_of_payment === 'Discount (5%)' ? true : false
                   }

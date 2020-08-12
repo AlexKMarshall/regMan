@@ -1,5 +1,5 @@
 import ApiClient from './ApiClient';
-import { buildInstrument } from '@test/test-utils';
+import { buildInstrument, buildParticipant } from '@test/test-utils';
 import { server, rest } from './../test/server/test-server';
 
 const apiUrl = process.env.REACT_APP_API_URL;
@@ -31,4 +31,13 @@ test('put Instruments requires auth token to be sent', async () => {
   await ApiClient.updateInstruments(fakeInstruments, fakeToken);
 
   expect(request.headers.get('Authorization')).toBe(`Bearer ${fakeToken}`);
+});
+
+test('post attandant', async () => {
+  server.resetHandlers();
+  const newParticipant = buildParticipant();
+
+  const returnedData = await ApiClient.postNewAttendant(newParticipant);
+
+  expect(returnedData).toEqual({ message: 'ok' });
 });
