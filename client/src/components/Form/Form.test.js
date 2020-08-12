@@ -74,9 +74,15 @@ test('user can register', async () => {
 
   await wait(() => user.click(screen.getByText(/send my registration/i)));
 
-  // TODO this should be checked with an actual object, but it's hard to do
-  // until the variables are all named consistently (e.g. no snake-case)
-  expect(registrationRequest.body).toEqual(expect.any(Object));
+  // This would be easier if all the variables used consistent casing
+  // And if we had a Typescript DTO type, and the type we use in the front end
+  // with a utility function to map between them. TODO, complete this with the
+  // rest of the missing fields
+  expect(registrationRequest.body).toMatchObject({
+    first_name: newParticipant.first_name,
+    last_name: newParticipant.last_name,
+    email: newParticipant.email,
+  });
 
   // TODO should also test that the form redirects to the confirmation page,
   // But for some reason, mocking redirect doesn't seem to be working
