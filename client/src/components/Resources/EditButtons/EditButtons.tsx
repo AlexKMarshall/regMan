@@ -1,0 +1,47 @@
+import React from 'react';
+import './EditButtons.css';
+import { useLocation } from 'react-router-dom';
+
+// Display component. Displays different buttons depending on the isEditting value. The button functionality
+// is handled by the parent component. buttonFunctionality is an object containing the callback functions for each
+// button interaction.
+
+type Props = {
+  buttonFunctionality: {
+    editParticipant: () => {};
+    cancelChanges: () => {};
+    submitChanges: () => {};
+  };
+  isEditting: boolean;
+};
+
+const EditButtons: React.FC<Props> = ({ buttonFunctionality, isEditting }) => {
+  const location = useLocation();
+  const isPaymentRoute: boolean =
+    location.pathname.search('payment') >= 0 ? true : false;
+  const { editParticipant, cancelChanges, submitChanges } = buttonFunctionality;
+
+  const buttons: (JSX.Element | null)[] | null = isPaymentRoute
+    ? null
+    : [
+        { name: 'Save changes', showOnEdit: true, onClick: submitChanges },
+        { name: 'Edit contact', showOnEdit: false, onClick: editParticipant },
+        { name: 'Cancel changes', showOnEdit: true, onClick: cancelChanges },
+      ].map((button) => {
+        if (button.showOnEdit === isEditting)
+          return (
+            <button key={button.name} onClick={button.onClick}>
+              {button.name}
+            </button>
+          );
+        else return null;
+      });
+
+  return (
+    <div className="edit-buttons">
+      <div>{buttons}</div>
+    </div>
+  );
+};
+
+export default EditButtons;

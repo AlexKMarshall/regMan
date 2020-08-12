@@ -16,13 +16,20 @@ function RegistrationPage() {
     ApiClient.getInstruments
   );
 
-  function transformRegistrationData(formData) {
-    // TODO this logic for being under 18 really shouldn't live here
-    // The server should calculate it
-    const courseStart = moment(process.env.REACT_APP_COURSE_START);
-    const dateOfBirth = moment(formData.dateOfBirth);
-    const is_underage = courseStart.diff(dateOfBirth, 'years') < 18;
+  const dateOfBirth = moment(formData.dateOfBirth);
+  const is_underage = courseStart.diff(dateOfBirth, 'years') < 18;
 
+  // handles change for all the fields. acceptsTos is a checkbox, so it needs a different target
+  function handleChange({ target }) {
+    const value = target.name === 'acceptsTos' ? target.checked : target.value;
+    setRegistration((oldRegistration) => ({
+      ...oldRegistration,
+      [target.name]: value,
+    }));
+  }
+
+  function clearForm() {
+    setRegistration(newRegistration);
     const {
       firstName: first_name,
       lastName: last_name,
