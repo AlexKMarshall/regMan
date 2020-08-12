@@ -1,12 +1,18 @@
-import ApiClient from './ApiClient';
-import { buildParticipant } from '@test/test-utils';
-import { server } from './../test/server/test-server';
+import { server, rest } from './../test/server/test-server';
+import { client } from './ApiClient';
 
-test('post attandant', async () => {
-  server.resetHandlers();
-  const newParticipant = buildParticipant();
+const apiURL = process.env.REACT_APP_API_URL;
 
-  const returnedData = await ApiClient.postNewAttendant(newParticipant);
+test('calls fetch at the endpoint with the arguments for GET requests', async () => {
+  const endpoint = 'test-endpoint';
+  const mockResult = { mockValue: 'VALUE' };
+  server.use(
+    rest.get(`${apiURL}/${endpoint}`, async (req, res, ctx) => {
+      return res(ctx.json(mockResult));
+    })
+  );
 
-  expect(returnedData).toEqual({ message: 'ok' });
+  const result = await client(endpoint);
+
+  expect(result).toEqual(mockResult);
 });
