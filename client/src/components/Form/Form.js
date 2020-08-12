@@ -97,151 +97,155 @@ function RegistrationForm({ instruments, onFormSubmit }) {
         allergies: '',
         acceptedTerms: false,
       }}
-      onSubmit={(values) => {
-        onFormSubmit(values);
+      onSubmit={async (values) => {
+        await onFormSubmit(values);
       }}
     >
-      <Form>
-        <div className="form-section">
-          <div className="description">
-            <h3>Personal details</h3>
-            <p>Let us know your contact information</p>
+      {({ isSubmitting }) => (
+        <Form>
+          <div className="form-section">
+            <div className="description">
+              <h3>Personal details</h3>
+              <p>Let us know your contact information</p>
+            </div>
+            <div className="fields">
+              <div className="field">
+                <TextInput
+                  id="firstName"
+                  name="firstName"
+                  type="text"
+                  label="Name:"
+                  className="form-input"
+                />
+              </div>
+              <div className="field">
+                <TextInput
+                  id="lastName"
+                  name="lastName"
+                  type="text"
+                  label="Surname:"
+                  className="form-input"
+                />
+              </div>
+              <div className="field">
+                <TextInput
+                  id="email"
+                  name="email"
+                  type="email"
+                  label="Email:"
+                  className="form-input"
+                />
+              </div>
+              <div className="field">
+                <TextInput
+                  id="dateOfBirth"
+                  name="dateOfBirth"
+                  type="date"
+                  label="Date of birth:"
+                  className="form-input"
+                />
+              </div>
+            </div>
           </div>
-          <div className="fields">
-            <div className="field">
-              <TextInput
-                id="firstName"
-                name="firstName"
-                type="text"
-                label="Name:"
-                className="form-input"
-              />
+          <div className="form-section">
+            <div className="description">
+              <h3>Address</h3>
             </div>
-            <div className="field">
-              <TextInput
-                id="lastName"
-                name="lastName"
-                type="text"
-                label="Surname:"
-                className="form-input"
-              />
+
+            <div className="fields">
+              <div className="field">
+                <TextInput
+                  id="street"
+                  name="street"
+                  type="text"
+                  label="Street:"
+                />
+              </div>
+              <div className="field">
+                <TextInput id="city" name="city" type="text" label="City:" />
+              </div>
+              <div className="field">
+                <TextInput
+                  id="country"
+                  name="country"
+                  type="text"
+                  label="Country:"
+                />
+              </div>
             </div>
-            <div className="field">
-              <TextInput
-                id="email"
-                name="email"
-                type="email"
-                label="Email:"
-                className="form-input"
-              />
-            </div>
-            <div className="field">
-              <TextInput
-                id="dateOfBirth"
-                name="dateOfBirth"
-                type="date"
-                label="Date of birth:"
-                className="form-input"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="form-section">
-          <div className="description">
-            <h3>Address</h3>
           </div>
 
-          <div className="fields">
-            <div className="field">
-              <TextInput
-                id="street"
-                name="street"
-                type="text"
-                label="Street:"
-              />
+          <div className="form-section">
+            <div className="description">
+              <h3>Group preferences</h3>
+              <p>Which instrument would you like to join?</p>
             </div>
-            <div className="field">
-              <TextInput id="city" name="city" type="text" label="City:" />
-            </div>
-            <div className="field">
-              <TextInput
-                id="country"
-                name="country"
-                type="text"
-                label="Country:"
-              />
+            <div className="fields">
+              <div className="field">
+                <SelectInput
+                  id="instrument"
+                  name="instrument"
+                  label="Instrument:"
+                >
+                  <option key="empty" value="empty"></option>
+                  {instruments.map(({ id, name }) => (
+                    <option key={id} value={id}>
+                      {name}
+                    </option>
+                  ))}
+                </SelectInput>
+              </div>
             </div>
           </div>
-        </div>
+          <div className="form-section">
+            <div className="description">
+              <h3>Medical Information</h3>
+              <p>
+                Let us know about any medical information that might be relevant
+                during the camp
+              </p>
+            </div>
 
-        <div className="form-section">
-          <div className="description">
-            <h3>Group preferences</h3>
-            <p>Which instrument would you like to join?</p>
-          </div>
-          <div className="fields">
-            <div className="field">
-              <SelectInput
-                id="instrument"
-                name="instrument"
-                label="Instrument:"
-              >
-                <option key="empty" value="empty"></option>
-                {instruments.map(({ id, name }) => (
-                  <option key={id} value={id}>
-                    {name}
-                  </option>
-                ))}
-              </SelectInput>
+            <div className="fields">
+              <div className="field">
+                <TextInput
+                  id="allergies"
+                  name="allergies"
+                  type="text"
+                  label="Allergies:"
+                  className="form-input"
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div className="form-section">
-          <div className="description">
-            <h3>Medical Information</h3>
-            <p>
-              Let us know about any medical information that might be relevant
-              during the camp
-            </p>
-          </div>
+          <div className="form-section">
+            <div className="description">
+              <h3>Terms of Service</h3>
+              <p>
+                Please accept the terms of service and click send to submit your
+                registration
+              </p>
+            </div>
 
-          <div className="fields">
-            <div className="field">
-              <TextInput
-                id="allergies"
-                name="allergies"
-                type="text"
-                label="Allergies:"
-                className="form-input"
-              />
+            <div className="fields">
+              <div className="field">
+                <CheckboxInput
+                  id="acceptedTerms"
+                  name="acceptedTerms"
+                  className="form-checkbox"
+                >
+                  I accept the terms of service.
+                </CheckboxInput>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="form-section">
-          <div className="description">
-            <h3>Terms of Service</h3>
-            <p>
-              Please accept the terms of service and click send to submit your
-              registration
-            </p>
+          <div className="form-btns">
+            <button type="submit" disabled={isSubmitting}>
+              Send my registration
+            </button>
           </div>
-
-          <div className="fields">
-            <div className="field">
-              <CheckboxInput
-                id="acceptedTerms"
-                name="acceptedTerms"
-                className="form-checkbox"
-              >
-                I accept the terms of service.
-              </CheckboxInput>
-            </div>
-          </div>
-        </div>
-        <div className="form-btns">
-          <button type="submit">Send my registration</button>
-        </div>
-      </Form>
+        </Form>
+      )}
     </Formik>
   );
 }
