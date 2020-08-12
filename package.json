@@ -4,7 +4,7 @@
   "description": "A CRM tool for handling small registration processes",
   "main": "index.js",
   "scripts": {
-    "test": "(cd client && npm run test:coverage); (cd server && npm run test:coverage)",
+    "test": "(cd client && npm run test:coverage) && (cd server && npm run test:coverage)",
     "postinstall": "(cd server && npm install); (cd client && npm install)",
     "format": "prettier --ignore-path .gitignore --write \"**/*.(js|jsx|ts|tsx|html|css|json|)\""
   },
