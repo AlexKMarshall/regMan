@@ -6,10 +6,6 @@ function getDetails(id, token) {
   return client(`inscriptions/${id}`, { token });
 }
 
-function postNewAttendant(registration) {
-  return client('inscriptions', { data: registration });
-}
-
 /**********************
  **  Payments' Calls  **
  ***********************/
@@ -73,7 +69,6 @@ export async function client(
 export default {
   getDetails,
   getAttendantPayments,
-  postNewAttendant,
   postNewPayment,
   putUpdatePayment,
   sendPaymentStatus,

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { useInstruments } from '@app/services/customHooks';
 import ApiClient from '@app/services/ApiClient';
+import { useParticipants } from '@app/services/customHooks';
 import moment from 'moment';
 import { Navbar } from '@app/components';
 import './Form.css';
@@ -12,6 +13,7 @@ import * as Yup from 'yup';
 function RegistrationPage() {
   const [redirect, setRedirect] = useState(false);
   const { isLoading, instruments } = useInstruments();
+  const { createParticipant } = useParticipants();
 
   function transformRegistrationData(formData) {
     // TODO this logic for being under 18 really shouldn't live here
@@ -48,11 +50,14 @@ function RegistrationPage() {
     };
   }
 
-  function onFormSubmit(values) {
+  async function onFormSubmit(values) {
     const newRegistration = transformRegistrationData(values);
-    ApiClient.postNewAttendant(newRegistration)
-      .then(() => setRedirect(true))
-      .catch((error) => console.error(error));
+    try {
+      await createParticipant({ participant: newRegistration });
+      setRedirect(true);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   if (isLoading) return <Loading />;

@@ -69,8 +69,20 @@ export function useParticipants() {
     }
   );
 
+  const [createParticipant] = useMutation(
+    async ({ participant }) => {
+      return client('inscriptions', { data: participant });
+    },
+    {
+      onSuccess: () => {
+        queryCache.invalidateQueries('participants');
+      },
+    }
+  );
+
   return {
     participants,
+    createParticipant,
     updateParticipant,
     deleteParticipant,
     ...participantsQuery,
