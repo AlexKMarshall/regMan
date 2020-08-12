@@ -1,9 +1,6 @@
 /*************************
  **  Attendant's Calls  **
  *************************/
-function getAllInscriptions(token) {
-  return client('inscriptions', { token });
-}
 
 function getDetails(id, token) {
   return client(`inscriptions/${id}`, { token });
@@ -11,20 +8,6 @@ function getDetails(id, token) {
 
 function postNewAttendant(registration) {
   return client('inscriptions', { data: registration });
-}
-
-// The name is confusing. It's a put request that mimics the deletion of a record from the database.
-// Records are not actually deleted, just not retrieved when getAll is called.
-function putDeleteAttendant(id, token) {
-  return client(`inscriptions/delete/${id}`, { method: 'PUT', token });
-}
-
-function putParticipantChanges(details, token) {
-  return client(`inscriptions/update/${details.id}`, {
-    method: 'PUT',
-    token,
-    data: details,
-  });
 }
 
 /**********************
@@ -88,13 +71,10 @@ export async function client(
 }
 
 export default {
-  getAllInscriptions,
   getDetails,
   getAttendantPayments,
   postNewAttendant,
   postNewPayment,
-  putDeleteAttendant,
-  putParticipantChanges,
   putUpdatePayment,
   sendPaymentStatus,
   client,

@@ -54,9 +54,25 @@ export function useParticipants() {
     }
   );
 
+  const [deleteParticipant] = useMutation(
+    async ({ participantId }) => {
+      const token = await getAccessTokenSilently();
+      return client(`inscriptions/delete/${participantId}`, {
+        method: 'PUT',
+        token,
+      });
+    },
+    {
+      onSuccess: () => {
+        queryCache.invalidateQueries('participants');
+      },
+    }
+  );
+
   return {
     participants,
     updateParticipant,
+    deleteParticipant,
     ...participantsQuery,
   };
 }

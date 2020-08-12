@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
-import { useMutation, queryCache } from 'react-query';
-import ApiClient from '@app/services/ApiClient';
 import { useInstruments, useParticipants } from '@app/services/customHooks';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './Dashboard.css';
@@ -19,8 +16,6 @@ import Loading from '../Resources/Loading';
 const Dashboard = () => {
   // controls the display of popups and the information they contain
   const [popupInfo, setPopupInfo] = useState({});
-  // gets an authorisatin token from Auth0
-  const { getAccessTokenSilently } = useAuth0();
 
   const {
     instruments,
@@ -39,6 +34,7 @@ const Dashboard = () => {
   const {
     participants,
     updateParticipant,
+    deleteParticipant,
     ...participantsQuery
   } = useParticipants();
 
@@ -49,18 +45,6 @@ const Dashboard = () => {
       console.log(`error saving participant ${participant}`);
     }
   }
-
-  const [deleteParticipant] = useMutation(
-    async ({ participantId }) => {
-      const authToken = await getAccessTokenSilently();
-      return ApiClient.putDeleteAttendant(participantId, authToken);
-    },
-    {
-      onSuccess: () => {
-        queryCache.invalidateQueries('participants');
-      },
-    }
-  );
 
   async function onDeleteParticipant({ participantId }) {
     try {
