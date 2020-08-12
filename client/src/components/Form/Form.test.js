@@ -83,6 +83,4 @@ test('user can register', async () => {
   await waitForElementToBeRemoved(() =>
     screen.getAllByRole('heading', /welcome/i)
   );
-
-  expect(true).toBe(false);
 });
