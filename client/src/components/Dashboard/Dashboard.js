@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useQuery, useMutation, queryCache } from 'react-query';
 import ApiClient from '@app/services/ApiClient';
@@ -23,15 +23,10 @@ const Dashboard = () => {
   // gets an authorisatin token from Auth0
   const { getAccessTokenSilently } = useAuth0();
 
-  const { isLoading, error, data: instruments } = useQuery(
+  const { data: instruments, ...instrumentsQuery } = useQuery(
     'instruments',
     ApiClient.getInstruments
   );
-
-  const participantsQuery = useQuery('participants', async () => {
-    const authToken = await getAccessTokenSilently();
-    return ApiClient.getAllInscriptions(authToken);
-  });
 
   const [mutateInstruments] = useMutation(
     async ({ instruments }) => {
@@ -50,6 +45,42 @@ const Dashboard = () => {
       await mutateInstruments({ instruments });
     } catch (error) {
       console.log(`error saving instruments ${instruments}`);
+    }
+  }
+
+  const { data: participants, ...participantsQuery } = useQuery(
+    'participants',
+    async () => {
+      const authToken = await getAccessTokenSilently();
+      return ApiClient.getAllInscriptions(authToken);
+    }
+  );
+
+  const [updateParticipant] = useMutation(
+    async ({ participant }) => {
+      console.log('updating participant', participant);
+      const authToken = await getAccessTokenSilently();
+      return ApiClient.putParticipantChanges(participant, authToken);
+    },
+    {
+      onSuccess: (updatedParticipant) => {
+        console.log('updated participant', updatedParticipant);
+        // queryCache.setQueryData('participants', (oldParticipants) =>
+        //   oldParticipants.map((participant) =>
+        //     participant.id === updatedParticipant.id
+        //       ? updatedParticipant
+        //       : participant
+        //   )
+        // );
+      },
+    }
+  );
+
+  async function onUpdateParticipant({ participant }) {
+    try {
+      await updateParticipant({ participant });
+    } catch (error) {
+      console.log(`error saving participant ${participant}`);
     }
   }
 
@@ -95,9 +126,10 @@ const Dashboard = () => {
   ) : (
     ''
   );
-  if (isLoading || participantsQuery.isLoading) return <Loading />;
-  if (error || participantsQuery.error)
-    return `Error ${error} ${participantsQuery.error}`;
+  if (instrumentsQuery.isLoading || participantsQuery.isLoading)
+    return <Loading />;
+  if (instrumentsQuery.error || participantsQuery.error)
+    return `Error ${instrumentsQuery.error} ${participantsQuery.error}`;
 
   return (
     <div>
@@ -114,7 +146,7 @@ const Dashboard = () => {
             render={(props) => (
               <ParticipantList
                 {...props}
-                participants={participantsQuery.data}
+                participants={participants}
                 promptPopup={promptPopup}
               />
             )}
@@ -126,7 +158,7 @@ const Dashboard = () => {
             render={(props) => (
               <GroupsDisplay
                 {...props}
-                participants={participantsQuery.data.filter(
+                participants={participants.filter(
                   (participant) =>
                     participant.registration_status !== 'Cancelled' &&
                     participant.registration_status !== 'Waitlist'
@@ -142,8 +174,8 @@ const Dashboard = () => {
             render={(props) => (
               <ParticipantDetails
                 {...props}
-                setParticipants={old_setParticipants}
                 instruments={instruments}
+                onUpdateParticipant={onUpdateParticipant}
               />
             )}
           />

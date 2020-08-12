@@ -23,7 +23,7 @@ import './ParticipantDetails.css';
  * Receives the match information form the Dashboard component, as well as instruments and
  * setParticipants (used to update the participants list with the new statuses.)
  */
-const ParticipantDetails = ({ match, instruments, setParticipants }) => {
+const ParticipantDetails = ({ match, instruments, onUpdateParticipant }) => {
   // the properties of an attendant.
   const [details, setDetails] = useState({});
   // copy of the details so that changes can be undone upon cancellation.
@@ -60,26 +60,10 @@ const ParticipantDetails = ({ match, instruments, setParticipants }) => {
       setIsEditting(!isEditting);
     },
 
-    // sends changes to the API, sets the changes into 'details' and updates the participants list in
-    // the dashboard component in the proper order.
     submitChanges: () => {
-      getAccessTokenSilently().then((token) =>
-        ApiClient.putParticipantChanges(details, token)
-      );
-      setParticipants((oldList) => {
-        const filtered = oldList.filter((attendant) => attendant.id !== +id);
-        const complete = [...filtered, details];
-        complete.sort((a, b) => {
-          const sortA = a.last_name;
-          const sortB = b.last_name;
-          return sortA.localeCompare(sortB, 'es', {
-            sensitivity: 'base',
-            ignorePunctuation: true,
-          });
-        });
-        return complete;
-      });
-      // updates oldDetails to match the new stored data.
+      const participant = details;
+      onUpdateParticipant({ participant });
+
       setOldDetails(details);
       setIsEditting(!isEditting);
     },
