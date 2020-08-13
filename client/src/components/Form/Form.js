@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import { useInstruments } from '@app/services/customHooks';
-import ApiClient from '@app/services/ApiClient';
+import { useInstruments } from '@app/services/instruments';
+import { useCreateParticipant } from '@app/services/participants';
 import moment from 'moment';
 import { Navbar } from '@app/components';
 import './Form.css';
@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 function RegistrationPage() {
   const [redirect, setRedirect] = useState(false);
   const { isLoading, instruments } = useInstruments();
+  const [createParticipant] = useCreateParticipant();
 
   function transformRegistrationData(formData) {
     // TODO this logic for being under 18 really shouldn't live here
@@ -48,11 +49,14 @@ function RegistrationPage() {
     };
   }
 
-  function onFormSubmit(values) {
+  async function onFormSubmit(values) {
     const newRegistration = transformRegistrationData(values);
-    ApiClient.postNewAttendant(newRegistration)
-      .then(() => setRedirect(true))
-      .catch((error) => console.error(error));
+    try {
+      await createParticipant({ participant: newRegistration });
+      setRedirect(true);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   if (isLoading) return <Loading />;
@@ -253,7 +257,6 @@ function RegistrationForm({ instruments, onSubmit }) {
           </div>
           <div className="form-btns">
             {/* TODO - need to style disabled state of button, it looks the same */}
-            now
             <button type="submit" disabled={!isValid || isSubmitting}>
               Send my registration
             </button>

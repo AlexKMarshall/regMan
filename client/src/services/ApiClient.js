@@ -1,48 +1,9 @@
 /*************************
  **  Attendant's Calls  **
  *************************/
-function getAllInscriptions(token) {
-  return fetchFromDb('inscriptions', {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-}
 
 function getDetails(id, token) {
-  return fetchFromDb(`inscriptions/${id}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-}
-
-function postNewAttendant(registration) {
-  return fetchFromDb('inscriptions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(registration),
-  });
-}
-
-// The name is confusing. It's a put request that mimics the deletion of a record from the database.
-// Records are not actually deleted, just not retrieved when getAll is called.
-function putDeleteAttendant(id, token) {
-  return fetchFromDb(`inscriptions/delete/${id}`, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-}
-
-function putParticipantChanges(details, token) {
-  return fetchFromDb(`inscriptions/update/${details.id}`, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(details),
-  });
+  return client(`inscriptions/${id}`, { token });
 }
 
 /**********************
@@ -50,55 +11,26 @@ function putParticipantChanges(details, token) {
  ***********************/
 
 function getAttendantPayments(id, token, signal) {
-  return fetchFromDb(`payments/${id}`, {
-    headers: { Authorization: `Bearer ${token}` },
-    ...signal,
-  });
+  return client(`payments/${id}`, { token, ...signal });
 }
 
 function postNewPayment(payment, token) {
-  return fetchFromDb('payments', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payment),
-  });
+  return client('payments', { data: payment, token });
 }
 
 function putUpdatePayment(payment, token) {
-  return fetchFromDb(`payments/update/${payment.id}`, {
+  return client(`payments/update/${payment.id}`, {
+    token,
+    data: payment,
     method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payment),
   });
 }
 
 function sendPaymentStatus(attendant, token) {
-  return fetchFromDb('payments/sendStatus', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(attendant),
+  return client('payments/sendStatus', {
+    data: attendant,
+    token,
   });
-}
-
-/*************************
- **  Instruments' Calls  **
- **************************/
-
-function getInstruments() {
-  return client('instruments');
-}
-
-function updateInstruments(instruments, token) {
-  return client('instruments', { method: 'PUT', data: instruments, token });
 }
 
 /*********************
@@ -134,25 +66,10 @@ export async function client(
     });
 }
 
-async function fetchFromDb(url, options) {
-  try {
-    const res = await fetch(`${process.env.REACT_APP_API_URL}/${url}`, options);
-    const res_1 = res.status < 400 ? res : Promise.reject(res);
-    return res_1.status !== 204 ? res_1.json() : res_1;
-  } catch (err) {
-    console.log(`Error fetching [${options && options.method}] ${url}: `, err);
-    return { error: true, err };
-  }
-}
-
 export default {
-  getAllInscriptions,
   getDetails,
   getAttendantPayments,
-  postNewAttendant,
   postNewPayment,
-  putDeleteAttendant,
-  putParticipantChanges,
   putUpdatePayment,
   sendPaymentStatus,
   client,

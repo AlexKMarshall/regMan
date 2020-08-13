@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
-import { useQuery, useMutation, queryCache } from 'react-query';
-import ApiClient from '@app/services/ApiClient';
-import { useInstruments } from '@app/services/customHooks';
+import {
+  useInstruments,
+  useUpdateInstruments,
+} from '@app/services/instruments';
+import {
+  useParticipants,
+  useUpdateParticipant,
+  useDeleteParticipant,
+} from '@app/services/participants';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './Dashboard.css';
 import {
@@ -19,14 +24,10 @@ import Loading from '../Resources/Loading';
 const Dashboard = () => {
   // controls the display of popups and the information they contain
   const [popupInfo, setPopupInfo] = useState({});
-  // gets an authorisatin token from Auth0
-  const { getAccessTokenSilently } = useAuth0();
 
-  const {
-    instruments,
-    updateInstruments,
-    ...instrumentsQuery
-  } = useInstruments();
+  const { instruments, ...instrumentsQuery } = useInstruments();
+
+  const [updateInstruments] = useUpdateInstruments();
 
   async function onUpdateInstruments({ instruments }) {
     try {
@@ -36,25 +37,9 @@ const Dashboard = () => {
     }
   }
 
-  const { data: participants, ...participantsQuery } = useQuery(
-    'participants',
-    async () => {
-      const authToken = await getAccessTokenSilently();
-      return ApiClient.getAllInscriptions(authToken);
-    }
-  );
+  const { participants, ...participantsQuery } = useParticipants();
 
-  const [updateParticipant] = useMutation(
-    async ({ participant }) => {
-      const authToken = await getAccessTokenSilently();
-      return ApiClient.putParticipantChanges(participant, authToken);
-    },
-    {
-      onSuccess: (updatedParticipant) => {
-        queryCache.invalidateQueries('participants');
-      },
-    }
-  );
+  const [updateParticipant] = useUpdateParticipant();
 
   async function onUpdateParticipant({ participant }) {
     try {
@@ -64,17 +49,7 @@ const Dashboard = () => {
     }
   }
 
-  const [deleteParticipant] = useMutation(
-    async ({ participantId }) => {
-      const authToken = await getAccessTokenSilently();
-      return ApiClient.putDeleteAttendant(participantId, authToken);
-    },
-    {
-      onSuccess: () => {
-        queryCache.invalidateQueries('participants');
-      },
-    }
-  );
+  const [deleteParticipant] = useDeleteParticipant();
 
   async function onDeleteParticipant({ participantId }) {
     try {
