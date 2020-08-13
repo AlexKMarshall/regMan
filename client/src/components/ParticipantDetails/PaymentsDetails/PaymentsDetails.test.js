@@ -158,9 +158,17 @@ describe('PaymentsDetails', () => {
       await wait(() =>
         userEvent.click(screen.getByRole('button', { name: 'Add new payment' }))
       );
-      await screen.findByTestId('popup-add-payment');
+      // await screen.findByTestId('popup-add-payment');
+      expect(
+        await screen.findByTestId('popup-add-payment')
+      ).toBeInTheDocument();
+      await wait(async () =>
+        userEvent.click(await screen.findByRole('button', { name: 'Cancel' }))
+      );
+      expect(
+        await screen.queryByTestId('popup-add-payment')
+      ).not.toBeInTheDocument();
     });
-    expect(await screen.findByTestId('popup-add-payment')).toBeInTheDocument();
   });
 
   it(`should submit new Payment to API`, async () => {

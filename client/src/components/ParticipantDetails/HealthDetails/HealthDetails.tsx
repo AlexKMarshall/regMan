@@ -1,7 +1,15 @@
 import React from 'react';
 import './HealthDetails.css';
 
-const HealthDetails = ({ details, isEditting, handleChange }) => {
+interface Props {
+  details: {
+    allergies: string;
+  };
+  isEditting: boolean;
+  handleChange(): any;
+}
+
+const HealthDetails = ({ details, isEditting, handleChange }: Props) => {
   let disabled = !isEditting ? 'disabled' : '';
   return (
     <section id="health-details">
