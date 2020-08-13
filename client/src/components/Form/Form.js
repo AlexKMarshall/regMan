@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import { useInstruments } from '@app/services/customHooks';
-import ApiClient from '@app/services/ApiClient';
-import { useParticipants } from '@app/services/customHooks';
+import { useInstruments } from '@app/services/instruments';
+import { useCreateParticipant } from '@app/services/participants';
 import moment from 'moment';
 import { Navbar } from '@app/components';
 import './Form.css';
@@ -13,7 +12,7 @@ import * as Yup from 'yup';
 function RegistrationPage() {
   const [redirect, setRedirect] = useState(false);
   const { isLoading, instruments } = useInstruments();
-  const { createParticipant } = useParticipants();
+  const [createParticipant] = useCreateParticipant();
 
   function transformRegistrationData(formData) {
     // TODO this logic for being under 18 really shouldn't live here

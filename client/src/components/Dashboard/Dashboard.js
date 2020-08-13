@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { useInstruments, useParticipants } from '@app/services/customHooks';
+import {
+  useInstruments,
+  useUpdateInstruments,
+} from '@app/services/instruments';
+import {
+  useParticipants,
+  useUpdateParticipant,
+  useDeleteParticipant,
+} from '@app/services/participants';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './Dashboard.css';
 import {
@@ -17,11 +25,9 @@ const Dashboard = () => {
   // controls the display of popups and the information they contain
   const [popupInfo, setPopupInfo] = useState({});
 
-  const {
-    instruments,
-    updateInstruments,
-    ...instrumentsQuery
-  } = useInstruments();
+  const { instruments, ...instrumentsQuery } = useInstruments();
+
+  const [updateInstruments] = useUpdateInstruments();
 
   async function onUpdateInstruments({ instruments }) {
     try {
@@ -31,12 +37,9 @@ const Dashboard = () => {
     }
   }
 
-  const {
-    participants,
-    updateParticipant,
-    deleteParticipant,
-    ...participantsQuery
-  } = useParticipants();
+  const { participants, ...participantsQuery } = useParticipants();
+
+  const [updateParticipant] = useUpdateParticipant();
 
   async function onUpdateParticipant({ participant }) {
     try {
@@ -45,6 +48,8 @@ const Dashboard = () => {
       console.log(`error saving participant ${participant}`);
     }
   }
+
+  const [deleteParticipant] = useDeleteParticipant();
 
   async function onDeleteParticipant({ participantId }) {
     try {
