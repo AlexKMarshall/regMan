@@ -1,14 +1,7 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  cleanup,
-  wait,
-  waitForElementToBeRemoved,
-} from '@testing-library/react';
+import { render, screen, cleanup, wait } from '@testing-library/react';
 import { buildPayments } from '@test/test-utils';
 import PaymentsDetails from './PaymentsDetails';
-import { Popup } from '@app/components';
 import ApiClient from '@app/services/ApiClient';
 import { useAuth0 } from '@auth0/auth0-react';
 import userEvent from '@testing-library/user-event';
@@ -158,7 +151,6 @@ describe('PaymentsDetails', () => {
       await wait(() =>
         userEvent.click(screen.getByRole('button', { name: 'Add new payment' }))
       );
-      // await screen.findByTestId('popup-add-payment');
       expect(
         await screen.findByTestId('popup-add-payment')
       ).toBeInTheDocument();
@@ -200,8 +192,6 @@ describe('PaymentsDetails', () => {
       await screen.queryByTestId('popup-add-payment')
     ).not.toBeInTheDocument();
     expect(await screen.findAllByTestId('payment-row3')).toBeInTheDocument;
-    // screen.debug();
-    // expect(ApiClient.postNewPayment).toBeCalledTimes(1);
   });
 
   it(`should cancel Popup to add Payment upon click on button`, async () => {

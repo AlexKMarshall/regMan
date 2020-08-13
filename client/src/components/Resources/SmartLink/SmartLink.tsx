@@ -6,14 +6,14 @@ import { Link } from 'react-router-dom';
 // and the links will act normally.
 
 interface Props {
-  isEditting: boolean,
+  isEditting: boolean;
   match: {
     params: {
-      id: string,
-    }
-  },
-  to: string,
-  value: string,
+      id: string;
+    };
+  };
+  to: string;
+  value: string;
 }
 
 const SmartLink = ({ isEditting, match, to, value }: Props) => {
@@ -31,9 +31,12 @@ const SmartLink = ({ isEditting, match, to, value }: Props) => {
     );
   } else {
     return (
-      <div className="section-selectors">
-        <Link to={`/dashboard/details/${match.params.id}/${to}`}>{value}</Link>
-      </div>
+      <Link
+        className="section-selectors"
+        to={`/dashboard/details/${match.params.id}/${to}`}
+      >
+        {value}
+      </Link>
     );
   }
 };
